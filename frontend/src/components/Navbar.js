@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
-import { Bree_Serif } from 'next/font/google';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Open_Sans } from "next/font/google";
 
-const breeSerif = Bree_Serif({ subsets: ['latin'], weight: '400' });
+import MenuIcon from '@mui/icons-material/Menu';
+import Logo from "./Logo";
+
+const openSans = Open_Sans( {subsets: ['latin'] });
 
 const pages = ['Find a Match', 'Questions'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -29,26 +31,12 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex'},
-              fontFamily: breeSerif.style,
-              letterSpacing: '.1rem',
-              color: 'inherit',
-              textDecoration: 'none'
-            }}
-          >
-            PeerPrep
-          </Typography>
-
+          <Logo display={{ xs: 'none', md: 'flex' }} />
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -79,37 +67,25 @@ export default function Navbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
+                  <Typography
+                    sx={{
+                      textAlign: 'center',
+                      fontFamily: openSans.style,
+                    }}
+                  >
                     {page}
                   </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: breeSerif.style,
-              fontWeight: 400,
-              letterSpacing: '.1rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            PeerPrep
-          </Typography>
+          <Logo display={{ xs: 'flex', md: 'none' }} flexGrow={1} />
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: (theme) => theme.palette.primary.contrastText, display: 'block' }}
               >
                 {page}
               </Button>
