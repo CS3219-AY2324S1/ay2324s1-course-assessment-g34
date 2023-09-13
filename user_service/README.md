@@ -5,9 +5,8 @@ Welcome to the User Service API documentation. This API provides endpoints for m
 ## Table of Contents
 
 1. [Endpoints](#endpoints)
-2. [Authentication](#authentication)
-3. [Request and Response Formats](#request-and-response-formats)
 4. [Running the Backend Service](#running-the-backend-service)
+5. [Environment Variables and .env File](#environment-variables-and-env-file)
 
 ## Endpoints
 
@@ -86,3 +85,21 @@ To run the User Service backend locally, follow these steps:
 That's it! You've successfully set up and run the User Service backend.
 
 For more detailed information and customization options, refer to the project's documentation and codebase.
+
+## Environment Variables and .env File
+
+The User Service backend relies on environment variables for configuration. These environment variables are typically stored in a .env file at the root of the project. It is essential to maintain the .env file to provide configuration details such as database connection settings, API keys, and other sensitive information.
+
+Ensure that the .env file contains the necessary environment variables for your project to run correctly. Here is an example of a .env file:
+
+```
+DJANGO_SECRET_KEY=your_secret_key_here
+DJANGO_DEBUG=True
+DATABASE_NAME=user_service
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+DATABASE_HOST=db
+DATABASE_PORT=5432
+```
+
+The .env file allows you to configure your application without hardcoding sensitive information directly into your codebase. Keep the .env file secure and avoid committing it to version control systems to protect sensitive data.
