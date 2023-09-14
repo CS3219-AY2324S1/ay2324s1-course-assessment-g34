@@ -1,14 +1,32 @@
 const mongoose = require("mongoose");
 
-const dataSchema = new mongoose.Schema({
-  name: {
-    required: true,
-    type: String,
-  },
-  age: {
-    required: true,
-    type: Number,
-  },
+const questionSchema = new mongoose.Schema({
+	title: { type: String, required: true },
+	categories: [String],
+	complexity: {
+		type: String,
+		enum: ["Easy", "Medium", "Hard"],
+		required: true,
+	},
+	link: { type: String, required: true },
+	description: { type: String, require: true}
+},
+{
+	collection: 'questionRepo'
 });
 
-module.exports = mongoose.model("Data", dataSchema);
+const Question = mongoose.model("Question", questionSchema);
+
+// const questionDescriptionSchema = new mongoose.Schema({
+// 	qid: { type: Number, required: true },
+// 	description: { type: String, required: true },
+// 	});
+
+// 	const QuestionDescription = mongoose.model(
+// 	"QuestionDescription",
+// 	questionDescriptionSchema
+// );
+
+// module.exports = QuestionDescription;
+
+module.exports = Question;
