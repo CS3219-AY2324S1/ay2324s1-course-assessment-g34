@@ -9,7 +9,7 @@ This API provides endpoints for managing questions related operations. Use this 
 3. [Setting up service](#setting-up-service)
 
 ## Endpoints
-<ins> Question repo services run on port 3000 </ins>
+<ins> Question repo services run on port 5000 </ins>
 
 ### Add a question
 - **URL**: `/api/addQuestion`
