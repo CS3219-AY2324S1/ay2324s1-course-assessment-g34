@@ -16,7 +16,7 @@ module.exports = router;
 
 
 //Post Method
-router.post("/post", async (req, res) => {
+router.post("/addQuestion", async (req, res) => {
     // res.send('Post API')
     const { title, categories, complexity, link, description } = req.body;
 
@@ -32,7 +32,7 @@ router.post("/post", async (req, res) => {
 });
 
 //Get all Method
-router.get("/getAll", async (req, res) => {
+router.get("/getAllQuestions", async (req, res) => {
     try {
         const data = await Question.find();
         res.json(data);
@@ -77,7 +77,7 @@ router.delete("/deleteQuestion/:id", async (req, res) => {
     try {
         const id = req.params.id;
         const data = await Question.findByIdAndDelete(id);
-        res.send(`Document with ${data.name} has been deleted..`);
+        res.send(`Document with ${data.title} has been deleted..`);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
