@@ -1,6 +1,6 @@
-import '@/styles/globals.css'
+import '@/styles/globals.css';
 import { theme } from '@/theme';
-import { ThemeProvider } from '@emotion/react';
+import { ThemeProvider } from '@mui/material/styles';
 import Head from 'next/head'
 
 export default function App({ Component, pageProps }) {

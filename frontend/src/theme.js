@@ -25,5 +25,9 @@ export const theme = createTheme({
       main: '#62FBD7',
       contrastText: darkText
     }
+  },
+  typography: {
+    "fontFamily": `"Open Sans", sans-serif`,
+    "fontWeightRegular": 400
   }
 });

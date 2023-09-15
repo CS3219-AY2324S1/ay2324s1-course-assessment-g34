@@ -1,0 +1,20 @@
+.question__category-list {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  flex-wrap: wrap;
+  margin: 0;
+  width: 100%;
+}
+
+.question__category {
+  margin: 0.2rem;
+  display: flex;
+  align-items: first baseline;
+  padding: 0.3rem 0.6rem;
+  color: var(--primary-light);
+  background-color: var(--success-main);
+  border-radius: 20px;
+  border: 1px solid var(--success-main);
+  box-shadow: 0 1px 2px 1px rgb(18, 18, 18);
+}

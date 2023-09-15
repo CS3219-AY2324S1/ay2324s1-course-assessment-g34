@@ -4,8 +4,12 @@
 
 :root {
   --primary-dark: #0A192F;
+  --primary-light: #172A46;
+  --success-main: #62FBD7;
+  --light-text: #CDD7F7;
 }
 
 body {
   background-color: var(--primary-dark);
+  color: var(--light-text)
 }
