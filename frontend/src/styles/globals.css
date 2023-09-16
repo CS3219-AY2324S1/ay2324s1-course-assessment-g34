@@ -13,3 +13,22 @@ body {
   background-color: var(--primary-dark);
   color: var(--light-text)
 }
+
+.ck.ck-content ul,
+.ck.ck-content ul li {
+  list-style-type: inherit;
+}
+.ck.ck-content ul {
+  padding-left: 40px;
+}
+
+.ck.ck-content ol,
+.ck.ck-content ol li {
+  list-style-type: decimal, decimal-leading-zero;
+}
+.ck.ck-content ol {
+  padding-left: 40px;
+}
+.ck-editor__editable_inline {
+  padding: 0 30px !important;
+}

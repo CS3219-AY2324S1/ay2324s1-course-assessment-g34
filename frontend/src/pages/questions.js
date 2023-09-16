@@ -1,10 +1,8 @@
 import React from "react";
 import Layout from "@/components/Layout";
-import { Box, Container, Typography } from "@mui/material";
-import { Open_Sans } from "next/font/google";
+import { Container, Typography } from "@mui/material";
 import QuestionTable from "@/components/QuestionPage/QuestionTable";
-
-const openSans = Open_Sans( {subsets: ['latin'] });
+import AddQuestionForm from "@/components/QuestionPage/AddQuestionForm";
 
 const questions = [
   {
@@ -61,6 +59,7 @@ export default function QuestionPage() {
           >
             Questions
           </Typography>
+          <AddQuestionForm />
           <QuestionTable questions={questions} />
         </Container>
       </Layout>

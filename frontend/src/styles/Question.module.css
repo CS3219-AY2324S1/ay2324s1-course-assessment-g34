@@ -8,6 +8,7 @@
 }
 
 .question__category {
+  font-weight: bold;
   margin: 0.2rem;
   display: flex;
   align-items: first baseline;

@@ -1,4 +1,4 @@
-import { ArrowDropDownRounded, ArrowLeftRounded, ArrowRightRounded } from "@mui/icons-material";
+import { ArrowDropDownRounded, ArrowRightRounded } from "@mui/icons-material";
 import { Box, Collapse, IconButton, TableCell, TableRow } from "@mui/material";
 import React, { useState } from "react";
 import QuestionCategoryList from "./QuestionCategoryList";
