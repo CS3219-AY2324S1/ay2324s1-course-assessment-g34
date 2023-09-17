@@ -14,7 +14,7 @@ const createRows = (questions) => {
   })
 }
 
-export default function QuestionTable({ questions }) {
+export default function QuestionTable({ questions, setQuestions }) {
   const rows = createRows(questions);
 
   return (
@@ -38,8 +38,9 @@ export default function QuestionTable({ questions }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <QuestionRow key={row.id} row={row} />
+          {rows.map((row, index) => (
+            // change key to id after integration
+            <QuestionRow key={index} row={row} index={index} setQuestions={setQuestions}/>
           ))}
         </TableBody>
       </Table>

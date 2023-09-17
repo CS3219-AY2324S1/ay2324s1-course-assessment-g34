@@ -102,7 +102,7 @@ export default function QuestionPage() {
           }
           {isLoading
             ? <Skeleton variant="rectangular" height='50vh' sx={{ bgcolor: (theme) => theme.palette.primary.light }}/>
-            : <QuestionTable questions={questions} />}
+            : <QuestionTable questions={questions} setQuestions={setQuestions} />}
         </Container>
       </Layout>
     </>

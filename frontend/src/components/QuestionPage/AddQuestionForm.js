@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Dialog, IconButton, MenuItem, Skeleton, Slide, TextField, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, Dialog, IconButton, MenuItem, Skeleton, Slide, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
 import { AddBox, Close } from "@mui/icons-material";
 import React, { forwardRef, useRef, useState } from "react";
 import axios from "axios";
@@ -144,13 +144,15 @@ export default function AddQuestionForm({ setQuestions }) {
 
   return (
     <Box sx={{ display: 'flex'}}>
-      <IconButton
-        size="medium"
-        onClick={handleClickOpen}
-        sx={{ marginLeft: 'auto', color: (theme) => theme.palette.secondary.main }}
-      >
-        <AddBox fontSize="large"/>
-      </IconButton>
+      <Tooltip title="Add" arrow>
+        <IconButton
+          size="medium"
+          onClick={handleClickOpen}
+          sx={{ marginLeft: 'auto', color: (theme) => theme.palette.secondary.main }}
+        >
+          <AddBox fontSize="large"/>
+        </IconButton>
+      </Tooltip>
       <Dialog
         fullScreen
         open={isOpen}

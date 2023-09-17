@@ -1,10 +1,36 @@
-import { ArrowDropDownRounded, ArrowRightRounded } from "@mui/icons-material";
-import { Box, Collapse, IconButton, TableCell, TableRow } from "@mui/material";
+import { ArrowDropDownRounded, ArrowRightRounded, DeleteForeverRounded, EditRounded } from "@mui/icons-material";
+import { Box, Collapse, IconButton, TableCell, TableRow, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import QuestionCategoryList from "./QuestionCategoryList";
 
-export default function QuestionRow({ row }) {
+const getComplexityColour = (complexity) => {
+  switch(complexity) {
+    case "Easy":
+      return (theme) => theme.palette.success.main;
+    case "Medium":
+      return (theme) => theme.palette.warning.main;
+    case "Hard":
+      return (theme) => theme.palette.error.main;
+    default:
+
+  }
+  return;
+}
+
+export default function QuestionRow({ row, index, setQuestions }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const updateQuestions = (index) => {
+    setQuestions((prevState) => prevState.filter((_, i) => i !== index));
+  }
+
+  const handleDelete = async () => {
+    const questions = JSON.parse(localStorage.getItem('questions'));
+    questions.splice(index, 1);
+    localStorage.setItem('questions', JSON.stringify(questions));
+    updateQuestions(index);
+    
+  }
 
   return (
     <>
@@ -36,13 +62,37 @@ export default function QuestionRow({ row }) {
         </TableCell>
         <TableCell
           align="right"
-          sx={{ py: 0, fontWeight: 600, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark }}
+          sx={{ py: 0, fontWeight: 600, color: getComplexityColour(row.complexity), borderColor: (theme) => theme.palette.primary.dark }}
         >
           {row.complexity}
         </TableCell>
         <TableCell
-          sx={{ py: 0, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark }}
-        />
+          align="right"
+          sx={{
+            py: 0,
+            pl: 0,
+            borderColor: (theme) => theme.palette.primary.dark }}
+        >
+          <Tooltip title="Edit" arrow>
+            <IconButton
+              sx={{
+                color: (theme) => theme.palette.primary.contrastText
+              }}
+            >
+              <EditRounded />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete" arrow>
+            <IconButton
+              sx={{
+                color: (theme) => theme.palette.error.main
+              }}
+              onClick={handleDelete}
+            >
+              <DeleteForeverRounded/>
+            </IconButton>
+          </Tooltip>
+        </TableCell>
       </TableRow>
       <TableRow
         sx={{
