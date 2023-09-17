@@ -1,8 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 import React, { useState } from "react";
 
-export default function CategoriesInput() {
-  const [categories, setCategories] = useState([]);
+export default function CategoriesInput({ onChange }) {
 
   return (
     <Autocomplete
@@ -11,13 +10,12 @@ export default function CategoriesInput() {
       id="categories"
       options={[]}
       freeSolo
-      sx={{ m: 1 }}
       fullWidth
-      onChange={(e, newVal) => setCategories(newVal)}
-      value={categories}
+      onChange={(e, newVal) => onChange(newVal)}
       renderInput={(params) => (
         <TextField
           {...params}
+          name="categories"
           variant="outlined"
           label="Categories"
           size="small"

@@ -9,7 +9,7 @@ const createRows = (questions) => {
       title: q.title,
       description: q.description,
       categories: q.categories,
-      difficulty: q.difficulty
+      complexity: q.complexity
     }
   })
 }
@@ -32,7 +32,7 @@ export default function QuestionTable({ questions }) {
               align="right"
               sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
             >
-              Difficulty
+              Complexity
             </TableCell>
             <TableCell sx={{ borderColor: '#747474' }} />
           </TableRow>

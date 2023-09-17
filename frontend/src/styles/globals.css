@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
   --primary-dark: #0A192F;
@@ -12,6 +13,10 @@
 body {
   background-color: var(--primary-dark);
   color: var(--light-text)
+}
+
+.ck.ck-content {
+  font-family: 'Open Sans', sans-serif;
 }
 
 .ck.ck-content ul,
@@ -31,4 +36,5 @@ body {
 }
 .ck-editor__editable_inline {
   padding: 0 30px !important;
+  min-height: 200px;
 }

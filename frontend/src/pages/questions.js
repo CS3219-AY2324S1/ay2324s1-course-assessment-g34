@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
-import { Container, Typography } from "@mui/material";
+import { Container, Skeleton, Typography } from "@mui/material";
 import QuestionTable from "@/components/QuestionPage/QuestionTable";
 import AddQuestionForm from "@/components/QuestionPage/AddQuestionForm";
+import axios from "axios";
+import { GET_ALL_QUESTIONS_SVC_URI } from "@/config/uris";
 
-const questions = [
+const dummyQuestions = [
   {
     id: 1,
     title: "Reverse a String",
@@ -38,6 +40,39 @@ const questions = [
 ]
 
 export default function QuestionPage() {
+  const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const getAllQuestions = async () => {
+    try {
+      const response = await axios.get(GET_ALL_QUESTIONS_SVC_URI);
+      setQuestions(response.data);
+    } catch (error) {
+      console.error("An error occurred:", error);
+      setError("An error occurred while retrieving the questions. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const getQuestionsFromLocalStorage = () => {
+    const storedQuestions = localStorage.getItem('questions');
+
+    if (storedQuestions) {
+      setQuestions(JSON.parse(storedQuestions));
+    } else {
+      localStorage.setItem('questions', JSON.stringify([]));
+    }
+
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getQuestionsFromLocalStorage();
+    // getAllQuestions();
+  }, []);
+
   return (
     <>
       <Layout>
@@ -59,8 +94,15 @@ export default function QuestionPage() {
           >
             Questions
           </Typography>
-          <AddQuestionForm />
-          <QuestionTable questions={questions} />
+          <AddQuestionForm setQuestions={setQuestions} />
+          {error &&
+            <Typography sx={{ textAlign: 'center', color: (theme) => theme.palette.error.main }} variant="h6">
+              {error}
+            </Typography>
+          }
+          {isLoading
+            ? <Skeleton variant="rectangular" height='50vh' sx={{ bgcolor: (theme) => theme.palette.primary.light }}/>
+            : <QuestionTable questions={questions} />}
         </Container>
       </Layout>
     </>

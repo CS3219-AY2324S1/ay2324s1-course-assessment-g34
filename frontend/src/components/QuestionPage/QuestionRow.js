@@ -12,7 +12,7 @@ export default function QuestionRow({ row }) {
         sx={{ '& > *': {
             borderBottom: 'unset',
           },
-          bgcolor: (theme) => theme.palette.primary.light,
+          bgcolor: (theme) => theme.palette.primary.light
         }}
       >
         <TableCell
@@ -30,15 +30,15 @@ export default function QuestionRow({ row }) {
         <TableCell
           component="th"
           scope="row"
-          sx={{ py: 0, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark }}
+          sx={{ py: 0, fontWeight: 600, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark }}
         >
           {row.title}
         </TableCell>
         <TableCell
           align="right"
-          sx={{ py: 0, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark }}
+          sx={{ py: 0, fontWeight: 600, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark }}
         >
-          {row.difficulty}
+          {row.complexity}
         </TableCell>
         <TableCell
           sx={{ py: 0, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark }}
