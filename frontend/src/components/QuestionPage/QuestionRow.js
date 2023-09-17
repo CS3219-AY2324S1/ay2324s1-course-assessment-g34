@@ -2,6 +2,7 @@ import { ArrowDropDownRounded, ArrowRightRounded, DeleteForeverRounded, EditRoun
 import { Box, Collapse, IconButton, TableCell, TableRow, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import QuestionCategoryList from "./QuestionCategoryList";
+import DeleteQuestionDialog from "./DeleteQuestionDialog";
 
 const getComplexityColour = (complexity) => {
   switch(complexity) {
@@ -19,6 +20,7 @@ const getComplexityColour = (complexity) => {
 
 export default function QuestionRow({ row, index, setQuestions }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const updateQuestions = (index) => {
     setQuestions((prevState) => prevState.filter((_, i) => i !== index));
@@ -29,7 +31,6 @@ export default function QuestionRow({ row, index, setQuestions }) {
     questions.splice(index, 1);
     localStorage.setItem('questions', JSON.stringify(questions));
     updateQuestions(index);
-    
   }
 
   return (
@@ -87,11 +88,13 @@ export default function QuestionRow({ row, index, setQuestions }) {
               sx={{
                 color: (theme) => theme.palette.error.main
               }}
-              onClick={handleDelete}
+              onClick={() => setIsDeleteDialogOpen(true)}
+              aria-haspopup="true"
             >
               <DeleteForeverRounded/>
             </IconButton>
           </Tooltip>
+          <DeleteQuestionDialog isOpen={isDeleteDialogOpen} onClose={() => setIsDeleteDialogOpen(false)} handleDelete={handleDelete} question={row}/>
         </TableCell>
       </TableRow>
       <TableRow

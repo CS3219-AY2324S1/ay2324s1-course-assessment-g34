@@ -194,7 +194,7 @@ export default function AddQuestionForm({ setQuestions }) {
                   error={titleError != null}
                   helperText={titleError}
                   onChange={(e) => handleChange(e)}
-                  />
+                />
                 <TextField
                   id="complexity"
                   name="complexity"

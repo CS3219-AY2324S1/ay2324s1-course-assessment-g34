@@ -23,7 +23,9 @@ export const theme = createTheme({
     },
     success: {
       main: '#62FBD7',
-      contrastText: darkText
+      light: '#62FBD7',
+      dark: '#62FBD7',
+      contrastText: lightText
     },
     formTheme: {
       main: '#B3A1FF',
