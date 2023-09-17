@@ -5,6 +5,8 @@
 
 import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
 
+import { UploadAdapter } from '@ckeditor/ckeditor5-adapter-ckfinder';
+import { Alignment } from '@ckeditor/ckeditor5-alignment';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
 import {
 	Bold,
@@ -18,20 +20,20 @@ import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
 import { Essentials } from '@ckeditor/ckeditor5-essentials';
 import { FindAndReplace } from '@ckeditor/ckeditor5-find-and-replace';
 import {
+	AutoImage,
 	Image,
 	ImageCaption,
+	ImageInsert,
 	ImageResize,
 	ImageStyle,
 	ImageToolbar,
 	ImageUpload
 } from '@ckeditor/ckeditor5-image';
-import { Indent } from '@ckeditor/ckeditor5-indent';
+import { Indent, IndentBlock } from '@ckeditor/ckeditor5-indent';
 import { AutoLink, Link } from '@ckeditor/ckeditor5-link';
 import { List, ListProperties } from '@ckeditor/ckeditor5-list';
-import { Markdown } from '@ckeditor/ckeditor5-markdown-gfm';
 import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
 import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
-import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
 import {
 	Table,
 	TableCellProperties,
@@ -46,6 +48,8 @@ import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 
 class Editor extends ClassicEditor {
 	public static override builtinPlugins = [
+		Alignment,
+		AutoImage,
 		AutoLink,
 		Autoformat,
 		Bold,
@@ -55,19 +59,19 @@ class Editor extends ClassicEditor {
 		FindAndReplace,
 		Image,
 		ImageCaption,
+		ImageInsert,
 		ImageResize,
 		ImageStyle,
 		ImageToolbar,
 		ImageUpload,
 		Indent,
+		IndentBlock,
 		Italic,
 		Link,
 		List,
 		ListProperties,
-		Markdown,
 		Paragraph,
 		PasteFromOffice,
-		SourceEditing,
 		Subscript,
 		Superscript,
 		Table,
@@ -76,7 +80,8 @@ class Editor extends ClassicEditor {
 		TableProperties,
 		TableToolbar,
 		TextTransformation,
-		Underline
+		Underline,
+		UploadAdapter
 	];
 
 	public static override defaultConfig = {
@@ -88,21 +93,21 @@ class Editor extends ClassicEditor {
 				'bold',
 				'underline',
 				'italic',
-				'link',
-				'superscript',
 				'subscript',
+				'superscript',
 				'|',
 				'bulletedList',
 				'numberedList',
 				'outdent',
 				'indent',
 				'|',
-				'imageUpload',
-				'insertTable',
-				'|',
 				'code',
 				'codeBlock',
-				'sourceEditing',
+				'|',
+				'link',
+				'imageUpload',
+				'imageInsert',
+				'insertTable',
 				'|',
 				'findAndReplace'
 			]
