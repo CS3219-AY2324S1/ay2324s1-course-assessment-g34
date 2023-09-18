@@ -24,21 +24,21 @@ export default function QuestionTable({ questions, setQuestions }) {
         <TableHead>
           <TableRow>
             <TableCell
-              // sx={{ borderColor: '#747474' }}
+              sx={{ borderColor: '#747474' }}
             />
             <TableCell
-              // sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
+              sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
             >
               Title
             </TableCell>
             <TableCell
               align="right"
-              // sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
+              sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
             >
               Complexity
             </TableCell>
             <TableCell
-              // sx={{ borderColor: '#747474' }}
+              sx={{ borderColor: '#747474' }}
             />
           </TableRow>
         </TableHead>

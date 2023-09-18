@@ -1,41 +1,21 @@
-import { createTheme } from "@mui/material/styles";
+import { alpha, createTheme, darken, getContrastRatio } from "@mui/material/styles";
 
-
-const lightText = '#CDD7F7';
-const darkText = '#172A46';
-
-const { palette } = createTheme();
-const {augmentColor} = palette;
-const createColor = (main) => augmentColor({ color: { main: main }});
+const createColor = (color) => {
+  return {
+    main: color,
+    light: alpha(color, 0.5),
+    dark: darken(color, 0.1),
+    contrastText: getContrastRatio(color, '#fff') > 4.5 ? '#fff' : '#111'
+  };
+}
 
 export const theme = createTheme({
-  // palette: {
-  //   primary: {
-  //     main: '#0D203A',
-  //     light: '#172A46',
-  //     dark: '#0A192F',
-  //     contrastText: lightText
-  //   },
-  //   secondary: {
-  //     main: '#B3A1FF'
-  //   },
-  //   error: {
-  //     main: '#FB1C52',
-  //     contrastText: darkText
-  //   },
-  //   warning: {
-  //     main: '#FBBC1C'
-  //   },
-  //   success: {
-  //     main: '#62FBD7',
-  //     light: '#62FBD7',
-  //     dark: '#62FBD7',
-  //     contrastText: lightText
-  //   }
-  // },
   palette: {
-    primary: createColor('#172A46'),
-    neonGreen: createColor('#62FBD7')
+    primary: createColor('#0D203A'),
+    secondary: createColor('#79155B'),
+    success: createColor('#62FBD7'),
+    warning: createColor('#FBBC1C'),
+    error: createColor('#FB1C52'),
   },
   typography: {
     "fontFamily": `"Open Sans", sans-serif`,

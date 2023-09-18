@@ -1,5 +1,5 @@
-import { ArrowDropDownRounded, ArrowRightRounded, DeleteForeverRounded, EditRounded } from "@mui/icons-material";
-import { Box, Button, Collapse, IconButton, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
+import { ArrowDropDownRounded, ArrowRightRounded, DeleteForeverRounded, EditRounded, LinkRounded } from "@mui/icons-material";
+import { Box, Chip, Collapse, IconButton, TableCell, TableRow, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import QuestionCategoryList from "./QuestionCategoryList";
 import DeleteQuestionDialog from "./DeleteQuestionDialog";
@@ -8,11 +8,11 @@ import EditQuestionForm from "./EditQuestionForm";
 const getComplexityColour = (complexity) => {
   switch(complexity) {
     case "Easy":
-      return (theme) => theme.palette.success.main;
+      return "success";
     case "Medium":
-      return (theme) => theme.palette.warning.main;
+      return "warning";
     case "Hard":
-      return (theme) => theme.palette.error.main;
+      return "error";
     default:
 
   }
@@ -41,22 +41,21 @@ export default function QuestionRow({ row, index, setQuestions }) {
         sx={{ '& > *': {
             borderBottom: 'unset',
           },
-          // bgcolor: (theme) => theme.palette.primary.light
+          bgcolor: '#fbfbfb',
         }}
       >
         <TableCell
           sx={{
             py: 0,
-            // color: (theme) => theme.palette.primary.contrastText,
-            // borderColor: (theme) => theme.palette.primary.dark,
-            maxWidth: '30px'
+            maxWidth: '30px',
+            borderColor: '#c4c4c4',
           }}
         >
           <IconButton
+            color="primary"
             aria-label="expand row"
             size="small"
             onClick={() => setIsOpen(!isOpen)}
-            // sx={{ color: (theme) => theme.palette.primary.contrastText }}
           >
             { isOpen ? <ArrowDropDownRounded fontSize="large"/> : <ArrowRightRounded fontSize="large"/> }
           </IconButton>
@@ -67,8 +66,8 @@ export default function QuestionRow({ row, index, setQuestions }) {
           sx={{
             py: 0,
             fontWeight: 600,
-            // color: (theme) => theme.palette.primary.contrastText,
-            // borderColor: (theme) => theme.palette.primary.dark
+            borderColor: '#c4c4c4',
+            color: (theme) => theme.palette.primary.main,
           }}
         >
           {row.title}
@@ -78,23 +77,27 @@ export default function QuestionRow({ row, index, setQuestions }) {
           sx={{
             py: 0,
             fontWeight: 600,
-            color: getComplexityColour(row.complexity),
-            // borderColor: (theme) => theme.palette.primary.dark
+            borderColor: '#c4c4c4',
           }}
         >
-          {row.complexity}
+          <Chip color={getComplexityColour(row.complexity)} label={row.complexity} />
         </TableCell>
         <TableCell
           align="right"
           sx={{
             py: 0,
             pl: 0,
-            // borderColor: (theme) => theme.palette.primary.dark
+            borderColor: '#c4c4c4',
           }}
         >
-          <Button variant="outlined" href={row.link} color="secondary" size="small">
-            Link
-          </Button>
+          <Tooltip title="Link" arrow>
+            <IconButton
+              href={row.link}
+              color="secondary"
+            >
+              <LinkRounded />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Edit" arrow>
             <IconButton
               sx={{
@@ -121,14 +124,13 @@ export default function QuestionRow({ row, index, setQuestions }) {
       </TableRow>
       <TableRow
         sx={{
-          // bgcolor: (theme) => theme.palette.primary.light,
+          bgcolor: '#fbfbfb',
           // color: (theme) => theme.palette.primary.contrastText,
         }}
       >
         <TableCell
           sx={{
             py: 0,
-            // borderColor: (theme) => theme.palette.primary.dark
           }}
           colSpan={6}
         >

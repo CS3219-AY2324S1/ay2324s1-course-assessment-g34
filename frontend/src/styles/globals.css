@@ -4,10 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
-  --primary-dark: #0A192F;
-  --primary-light: #172A46;
-  --success-main: #62FBD7;
-  --light-text: #CDD7F7;
+  --primary-main: #0D203A;
   --ck-color-image-caption-background: hsl(0, 0%, 97%);
   --ck-color-image-caption-text: hsl(0, 0%, 20%);
   --ck-color-mention-background: hsla(341, 100%, 30%, 0.1);
@@ -26,8 +23,8 @@
 }
 
 body {
-  /* background-color: var(--primary-dark); */
-  /* color: var(--light-text) */
+  /* background-color: #fafaf3; */
+  color: var(--primary-main)
 }
 
 .ck.ck-content {

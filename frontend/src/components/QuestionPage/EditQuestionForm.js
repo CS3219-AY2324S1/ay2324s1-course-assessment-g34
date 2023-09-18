@@ -6,6 +6,7 @@ import CategoriesInput from "./CategoriesInput";
 import axios from "axios";
 import { UPDATE_QUESTION_SVC_URI } from "@/config/uris";
 import { validateComplexity, validateDescription, validateLink, validateTitle } from "@/utils/validation";
+import SolidButton from "../SolidButton";
 
 
 const Editor = dynamic(() => import("./QuestionDescriptionEditor"), {
@@ -81,11 +82,11 @@ export default function EditQuestionForm({ setQuestions, question, index, isOpen
     resetErrors();
 
     const updatedQuestionData = {
-      title: questionData.title,
-      complexity: questionData.complexity,
+      title: questionData.title.trim(),
+      complexity: questionData.complexity.trim(),
       categories: categories,
-      link: questionData.link,
-      description: description
+      link: questionData.link.trim(),
+      description: description.trim()
     }
   
     const errors = [];
@@ -251,15 +252,15 @@ export default function EditQuestionForm({ setQuestions, question, index, isOpen
             >
               Cancel
             </Button>
-            <Button
+            <SolidButton
               variant="contained"
               size="medium"
               color="success"
               type="submit"
-              sx={{ "&.MuiButton-contained": {bgcolor: (theme) => theme.palette.success.main} }}
+              sx={{ textTransform: 'none' }}
             >
               Submit
-            </Button>
+            </SolidButton>
           </Box>
         </form>
       </Container>

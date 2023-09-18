@@ -1,14 +1,12 @@
 import React from "react";
-import styles from '../../styles/Question.module.css';
+import { Chip, Stack } from "@mui/material";
 
 export default function QuestionCategoryList({ categories }) {
   return (
-    <ul className={styles["question__category-list"]}>
+    <Stack direction="row" spacing={1}>
       {categories.map((cat) => (
-        <li key={cat} className={styles["question__category"]}>
-          {cat}
-        </li>
+        <Chip key={cat} label={cat} color="secondary" sx={{ fontWeight: '600' }}/>
       ))}
-    </ul>
+    </Stack>
   );
 }

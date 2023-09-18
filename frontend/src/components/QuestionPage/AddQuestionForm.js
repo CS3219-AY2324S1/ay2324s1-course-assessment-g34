@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import CategoriesInput from "./CategoriesInput";
 import { ADD_QUESTION_SVC_URI } from "@/config/uris";
 import { validateComplexity, validateDescription, validateLink, validateTitle } from "@/utils/validation";
+import SolidButton from "../SolidButton";
 
 const Editor = dynamic(() => import("./QuestionDescriptionEditor"), {
   ssr: false,
@@ -81,11 +82,11 @@ export default function AddQuestionForm({ setQuestions }) {
     resetErrors();
     
     const newQuestionData = {
-      title: questionData.title,
-      complexity: questionData.complexity,
+      title: questionData.title.trim(),
+      complexity: questionData.complexity.trim(),
       categories: categories,
-      link: questionData.link,
-      description: description
+      link: questionData.link.trim(),
+      description: description.trim()
     }
     
     // validate question data
@@ -261,12 +262,9 @@ export default function AddQuestionForm({ setQuestions }) {
               >
                 Cancel
               </Button>
-              <Button
-                variant="contained" color="success" size="medium" type="submit"
-                sx={{ "&.MuiButton-contained": { backgroundColor: (theme) => theme.palette.secondary.main }}}
-              >
+              <SolidButton variant="contained" color="success" size="medium" type="submit" sx={{ textTransform: 'none' }}>
                 Submit
-              </Button>
+              </SolidButton>
             </Box>
           </form>
         </Container>
