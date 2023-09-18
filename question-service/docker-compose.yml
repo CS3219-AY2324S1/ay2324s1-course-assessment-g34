@@ -12,7 +12,7 @@ services:
   api:
     build: .
     ports: 
-      - 4000:3000
+      - 3000:3000
     environment:
       PORT: 3000
     depends_on:

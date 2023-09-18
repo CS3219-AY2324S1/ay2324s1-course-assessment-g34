@@ -83,6 +83,8 @@ DATABASE_URL =unique_mongdoDB_url
 1. Run `npm i` to install the relevant dependencies
 2. Install Postman if you need to test API
 3. Install MongoDB Compass to view database
-4. cd backend
-5. `npm start` 
-6. Once you see **Server Started at 3000 Database Connected**, you may start interacting with the database
+4. Install Docker and ensure this is opened, which enable us to use the 'docker' command in the terminal
+5. cd backend
+6. Type `docker compose up` in the terminal to start
+7. Once you see **Database Connected**, you may start interacting with the database
+8. When finished, press `Control + C` in the terminal to exit, type `docker compose down` to remove the containers 
