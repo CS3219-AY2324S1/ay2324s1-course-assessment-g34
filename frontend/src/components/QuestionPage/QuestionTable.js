@@ -23,9 +23,7 @@ export default function QuestionTable({ questions, setQuestions }) {
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            <TableCell
-              sx={{ borderColor: '#747474' }}
-            />
+            <TableCell sx={{ borderColor: '#747474' }}/>
             <TableCell
               sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
             >
@@ -37,9 +35,7 @@ export default function QuestionTable({ questions, setQuestions }) {
             >
               Complexity
             </TableCell>
-            <TableCell
-              sx={{ borderColor: '#747474' }}
-            />
+            <TableCell sx={{ borderColor: '#747474' }}/>
           </TableRow>
         </TableHead>
         <TableBody>

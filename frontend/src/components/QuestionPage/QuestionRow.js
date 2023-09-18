@@ -1,9 +1,9 @@
-import { ArrowDropDownRounded, ArrowRightRounded, DeleteForeverRounded, EditRounded, LinkRounded } from "@mui/icons-material";
+import { ArrowDropDownRounded, ArrowRightRounded, DeleteForeverRounded, LinkRounded } from "@mui/icons-material";
 import { Box, Chip, Collapse, IconButton, TableCell, TableRow, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import QuestionCategoryList from "./QuestionCategoryList";
 import DeleteQuestionDialog from "./DeleteQuestionDialog";
-import EditQuestionForm from "./EditQuestionForm";
+import EditQuestion from "./EditQuestion";
 
 const getComplexityColour = (complexity) => {
   switch(complexity) {
@@ -14,7 +14,6 @@ const getComplexityColour = (complexity) => {
     case "Hard":
       return "error";
     default:
-
   }
   return;
 }
@@ -22,7 +21,6 @@ const getComplexityColour = (complexity) => {
 export default function QuestionRow({ row, index, setQuestions }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const updateDeletedQuestions = (index) => {
     setQuestions((prevState) => prevState.filter((_, i) => i !== index));
@@ -44,13 +42,7 @@ export default function QuestionRow({ row, index, setQuestions }) {
           bgcolor: '#fbfbfb',
         }}
       >
-        <TableCell
-          sx={{
-            py: 0,
-            maxWidth: '30px',
-            borderColor: '#c4c4c4',
-          }}
-        >
+        <TableCell sx={{ py: 0, maxWidth: '30px',borderColor: '#c4c4c4' }}>
           <IconButton
             color="primary"
             aria-label="expand row"
@@ -74,82 +66,49 @@ export default function QuestionRow({ row, index, setQuestions }) {
         </TableCell>
         <TableCell
           align="right"
-          sx={{
-            py: 0,
-            fontWeight: 600,
-            borderColor: '#c4c4c4',
-          }}
+          sx={{ py: 0, fontWeight: 600, borderColor: '#c4c4c4' }}
         >
           <Chip color={getComplexityColour(row.complexity)} label={row.complexity} />
         </TableCell>
         <TableCell
           align="right"
-          sx={{
-            py: 0,
-            pl: 0,
-            borderColor: '#c4c4c4',
-          }}
+          sx={{ py: 0, pl: 0, borderColor: '#c4c4c4' }}
         >
           <Tooltip title="Link" arrow>
-            <IconButton
-              href={row.link}
-              color="secondary"
-            >
+            <IconButton href={row.link} color="secondary">
               <LinkRounded />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Edit" arrow>
-            <IconButton
-              sx={{
-                // color: (theme) => theme.palette.primary.contrastText
-              }}
-              onClick={() => setIsEditOpen(true)}
-            >
-              <EditRounded />
-            </IconButton>
-          </Tooltip>
+          <EditQuestion setQuestions={setQuestions} index={index} question={row} />
           <Tooltip title="Delete" arrow>
             <IconButton
-              sx={{
-                color: (theme) => theme.palette.error.main
-              }}
+              sx={{ color: (theme) => theme.palette.error.main }}
               onClick={() => setIsDeleteDialogOpen(true)}
               aria-haspopup="true"
             >
               <DeleteForeverRounded/>
             </IconButton>
           </Tooltip>
-          <DeleteQuestionDialog isOpen={isDeleteDialogOpen} onClose={() => setIsDeleteDialogOpen(false)} handleDelete={handleDelete} question={row}/>
+          <DeleteQuestionDialog
+            isOpen={isDeleteDialogOpen}
+            onClose={() => setIsDeleteDialogOpen(false)}
+            handleDelete={handleDelete}
+            question={row}
+          />
         </TableCell>
       </TableRow>
-      <TableRow
-        sx={{
-          bgcolor: '#fbfbfb',
-          // color: (theme) => theme.palette.primary.contrastText,
-        }}
-      >
-        <TableCell
-          sx={{
-            py: 0,
-          }}
-          colSpan={6}
-        >
+      <TableRow sx={{ bgcolor: '#fbfbfb' }}>
+        <TableCell sx={{ py: 0 }} colSpan={6}>
           <Collapse in={isOpen} timeout="auto" unmountOnExit>
             <Box sx={{ mx: 1, my: 2 }}>
               <QuestionCategoryList categories={row.categories} />
-              <Box
-                sx={{
-                  margin: 1,
-                  // color: (theme) => theme.palette.primary.contrastText
-                }}
-              >
+              <Box sx={{ mx: 1, my: 3 }}>
                 <div className="ck-content" dangerouslySetInnerHTML={{ __html: row.description}}></div>
               </Box>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-      <EditQuestionForm setQuestions={setQuestions} question={row} index={index} isOpen={isEditOpen} onClose={() => setIsEditOpen(false)}/>
     </>
   );
 }

@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
-import { Open_Sans } from "next/font/google";
 import MenuIcon from '@mui/icons-material/Menu';
 import Logo from "./Logo";
 import Link from "next/link";
-
-const openSans = Open_Sans( {subsets: ['latin'] });
 
 const pages = [
   {
@@ -21,6 +18,7 @@ const pages = [
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function Navbar() {
+  // temporary avatar placeholder; to change later
   const [image, setImage] = useState('http://localhost:3000/images/user-avatar.png');
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -41,9 +39,7 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar
-      position="static"
-    >
+    <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Logo display={{ xs: 'none', md: 'flex' }} />
@@ -60,10 +56,7 @@ export default function Navbar() {
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
               keepMounted
               transformOrigin={{
                 vertical: 'top',
@@ -71,18 +64,11 @@ export default function Navbar() {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' }
-              }}
+              sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
                 <MenuItem key={page.label} onClick={handleCloseNavMenu}>
-                  <Typography
-                    sx={{
-                      textAlign: 'center',
-                      fontFamily: openSans.style,
-                    }}
-                  >
+                  <Typography sx={{ textAlign: 'center' }}>
                     <Link href={page.path}>
                       {page.label}
                     </Link>
@@ -116,15 +102,9 @@ export default function Navbar() {
               sx={{ mt: '45px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >

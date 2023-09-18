@@ -1,39 +1,30 @@
 import { Close } from "@mui/icons-material";
-import { AppBar, Box, Button, Container, Dialog, FormControlLabel, IconButton, InputLabel, MenuItem, Skeleton, Slide, TextField, Toolbar, Typography } from "@mui/material";
-import React, { forwardRef, useRef, useState } from "react";
+import { AppBar, Box, Button, Container, Dialog, IconButton, InputLabel, Skeleton, Slide, TextField, Toolbar, Typography } from "@mui/material";
 import dynamic from "next/dynamic";
+import React, { forwardRef, useRef, useState } from "react";
+import ComplexitySelector from "./ComplexitySelector";
 import CategoriesInput from "./CategoriesInput";
-import axios from "axios";
-import { UPDATE_QUESTION_SVC_URI } from "@/config/uris";
-import { validateComplexity, validateDescription, validateLink, validateTitle } from "@/utils/validation";
 import SolidButton from "../SolidButton";
-
+import { validateComplexity, validateDescription, validateLink, validateTitle } from "@/utils/validation";
 
 const Editor = dynamic(() => import("./QuestionDescriptionEditor"), {
   ssr: false,
-  loading: () => <Skeleton variant="rectangular" height='40vh' />
+  loading: () => <Skeleton variant="rectangular" height="40 vh" />
 })
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
-})
+});
 
-const complexities = [
-  {
-    value: 'Easy',
-    label: 'Easy'
-  },
-  {
-    value: 'Medium',
-    label: 'Medium'
-  },
-  {
-    value: 'Hard',
-    label: 'Hard'
-  }
-];
+const defaultQuestionData = {
+  title: "",
+  complexity: "Easy",
+  categories: [],
+  link: "",
+  description: ""
+}
 
-export default function EditQuestionForm({ setQuestions, question, index, isOpen, onClose }) {
+export default function QuestionForm({ question = defaultQuestionData, isOpen, onClose, label, id, onSubmit, generalError }) {
   const editorRef = useRef(null);
   const [titleError, setTitleError] = useState(null);
   const [complexityError, setComplexityError] = useState(null);
@@ -69,31 +60,14 @@ export default function EditQuestionForm({ setQuestions, question, index, isOpen
     });
   }
 
-  const updateEditedQuestions = (index, question) => {
-    setQuestions((prevState) => {
-      const updatedQuestions = [...prevState];
-      updatedQuestions[index] = question;
-      return updatedQuestions;
-    });
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    resetErrors();
-
-    const updatedQuestionData = {
-      title: questionData.title.trim(),
-      complexity: questionData.complexity.trim(),
-      categories: categories,
-      link: questionData.link.trim(),
-      description: description.trim()
-    }
-  
+  const validateQuestionData = (question) => {
+    const { title, complexity, link, description } = question;
     const errors = [];
-    const titleError = validateTitle(updatedQuestionData.title);
-    const complexityError = validateComplexity(updatedQuestionData.complexity);
-    const linkError = validateLink(updatedQuestionData.link);
-    const descriptionError = validateDescription(updatedQuestionData.description);
+
+    const titleError = validateTitle(title);
+    const complexityError = validateComplexity(complexity);
+    const linkError = validateLink(link);
+    const descriptionError = validateDescription(description);
 
     if (titleError) {
       errors.push(titleError);
@@ -115,31 +89,30 @@ export default function EditQuestionForm({ setQuestions, question, index, isOpen
       setDescriptionError(descriptionError);
     }
 
-    if (errors.length > 0) {
+    return errors.length == 0;
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    resetErrors();
+
+    const newQuestionData = {
+      title: questionData.title.trim(),
+      complexity: questionData.complexity.trim(),
+      categories: categories,
+      link: questionData.link.trim(),
+      description: description.trim()
+    }
+
+    if (!validateQuestionData(newQuestionData)) {
       return;
     }
 
-    // local storage
-    const questions = JSON.parse(localStorage.getItem('questions'));
-    questions[index] = updatedQuestionData;
-    localStorage.setItem('questions', JSON.stringify(questions));
-    updateEditedQuestions(index, updatedQuestionData);
-    handleClose();
+    onSubmit(newQuestionData);
 
-    // try {
-    //   // change index to proper id from database
-    //   const response = await axios.patch(`${UPDATE_QUESTION_SVC_URI}/${index}`, updatedQuestionData);
-
-    //   // update state in client
-    //   updateEditedQuestions(index, updatedQuestionData);
-    //   handleClose();
-    // } catch (error) {
-    //   if (error.respone && error.response.status === 400) {
-    //     console.error("Bad Request: ", error.response.data);
-    //   } else {
-    //     console.error("An error occurred: ", error);
-    //   }
-    // }
+    if (generalError == null) {
+      handleClose();
+    } 
   }
 
   return (
@@ -151,12 +124,8 @@ export default function EditQuestionForm({ setQuestions, question, index, isOpen
     >
       <AppBar sx={{ position: 'relative' }}>
         <Toolbar>
-          <Typography
-            sx={{ flex: 1 }}
-            variant="h6"
-            component="div"
-          >
-            Edit a Question
+          <Typography sx={{ flex: 1 }} variant="h6" component="div">
+            {label}
           </Typography>
           <IconButton
             edge="end"
@@ -169,7 +138,7 @@ export default function EditQuestionForm({ setQuestions, question, index, isOpen
         </Toolbar>
       </AppBar>
       <Container sx={{ my: 1 }}>
-        <form id="edit_question" noValidate onSubmit={handleSubmit}>
+        <form id={id} noValidate onSubmit={handleSubmit}>
           <Box sx={{ my: 1 }}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
               <TextField
@@ -187,29 +156,18 @@ export default function EditQuestionForm({ setQuestions, question, index, isOpen
                 helperText={titleError}
                 onChange={(e) => handleChange(e)}
               />
-              <TextField
+              <ComplexitySelector
                 required
-                id="complexity"
-                name="complexity"
-                select
                 value={questionData.complexity}
                 size="small"
-                label="Complexity"
-                defaultValue="Easy"
                 sx={{ mt: 1, width: '20ch' }}
                 error={complexityError != null}
                 helperText={complexityError}
                 onChange={(e) => handleChange(e)}
-              >
-                {complexities.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              />
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              <CategoriesInput onChange={setCategories} value={categories}/>
+              <CategoriesInput value={categories} onChange={setCategories} />
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               <TextField
@@ -241,6 +199,11 @@ export default function EditQuestionForm({ setQuestions, question, index, isOpen
           {descriptionError &&
             <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: 12, ml: 2 }}>
               {descriptionError}
+            </Typography>
+          }
+          {generalError &&
+            <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: 12, ml: 2 }}>
+              {generalError}
             </Typography>
           }
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>

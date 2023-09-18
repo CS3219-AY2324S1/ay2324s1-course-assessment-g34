@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Container, Skeleton, Typography } from "@mui/material";
 import QuestionTable from "@/components/QuestionPage/QuestionTable";
-import AddQuestionForm from "@/components/QuestionPage/AddQuestionForm";
 import axios from "axios";
 import { GET_ALL_QUESTIONS_SVC_URI } from "@/config/uris";
+import AddQuestion from "@/components/QuestionPage/AddQuestion";
 
 export default function QuestionPage() {
   const [questions, setQuestions] = useState([]);
@@ -43,9 +43,7 @@ export default function QuestionPage() {
   return (
     <>
       <Layout>
-        <Container
-          maxWidth="xl"
-          sx={{ height: '100vh', my: 2}}
+        <Container maxWidth="xl" sx={{ height: '100vh', my: 2}}
         >
           <Typography
             variant="h5"
@@ -61,7 +59,7 @@ export default function QuestionPage() {
           >
             Questions
           </Typography>
-          <AddQuestionForm setQuestions={setQuestions} />
+          <AddQuestion setQuestions={setQuestions} />
           {error &&
             <Typography color="error" sx={{ textAlign: 'center' }} variant="h6">
               {error}

@@ -284,6 +284,7 @@ body {
 }
 /* @ckeditor/ckeditor5-list/theme/list.css */
 .ck-content ol {
+  padding-left: 40px;
   list-style-type: decimal;
 }
 /* @ckeditor/ckeditor5-list/theme/list.css */
@@ -304,6 +305,7 @@ body {
 }
 /* @ckeditor/ckeditor5-list/theme/list.css */
 .ck-content ul {
+  padding-left: 40px;
   list-style-type: disc;
 }
 /* @ckeditor/ckeditor5-list/theme/list.css */
