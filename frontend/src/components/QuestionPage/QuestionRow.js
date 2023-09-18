@@ -1,8 +1,9 @@
 import { ArrowDropDownRounded, ArrowRightRounded, DeleteForeverRounded, EditRounded } from "@mui/icons-material";
-import { Box, Collapse, IconButton, TableCell, TableRow, Tooltip } from "@mui/material";
+import { Box, Button, Collapse, IconButton, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
 import QuestionCategoryList from "./QuestionCategoryList";
 import DeleteQuestionDialog from "./DeleteQuestionDialog";
+import EditQuestionForm from "./EditQuestionForm";
 
 const getComplexityColour = (complexity) => {
   switch(complexity) {
@@ -21,8 +22,9 @@ const getComplexityColour = (complexity) => {
 export default function QuestionRow({ row, index, setQuestions }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const updateQuestions = (index) => {
+  const updateDeletedQuestions = (index) => {
     setQuestions((prevState) => prevState.filter((_, i) => i !== index));
   }
 
@@ -30,7 +32,7 @@ export default function QuestionRow({ row, index, setQuestions }) {
     const questions = JSON.parse(localStorage.getItem('questions'));
     questions.splice(index, 1);
     localStorage.setItem('questions', JSON.stringify(questions));
-    updateQuestions(index);
+    updateDeletedQuestions(index);
   }
 
   return (
@@ -39,17 +41,22 @@ export default function QuestionRow({ row, index, setQuestions }) {
         sx={{ '& > *': {
             borderBottom: 'unset',
           },
-          bgcolor: (theme) => theme.palette.primary.light
+          // bgcolor: (theme) => theme.palette.primary.light
         }}
       >
         <TableCell
-          sx={{ py: 0, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark, maxWidth: '30px' }}
+          sx={{
+            py: 0,
+            // color: (theme) => theme.palette.primary.contrastText,
+            // borderColor: (theme) => theme.palette.primary.dark,
+            maxWidth: '30px'
+          }}
         >
           <IconButton
             aria-label="expand row"
             size="small"
             onClick={() => setIsOpen(!isOpen)}
-            sx={{ color: (theme) => theme.palette.primary.contrastText }}
+            // sx={{ color: (theme) => theme.palette.primary.contrastText }}
           >
             { isOpen ? <ArrowDropDownRounded fontSize="large"/> : <ArrowRightRounded fontSize="large"/> }
           </IconButton>
@@ -57,13 +64,23 @@ export default function QuestionRow({ row, index, setQuestions }) {
         <TableCell
           component="th"
           scope="row"
-          sx={{ py: 0, fontWeight: 600, color: (theme) => theme.palette.primary.contrastText, borderColor: (theme) => theme.palette.primary.dark }}
+          sx={{
+            py: 0,
+            fontWeight: 600,
+            // color: (theme) => theme.palette.primary.contrastText,
+            // borderColor: (theme) => theme.palette.primary.dark
+          }}
         >
           {row.title}
         </TableCell>
         <TableCell
           align="right"
-          sx={{ py: 0, fontWeight: 600, color: getComplexityColour(row.complexity), borderColor: (theme) => theme.palette.primary.dark }}
+          sx={{
+            py: 0,
+            fontWeight: 600,
+            color: getComplexityColour(row.complexity),
+            // borderColor: (theme) => theme.palette.primary.dark
+          }}
         >
           {row.complexity}
         </TableCell>
@@ -72,13 +89,18 @@ export default function QuestionRow({ row, index, setQuestions }) {
           sx={{
             py: 0,
             pl: 0,
-            borderColor: (theme) => theme.palette.primary.dark }}
+            // borderColor: (theme) => theme.palette.primary.dark
+          }}
         >
+          <Button variant="outlined" href={row.link} color="secondary" size="small">
+            Link
+          </Button>
           <Tooltip title="Edit" arrow>
             <IconButton
               sx={{
-                color: (theme) => theme.palette.primary.contrastText
+                // color: (theme) => theme.palette.primary.contrastText
               }}
+              onClick={() => setIsEditOpen(true)}
             >
               <EditRounded />
             </IconButton>
@@ -99,26 +121,33 @@ export default function QuestionRow({ row, index, setQuestions }) {
       </TableRow>
       <TableRow
         sx={{
-          bgcolor: (theme) => theme.palette.primary.light,
-          color: (theme) => theme.palette.primary.contrastText,
+          // bgcolor: (theme) => theme.palette.primary.light,
+          // color: (theme) => theme.palette.primary.contrastText,
         }}
       >
         <TableCell
           sx={{
             py: 0,
-            borderColor: (theme) => theme.palette.primary.dark }}
+            // borderColor: (theme) => theme.palette.primary.dark
+          }}
           colSpan={6}
         >
           <Collapse in={isOpen} timeout="auto" unmountOnExit>
             <Box sx={{ mx: 1, my: 2 }}>
               <QuestionCategoryList categories={row.categories} />
-              <Box sx={{ margin: 1, color: (theme) => theme.palette.primary.contrastText }}>
-                <div dangerouslySetInnerHTML={{ __html: row.description}}></div>
+              <Box
+                sx={{
+                  margin: 1,
+                  // color: (theme) => theme.palette.primary.contrastText
+                }}
+              >
+                <div className="ck-content" dangerouslySetInnerHTML={{ __html: row.description}}></div>
               </Box>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
+      <EditQuestionForm setQuestions={setQuestions} question={row} index={index} isOpen={isEditOpen} onClose={() => setIsEditOpen(false)}/>
     </>
   );
 }

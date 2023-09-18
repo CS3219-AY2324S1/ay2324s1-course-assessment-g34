@@ -87,7 +87,6 @@ export default function QuestionPage() {
             sx={{
               marginTop: 0,
               textAlign: 'center',
-              color: (theme) => theme.palette.primary.contrastText,
               fontWeight: 'bold',
               fontSize: '30px'
             }}
@@ -101,7 +100,7 @@ export default function QuestionPage() {
             </Typography>
           }
           {isLoading
-            ? <Skeleton variant="rectangular" height='50vh' sx={{ bgcolor: (theme) => theme.palette.primary.light }}/>
+            ? <Skeleton variant="rectangular" height='50vh' />
             : <QuestionTable questions={questions} setQuestions={setQuestions} />}
         </Container>
       </Layout>

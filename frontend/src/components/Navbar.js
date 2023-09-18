@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import { Open_Sans } from "next/font/google";
-
 import MenuIcon from '@mui/icons-material/Menu';
 import Logo from "./Logo";
+import Link from "next/link";
 
 const openSans = Open_Sans( {subsets: ['latin'] });
 
-const pages = ['Find a Match', 'Questions'];
+const pages = [
+  {
+    label: 'Find a Match',
+    path: '/match'
+  },
+  {
+    label: 'Questions',
+    path: '/questions'
+  }
+];
+
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function Navbar() {
@@ -66,14 +76,16 @@ export default function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.label} onClick={handleCloseNavMenu}>
                   <Typography
                     sx={{
                       textAlign: 'center',
                       fontFamily: openSans.style,
                     }}
                   >
-                    {page}
+                    <Link href={page.path}>
+                      {page.label}
+                    </Link>
                   </Typography>
                 </MenuItem>
               ))}
@@ -83,11 +95,13 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.label}
+                onClick={ handleCloseNavMenu}
                 sx={{ my: 2, color: (theme) => theme.palette.primary.contrastText, display: 'block' }}
               >
-                {page}
+                <Link href={page.path}>
+                  {page.label}
+                </Link>
               </Button>
             ))}
           </Box>

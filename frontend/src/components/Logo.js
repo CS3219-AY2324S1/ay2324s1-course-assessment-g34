@@ -18,7 +18,7 @@ export default function Logo({ display, flexGrow }) {
           flexGrow: flexGrow,
           fontFamily: breeSerif.style,
           letterSpacing: '.1rem',
-          color: (theme) => theme.palette.success.main,
+          // color: (theme) => theme.palette.success.main,
           textDecoration: 'none',
         }}
       >

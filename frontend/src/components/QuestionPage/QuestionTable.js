@@ -9,6 +9,7 @@ const createRows = (questions) => {
       title: q.title,
       description: q.description,
       categories: q.categories,
+      link: q.link,
       complexity: q.complexity
     }
   })
@@ -21,20 +22,24 @@ export default function QuestionTable({ questions, setQuestions }) {
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
-          <TableRow sx={{ bgcolor: (theme) => theme.palette.primary.dark }}>
-            <TableCell sx={{ borderColor: '#747474' }} />
+          <TableRow>
             <TableCell
-              sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
+              // sx={{ borderColor: '#747474' }}
+            />
+            <TableCell
+              // sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
             >
               Title
             </TableCell>
             <TableCell
               align="right"
-              sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
+              // sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
             >
               Complexity
             </TableCell>
-            <TableCell sx={{ borderColor: '#747474' }} />
+            <TableCell
+              // sx={{ borderColor: '#747474' }}
+            />
           </TableRow>
         </TableHead>
         <TableBody>

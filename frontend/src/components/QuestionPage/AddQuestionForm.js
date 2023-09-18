@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Dialog, IconButton, MenuItem, Skeleton, Slide, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, Dialog, IconButton, InputLabel, MenuItem, Skeleton, Slide, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
 import { AddBox, Close } from "@mui/icons-material";
 import React, { forwardRef, useRef, useState } from "react";
 import axios from "axios";
@@ -16,7 +16,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 });
 
-const difficulties = [
+const complexities = [
   {
     value: 'Easy',
     label: 'Easy'
@@ -135,9 +135,9 @@ export default function AddQuestionForm({ setQuestions }) {
     //   handleClose();
     // } catch (error) {
     //   if (error.response && error.response.status === 400) {
-    //     console.error("Bad Request:", error.response.data);
+    //     console.error("Bad Request: ", error.response.data);
     //   } else {
-    //     console.error("An error occurred:", error);
+    //     console.error("An error occurred: ", error);
     //   }
     // }
   }
@@ -148,7 +148,10 @@ export default function AddQuestionForm({ setQuestions }) {
         <IconButton
           size="medium"
           onClick={handleClickOpen}
-          sx={{ marginLeft: 'auto', color: (theme) => theme.palette.secondary.main }}
+          sx={{
+            marginLeft: 'auto',
+            color: (theme) => theme.palette.secondary.main
+          }}
         >
           <AddBox fontSize="large"/>
         </IconButton>
@@ -183,6 +186,7 @@ export default function AddQuestionForm({ setQuestions }) {
             <Box sx={{ my: 1 }}>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                 <TextField
+                  required
                   sx={{ flexGrow: 1 }}
                   size="small"
                   autoFocus
@@ -196,6 +200,7 @@ export default function AddQuestionForm({ setQuestions }) {
                   onChange={(e) => handleChange(e)}
                 />
                 <TextField
+                  required
                   id="complexity"
                   name="complexity"
                   select
@@ -207,7 +212,7 @@ export default function AddQuestionForm({ setQuestions }) {
                   helperText={complexityError}
                   onChange={(e) => handleChange(e)}
                 >
-                  {difficulties.map((option) => (
+                  {complexities.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -219,6 +224,7 @@ export default function AddQuestionForm({ setQuestions }) {
               </Box>
               <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 <TextField
+                  required
                   sx={{ width: '70ch' }}
                   size="small"
                   autoFocus
@@ -233,12 +239,16 @@ export default function AddQuestionForm({ setQuestions }) {
                 />
               </Box>   
             </Box>
+            <InputLabel shrink htmlFor="description-editor" required sx={ descriptionError && { color: (theme) => theme.palette.error.main } }>
+              Description
+            </InputLabel>
             <Editor
+              id="description-editor"
               editorRef={editorRef}
               onChange={setDescription}
             />
             {descriptionError &&
-              <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: 12 }}>
+              <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: 12, ml: 2 }}>
                 {descriptionError}
               </Typography>
             }
@@ -251,7 +261,10 @@ export default function AddQuestionForm({ setQuestions }) {
               >
                 Cancel
               </Button>
-              <Button variant="contained" size="medium" color="success" type="submit">
+              <Button
+                variant="contained" color="success" size="medium" type="submit"
+                sx={{ "&.MuiButton-contained": { backgroundColor: (theme) => theme.palette.secondary.main }}}
+              >
                 Submit
               </Button>
             </Box>
