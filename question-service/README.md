@@ -12,7 +12,7 @@ This API provides endpoints for managing questions related operations. Use this 
 <ins> Question repo services run on port 5000 </ins>
 
 ### Add a question
-- **URL**: `/api/addQuestion`
+- **URL**: `/question-service/addQuestion`
 - **Method**: `POST`
 - **Description**: Create a new question.
 - **Request Body**:
@@ -29,7 +29,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 400 Error
 
 ### Get all questions
-- **URL**: `/api/getAllQuestions`
+- **URL**: `/question-service/getAllQuestions`
 - **Method**: `GET`
 - **Description**: Get all questions from repo.
 
@@ -38,7 +38,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 500 Error when failed to get
 
 ### Get a question by ID
-- **URL**: `/api/getQuestion/:id`
+- **URL**: `/question-service/getQuestion/:id`
 - **Method**: `GET`
 - **Description**: Get question details by ID.
 - **Params**: ID
@@ -47,7 +47,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 500 Error when failed to get
 
 ### Modify a question
-- **URL**: `/api/updateQuestion/:id`
+- **URL**: `/question-service/updateQuestion/:id`
 - **Method**: `PATCH`
 - **Description**: Modify any question details.
 - **Request Body**:
@@ -64,7 +64,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 400 Error
 
 ### Delete a question
-- **URL**: `/api/deleteQuestion/:id`
+- **URL**: `/question-service/deleteQuestion/:id`
 - **Method**: `DELETE`
 - **Description**: Delete a question by ID.
 - **Params**: ID
@@ -84,7 +84,7 @@ DATABASE_URL =unique_mongdoDB_url
 2. Install Postman if you need to test API
 3. Install MongoDB Compass to view database
 4. Install Docker and ensure this is opened, which enable us to use the 'docker' command in the terminal
-5. cd backend
+5. cd question-service
 6. Type `docker compose up` in the terminal to start
 7. Once you see **Database Connected**, you may start interacting with the database
 8. When finished, press `Control + C` in the terminal to exit, type `docker compose down` to remove the containers 

@@ -17,7 +17,7 @@ module.exports = router;
 
 //Post Method
 router.post("/addQuestion", async (req, res) => {
-    // res.send('Post API')
+
     const { title, categories, complexity, link, description } = req.body;
 
     // Create a new question
@@ -51,7 +51,7 @@ router.get('/getQuestion/:id', async (req, res) => {
         res.status(500).json({message: error.message})
     }
 })
-// sample postman query PATCH localhost:3000/api/updateQuestion/6502de2c3f85e1f959cc97c4 
+// sample postman query PATCH localhost:3000/question-service/updateQuestion/6502de2c3f85e1f959cc97c4 
 // set body with question in json format to update any fields
 
 //Update by ID Method
