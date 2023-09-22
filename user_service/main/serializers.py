@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -11,9 +12,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         # Add custom claims
-        token['name'] = user.name
+        token['username'] = user.username
+        token['user_role'] = user.profile.user_role
         
-
         return token
     
 class ProfileSerializer(serializers.ModelSerializer):
@@ -29,3 +30,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'password')
         extra_kwargs = {'password': {'write_only': True}}  
+    
+    def create(self, validated_data):
+        # Hash the password before saving it
+        validated_data['password'] = make_password(validated_data['password'])
+        user = super(UserSerializer, self).create(validated_data)
+        return user

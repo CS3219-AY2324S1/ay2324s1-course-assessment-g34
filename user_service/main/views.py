@@ -1,6 +1,8 @@
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Profile
 from .serializers import ProfileSerializer, UserSerializer
@@ -30,6 +32,25 @@ class UserViewSet(viewsets.ModelViewSet):
             serialized_data.append(user_data)
 
         return Response(serialized_data, status=status.HTTP_200_OK)
+    
+    def login(self, request):
+        # Perform user authentication here (e.g., username and password validation)
+        # If authentication is successful, generate a token
+
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        user = User.objects.get(username=username)
+
+        if check_password(password, user.password):
+            # Authentication successful
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+            return Response({'access_token': access_token, 'refresh_token': refresh_token}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        
         
     def register(self, request):
         user_serializer = UserSerializer(data=request.data)
@@ -40,6 +61,7 @@ class UserViewSet(viewsets.ModelViewSet):
             profile_data = {
                 'user_id': user.id,
                 'displayed_name': request.data.get('displayed_name', user.username),
+                'user_role': 'normal user'
             }
             
             profile_serializer = ProfileSerializer(data=profile_data)
