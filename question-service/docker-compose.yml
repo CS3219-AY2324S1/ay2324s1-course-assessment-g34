@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  # MongoDB services
+  mongo_db:
+    image: mongo:latest
+    restart: always
+    volumes: 
+      - mongo_db:/data/db
+
+  # Mode API service
+  api:
+    build: .
+    ports: 
+      - 3000:3000
+    environment:
+      PORT: 3000
+    depends_on:
+      - mongo_db
+
+volumes: 
+  mongo_db: {}
