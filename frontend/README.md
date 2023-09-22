@@ -6,7 +6,7 @@ Welcome to the Frontend Service Docker setup guide. This guide provides instruct
 
 To run the frontend locally, follow these steps:
 
-1. Install Docker:
+1. Install Docker: https://docs.docker.com/get-docker/
 
 2. Clone this repository
 

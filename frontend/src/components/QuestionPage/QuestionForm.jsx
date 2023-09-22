@@ -47,6 +47,18 @@ export default function QuestionForm({
     description: question.description,
   });
 
+  const resetFields = () => {
+    setQuestionData({
+      title: '',
+      description: '',
+      categories: [],
+      link: '',
+      complexity: 'Easy',
+    })
+    setCategories([]);
+    setDescription('');
+  }
+
   const resetErrors = () => {
     setTitleError(null);
     setComplexityError(null);
@@ -120,6 +132,10 @@ export default function QuestionForm({
     onSubmit(newQuestionData);
 
     if (generalError == null) {
+      const isAddQuestion = question == defaultQuestion;
+      if (isAddQuestion) {
+        resetFields();
+      }
       handleClose();
     }
   };
