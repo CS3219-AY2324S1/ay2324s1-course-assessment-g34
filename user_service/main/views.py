@@ -14,8 +14,8 @@ class UserViewSet(viewsets.ModelViewSet):
         # Check if the user has a profile
         if hasattr(user, 'profile'):
             user_data['profile'] = {
-                'displayed_name': user.profile.displayed_name
-                # Include other profile fields here if needed
+                'displayed_name': user.profile.displayed_name,
+                'user_role': user.profile.user_role
             }
         else:
             user_data['profile'] = None
@@ -39,7 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
             
             profile_data = {
                 'user_id': user.id,
-                'displayed_name': request.data['username']
+                'displayed_name': request.data.get('displayed_name', user.username),
             }
             
             profile_serializer = ProfileSerializer(data=profile_data)
