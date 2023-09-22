@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db
+      - postgres_db
 
   postgres_db:
     container_name: ${DATABASE_HOST}
