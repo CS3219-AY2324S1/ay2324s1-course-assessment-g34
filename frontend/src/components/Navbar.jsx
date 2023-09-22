@@ -1,18 +1,20 @@
-import React, { useState } from "react";
-import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import React, { useState } from 'react';
+import {
+  AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Logo from "./Logo";
-import Link from "next/link";
+import Link from 'next/link';
+import Logo from './Logo';
 
 const pages = [
   {
     label: 'Find a Match',
-    path: '/match'
+    path: '/match',
   },
   {
     label: 'Questions',
-    path: '/questions'
-  }
+    path: '/questions',
+  },
 ];
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -82,7 +84,7 @@ export default function Navbar() {
             {pages.map((page) => (
               <Button
                 key={page.label}
-                onClick={ handleCloseNavMenu}
+                onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: (theme) => theme.palette.primary.contrastText, display: 'block' }}
               >
                 <Link href={page.path}>

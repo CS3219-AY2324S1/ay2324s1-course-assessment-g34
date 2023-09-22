@@ -1,55 +1,53 @@
-import { ArrowDropDownRounded, ArrowRightRounded, DeleteForeverRounded, LinkRounded } from "@mui/icons-material";
-import { Box, Chip, Collapse, IconButton, TableCell, TableRow, Tooltip } from "@mui/material";
-import React, { useState } from "react";
-import QuestionCategoryList from "./QuestionCategoryList";
-import DeleteQuestionDialog from "./DeleteQuestionDialog";
-import EditQuestion from "./EditQuestion";
+import {
+  ArrowDropDownRounded, ArrowRightRounded, LinkRounded,
+} from '@mui/icons-material';
+import {
+  Box, Chip, Collapse, IconButton, TableCell, TableRow, Tooltip,
+} from '@mui/material';
+import React, { useState } from 'react';
+import { PropTypes } from 'prop-types';
+import QuestionCategoryList from './QuestionCategoryList';
+import DeleteQuestionDialog from './DeleteQuestionDialog';
+import EditQuestion from './EditQuestion';
 
-const getComplexityColour = (complexity) => {
-  switch(complexity) {
-    case "Easy":
-      return "success";
-    case "Medium":
-      return "warning";
-    case "Hard":
-      return "error";
-    default:
-  }
-  return;
-}
+const complexityToColorMap = {
+  Easy: 'success',
+  Medium: 'warning',
+  Hard: 'error',
+};
 
 export default function QuestionRow({ row, index, setQuestions }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const updateDeletedQuestions = (index) => {
+  const updateDeletedQuestions = () => {
     setQuestions((prevState) => prevState.filter((_, i) => i !== index));
-  }
+  };
 
   const handleDelete = async () => {
     const questions = JSON.parse(localStorage.getItem('questions'));
     questions.splice(index, 1);
     localStorage.setItem('questions', JSON.stringify(questions));
     updateDeletedQuestions(index);
-  }
+  };
 
   return (
     <>
       <TableRow
-        sx={{ '& > *': {
+        sx={{
+          '& > *': {
             borderBottom: 'unset',
           },
           bgcolor: '#fbfbfb',
         }}
       >
-        <TableCell sx={{ py: 0, maxWidth: '30px',borderColor: '#c4c4c4' }}>
+        <TableCell sx={{ py: 0, maxWidth: '30px', borderColor: '#c4c4c4' }}>
           <IconButton
             color="primary"
             aria-label="expand row"
             size="small"
             onClick={() => setIsOpen(!isOpen)}
           >
-            { isOpen ? <ArrowDropDownRounded fontSize="large"/> : <ArrowRightRounded fontSize="large"/> }
+            { isOpen ? <ArrowDropDownRounded fontSize="large" /> : <ArrowRightRounded fontSize="large" /> }
           </IconButton>
         </TableCell>
         <TableCell
@@ -68,7 +66,7 @@ export default function QuestionRow({ row, index, setQuestions }) {
           align="right"
           sx={{ py: 0, fontWeight: 600, borderColor: '#c4c4c4' }}
         >
-          <Chip color={getComplexityColour(row.complexity)} label={row.complexity} />
+          <Chip color={complexityToColorMap[row.complexity]} label={row.complexity} />
         </TableCell>
         <TableCell
           align="right"
@@ -80,20 +78,9 @@ export default function QuestionRow({ row, index, setQuestions }) {
             </IconButton>
           </Tooltip>
           <EditQuestion setQuestions={setQuestions} index={index} question={row} />
-          <Tooltip title="Delete" arrow>
-            <IconButton
-              sx={{ color: (theme) => theme.palette.error.main }}
-              onClick={() => setIsDeleteDialogOpen(true)}
-              aria-haspopup="true"
-            >
-              <DeleteForeverRounded/>
-            </IconButton>
-          </Tooltip>
           <DeleteQuestionDialog
-            isOpen={isDeleteDialogOpen}
-            onClose={() => setIsDeleteDialogOpen(false)}
             handleDelete={handleDelete}
-            question={row}
+            title={row.title}
           />
         </TableCell>
       </TableRow>
@@ -103,7 +90,7 @@ export default function QuestionRow({ row, index, setQuestions }) {
             <Box sx={{ mx: 1, my: 2 }}>
               <QuestionCategoryList categories={row.categories} />
               <Box sx={{ mx: 1, my: 3 }}>
-                <div className="ck-content" dangerouslySetInnerHTML={{ __html: row.description}}></div>
+                <div className="ck-content" dangerouslySetInnerHTML={{ __html: row.description }} />
               </Box>
             </Box>
           </Collapse>
@@ -112,3 +99,17 @@ export default function QuestionRow({ row, index, setQuestions }) {
     </>
   );
 }
+
+QuestionRow.propTypes = {
+  row: PropTypes.shape({
+    // id requried after integration
+    id: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+    link: PropTypes.string.isRequired,
+    complexity: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
+  }).isRequired,
+  index: PropTypes.number.isRequired,
+  setQuestions: PropTypes.func.isRequired,
+};

@@ -1,30 +1,31 @@
-import { EditRounded } from "@mui/icons-material";
-import { IconButton, Tooltip } from "@mui/material";
-import React, { useState } from "react";
-import QuestionForm from "./QuestionForm";
+import { EditRounded } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
+import { PropTypes } from 'prop-types';
+import QuestionForm from './QuestionForm';
 
 export default function EditQuestion({ setQuestions, index, question }) {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
 
-  const updateQuestions = (index, question) => {
+  const updateQuestions = (newQuestion) => {
     setQuestions((prevState) => {
       const updatedQuestions = [...prevState];
-      updatedQuestions[index] = question;
+      updatedQuestions[index] = newQuestion;
       return updatedQuestions;
     });
-  }
+  };
 
   const handleOpen = () => {
-    console.log(question);
     setIsOpen(true);
-  }
+  };
+
   const handleSubmit = async (newQuestionData) => {
     // local storage
     const questions = JSON.parse(localStorage.getItem('questions'));
     questions[index] = newQuestionData;
     localStorage.setItem('questions', JSON.stringify(questions));
-    updateQuestions(index, newQuestionData);
+    updateQuestions(newQuestionData);
 
     // try {
     //   // change index to proper id from database
@@ -40,7 +41,7 @@ export default function EditQuestion({ setQuestions, index, question }) {
     //   }
     //   setError("An error occurred. Please try again later.");
     // }
-  }
+  };
 
   return (
     <>
@@ -61,3 +62,17 @@ export default function EditQuestion({ setQuestions, index, question }) {
     </>
   );
 }
+
+EditQuestion.propTypes = {
+  setQuestions: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  question: PropTypes.shape({
+    // id required after integration
+    id: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+    link: PropTypes.string.isRequired,
+    complexity: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
+  }).isRequired,
+};

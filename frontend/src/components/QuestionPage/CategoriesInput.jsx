@@ -1,8 +1,8 @@
-import { Autocomplete, TextField } from "@mui/material";
-import React from "react";
+import { Autocomplete, TextField } from '@mui/material';
+import React from 'react';
+import { PropTypes } from 'prop-types';
 
 export default function CategoriesInput({ onChange, value }) {
-
   return (
     <Autocomplete
       multiple
@@ -26,3 +26,8 @@ export default function CategoriesInput({ onChange, value }) {
     />
   );
 }
+
+CategoriesInput.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

@@ -1,30 +1,37 @@
-import { Close } from "@mui/icons-material";
-import { AppBar, Box, Button, Container, Dialog, IconButton, InputLabel, Skeleton, Slide, TextField, Toolbar, Typography } from "@mui/material";
-import dynamic from "next/dynamic";
-import React, { forwardRef, useRef, useState } from "react";
-import ComplexitySelector from "./ComplexitySelector";
-import CategoriesInput from "./CategoriesInput";
-import SolidButton from "../SolidButton";
-import { validateComplexity, validateDescription, validateLink, validateTitle } from "@/utils/validation";
+import { Close } from '@mui/icons-material';
+import {
+  AppBar, Box, Button, Container, Dialog, IconButton, InputLabel, Skeleton, Slide, TextField,
+  Toolbar, Typography,
+} from '@mui/material';
+import dynamic from 'next/dynamic';
+import React, { forwardRef, useRef, useState } from 'react';
+import {
+  validateComplexity, validateDescription, validateLink, validateTitle,
+} from '@/utils/validation';
+import { PropTypes } from 'prop-types';
+import ComplexitySelector from './ComplexitySelector';
+import CategoriesInput from './CategoriesInput';
+import SolidButton from '../SolidButton';
 
-const Editor = dynamic(() => import("./QuestionDescriptionEditor"), {
+const Editor = dynamic(() => import('./QuestionDescriptionEditor'), {
   ssr: false,
-  loading: () => <Skeleton variant="rectangular" height="40 vh" />
-})
-
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />
+  loading: () => <Skeleton variant="rectangular" height="40 vh" />,
 });
 
-const defaultQuestionData = {
-  title: "",
-  complexity: "Easy",
-  categories: [],
-  link: "",
-  description: ""
-}
+const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
-export default function QuestionForm({ question = defaultQuestionData, isOpen, onClose, label, id, onSubmit, generalError }) {
+const defaultQuestion = {
+  id: '',
+  title: '',
+  description: '',
+  categories: [],
+  link: '',
+  complexity: 'Easy',
+};
+
+export default function QuestionForm({
+  question = defaultQuestion, isOpen, onClose, label, id, onSubmit, generalError = null,
+}) {
   const editorRef = useRef(null);
   const [titleError, setTitleError] = useState(null);
   const [complexityError, setComplexityError] = useState(null);
@@ -37,60 +44,62 @@ export default function QuestionForm({ question = defaultQuestionData, isOpen, o
     complexity: question.complexity,
     categories: question.categories,
     link: question.link,
-    description: question.description
+    description: question.description,
   });
-
-  const handleClose = () => {
-    resetErrors();
-    onClose();
-  };
 
   const resetErrors = () => {
     setTitleError(null);
     setComplexityError(null);
     setLinkError(null);
     setDescriptionError(null);
-  }
+  };
+
+  const handleClose = () => {
+    resetErrors();
+    onClose();
+  };
 
   const handleChange = (e) => {
-    const value = e.target.value;
+    const { value } = e.target;
     setQuestionData({
       ...questionData,
-      [e.target.name]: value
+      [e.target.name]: value,
     });
-  }
+  };
 
   const validateQuestionData = (question) => {
-    const { title, complexity, link, description } = question;
+    const {
+      title, complexity, link, description: desc,
+    } = question;
     const errors = [];
 
-    const titleError = validateTitle(title);
-    const complexityError = validateComplexity(complexity);
-    const linkError = validateLink(link);
-    const descriptionError = validateDescription(description);
+    const titleValidationError = validateTitle(title);
+    const complexityValidationError = validateComplexity(complexity);
+    const linkValidationError = validateLink(link);
+    const descriptionValidationError = validateDescription(desc);
 
-    if (titleError) {
-      errors.push(titleError);
-      setTitleError(titleError);
+    if (titleValidationError) {
+      errors.push(titleValidationError);
+      setTitleError(titleValidationError);
     }
 
-    if (complexityError) {
-      errors.push(complexityError);
-      setComplexityError(complexityError);
+    if (complexityValidationError) {
+      errors.push(complexityValidationError);
+      setComplexityError(complexityValidationError);
     }
 
-    if (linkError) {
-      errors.push(linkError);
-      setLinkError(linkError);
+    if (linkValidationError) {
+      errors.push(linkValidationError);
+      setLinkError(linkValidationError);
     }
 
-    if (descriptionError) {
-      errors.push(descriptionError);
-      setDescriptionError(descriptionError);
+    if (descriptionValidationError) {
+      errors.push(descriptionValidationError);
+      setDescriptionError(descriptionValidationError);
     }
 
-    return errors.length == 0;
-  }
+    return errors.length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,10 +108,10 @@ export default function QuestionForm({ question = defaultQuestionData, isOpen, o
     const newQuestionData = {
       title: questionData.title.trim(),
       complexity: questionData.complexity.trim(),
-      categories: categories,
+      categories,
       link: questionData.link.trim(),
-      description: description.trim()
-    }
+      description: description.trim(),
+    };
 
     if (!validateQuestionData(newQuestionData)) {
       return;
@@ -112,8 +121,8 @@ export default function QuestionForm({ question = defaultQuestionData, isOpen, o
 
     if (generalError == null) {
       handleClose();
-    } 
-  }
+    }
+  };
 
   return (
     <Dialog
@@ -187,25 +196,27 @@ export default function QuestionForm({ question = defaultQuestionData, isOpen, o
               />
             </Box>
           </Box>
-          <InputLabel shrink htmlFor="description-editor" required sx={ descriptionError && { color: (theme) => theme.palette.error.main } }>
+          <InputLabel shrink htmlFor="description-editor" required sx={descriptionError && { color: (theme) => theme.palette.error.main }}>
             Description
           </InputLabel>
           <Editor
             id="description-editor"
-            data={description}
+            description={description}
             editorRef={editorRef}
             onChange={setDescription}
           />
-          {descriptionError &&
+          {descriptionError
+            && (
             <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: 12, ml: 2 }}>
               {descriptionError}
             </Typography>
-          }
-          {generalError &&
+            )}
+          {generalError
+            && (
             <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: 12, ml: 2 }}>
               {generalError}
             </Typography>
-          }
+            )}
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
             <Button
               variant="outlined"
@@ -230,3 +241,21 @@ export default function QuestionForm({ question = defaultQuestionData, isOpen, o
     </Dialog>
   );
 }
+
+QuestionForm.propTypes = {
+  question: PropTypes.shape({
+    // id required after integration
+    id: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+    link: PropTypes.string.isRequired,
+    complexity: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
+  }),
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  generalError: PropTypes.string,
+};

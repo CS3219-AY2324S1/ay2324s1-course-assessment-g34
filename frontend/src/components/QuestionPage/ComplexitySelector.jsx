@@ -1,23 +1,22 @@
-import { MenuItem, TextField } from "@mui/material";
-import React from "react";
+import { MenuItem, TextField } from '@mui/material';
+import React from 'react';
 
 const complexities = [
   {
     value: 'Easy',
-    label: 'Easy'
+    label: 'Easy',
   },
   {
     value: 'Medium',
-    label: 'Medium'
+    label: 'Medium',
   },
   {
     value: 'Hard',
-    label: 'Hard'
-  }
+    label: 'Hard',
+  },
 ];
 
 export default function ComplexitySelector(props) {
-  
   return (
     <TextField
       {...props}

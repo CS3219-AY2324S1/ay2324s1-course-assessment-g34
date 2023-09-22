@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import QuestionForm from "./QuestionForm";
-import { Box, IconButton, Tooltip } from "@mui/material";
-import { AddBox } from "@mui/icons-material";
-import { ADD_QUESTION_SVC_URI } from "@/config/uris";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Box, IconButton, Tooltip } from '@mui/material';
+import { AddBox } from '@mui/icons-material';
+// import axios from 'axios';
+// import { ADD_QUESTION_SVC_URI } from '@/config/uris';
+import { PropTypes } from 'prop-types';
+import QuestionForm from './QuestionForm';
 
 export default function AddQuestion({ setQuestions }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,7 @@ export default function AddQuestion({ setQuestions }) {
 
   const updateQuestions = (question) => {
     setQuestions((prev) => [...prev, question]);
-  }
+  };
 
   const handleSubmit = async (newQuestionData) => {
     // local storage
@@ -22,7 +23,7 @@ export default function AddQuestion({ setQuestions }) {
 
     // try {
     //   const response = await axios.post(ADD_QUESTION_SVC_URI, newQuestionData);
-      
+
     //   // add new question on client side
     //   updateQuestions(response.data);
     // } catch (error) {
@@ -33,20 +34,20 @@ export default function AddQuestion({ setQuestions }) {
     //   }
     //   setError("An error occurred. Please try again later.");
     // }
-  }
+  };
 
   return (
-    <Box sx={{ display: 'flex'}}>
+    <Box sx={{ display: 'flex' }}>
       <Tooltip title="Add" arrow>
         <IconButton
           size="medium"
           onClick={() => setIsOpen(true)}
           sx={{
             marginLeft: 'auto',
-            color: (theme) => theme.palette.secondary.main
+            color: (theme) => theme.palette.secondary.main,
           }}
         >
-          <AddBox fontSize="large"/>
+          <AddBox fontSize="large" />
         </IconButton>
       </Tooltip>
       <QuestionForm
@@ -60,3 +61,7 @@ export default function AddQuestion({ setQuestions }) {
     </Box>
   );
 }
+
+AddQuestion.propTypes = {
+  setQuestions: PropTypes.func.isRequired,
+};
