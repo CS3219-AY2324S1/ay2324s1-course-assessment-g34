@@ -5,16 +5,16 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework_simplejwt.views import TokenVerifyView  
 
-from .views import UserViewSet
+from .views import RegisterViewSet, UserViewSet
 
 urlpatterns = [
     path('users', UserViewSet.as_view({
         'get': 'list'
     })),
-    path('register', UserViewSet.as_view({
+    path('register', RegisterViewSet.as_view({
         'post': 'register'
     })),
-    path('login', UserViewSet.as_view({
+    path('login', RegisterViewSet.as_view({
         'post': 'login'
     })),
     path('users/<str:pk>', UserViewSet.as_view({

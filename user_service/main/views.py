@@ -6,8 +6,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Profile
 from .serializers import ProfileSerializer, UserSerializer
+from .management.permissions import IsOwnerOrAdmin
 
 class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsOwnerOrAdmin]
     queryset = User.objects.all()
     
     def _get_profile(self, user):
@@ -23,6 +25,31 @@ class UserViewSet(viewsets.ModelViewSet):
             user_data['profile'] = None
         
         return user_data
+
+    def partial_update(self, request, pk=None):
+        try:
+            user = User.objects.get(username=pk)
+            profile = user.profile
+
+            # Update the profile fields based on the request data
+            serializer = ProfileSerializer(profile, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    def delete(self, request, pk=None):
+        try:
+            user = User.objects.get(username=pk)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
     def list(self, request):
         users = User.objects.select_related('profile').all()
@@ -33,25 +60,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
         return Response(serialized_data, status=status.HTTP_200_OK)
     
-    def login(self, request):
-        # Perform user authentication here (e.g., username and password validation)
-        # If authentication is successful, generate a token
+    def get(self, request, pk=None):
+        user = User.objects.get(username=pk)
+        user_data = self._get_profile(user)
 
-        username = request.data.get('username')
-        password = request.data.get('password')
-
-        user = User.objects.get(username=username)
-
-        if check_password(password, user.password):
-            # Authentication successful
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            refresh_token = str(refresh)
-            return Response({'access_token': access_token, 'refresh_token': refresh_token}, status=status.HTTP_200_OK)
-        else:
-            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        
+        return Response(user_data, status=status.HTTP_200_OK)
+    
+    
+class RegisterViewSet(viewsets.ModelViewSet):
     def register(self, request):
         user_serializer = UserSerializer(data=request.data)
         
@@ -75,29 +91,20 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def get(self, request, pk=None):
-        user = User.objects.get(username=pk)
-        user_data = self._get_profile(user)
+    def login(self, request):
+        # Perform user authentication here (e.g., username and password validation)
+        # If authentication is successful, generate a token
 
-        return Response(user_data, status=status.HTTP_200_OK)
+        username = request.data.get('username')
+        password = request.data.get('password')
 
-    def partial_update(self, request, pk=None):
-        try:
-            user = User.objects.get(username=pk)
-            profile = user.profile
+        user = User.objects.get(username=username)
 
-            # Update the profile fields based on the request data
-            serializer = ProfileSerializer(profile, data=request.data, partial=True)
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-        
-    def delete(self, request, pk=None):
-        user = User.objects.get(username=pk)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if check_password(password, user.password):
+            # Authentication successful
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+            return Response({'access_token': access_token, 'refresh_token': refresh_token}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
