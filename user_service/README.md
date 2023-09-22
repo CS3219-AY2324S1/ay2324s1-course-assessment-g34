@@ -5,36 +5,96 @@ Welcome to the User Service API documentation. This API provides endpoints for m
 ## Table of Contents
 
 1. [Endpoints](#endpoints)
-4. [Running the Backend Service](#running-the-backend-service)
-5. [Environment Variables and .env File](#environment-variables-and-env-file)
+2. [User Authentication and Authorization](#user-authentication-and-authorization)
+3. [Running the Backend Service](#running-the-backend-service)
+4. [Environment Variables and .env File](#environment-variables-and-env-file)
+
+
+## User Authentication and Authorization
+To access certain endpoints, users need to be authenticated and authorized. The User Service uses JWT (JSON Web Tokens) for user authentication. To authenticate, include a valid JWT token in the request headers.
+
+Header: Authorization: Bearer <access_token>
+Replace <access_token> with a valid access token obtained by logging in using the /api/login endpoint. Access tokens contain information about the user's name and roles.
 
 ## Endpoints
 
 ### Note that the user service runs on port 8000.
 
-### Create User
+### Register User
 
-- **URL**: `/api/users`
+- **URL**: `/api/register/`
 - **Method**: `POST`
 - **Description**: Create a new user.
 - **Request Body**:
   ```json
   {
-    "name": "john_doe",
+    "username": "john_doe",
+    "password": "pwd",
+    (Optional)"displayed_name": "name"
   }
 - **Response**:
   - 201 Created on success with user details
+  - 400 Bad Request on failure
+
+### Login User
+- **URL**: `/api/login/`
+- **Method**: `POST`
+- **Description**: Login as a user.
+- **Request Body**:
+  ```json
+  {
+    "username": "john_doe",
+    "password": "pwd"
+  }
+- **Response**:
+  - 200 on success with access_token and refresh_token attached
+  - 401 on failure
+
+
+### Obtain new access token with refresh token
+- **URL**: `/api/token/refresh/`
+- **Method**: `POST`
+- **Description**: Obtain new access token.
+- **Request Body**:
+  ```json
+  {
+    "refresh": "213245tygdfs...token...."
+  }
+- **Response**:
+  - new access token on success
+
+
+### Verify the validity of a token
+- **URL**: `/api/token/verify/`
+- **Method**: `POST`
+- **Description**: Verify a token.
+- **Request Body**:
+  ```json
+  {
+    "token": "213245tygdfs...token...."
+  }
+- **Response**:
+  - 200 on valid token
 
 
 ### Get User by ID 
 
-- **URL**: `/api/users/<int:user_id>`
+- **URL**: `/api/users/<str:username>`
 - **Method**: `GET`
-- **Description**: Retrieve user information by ID.
+- **Description**: Retrieve user information by username.
 - **Request Body**:
 - **Response**:
   - 200 OK on success with user details.
   - 404 Not Found if the user does not exist.
+
+### Get all user
+
+- **URL**: `/api/users/`
+- **Method**: `GET`
+- **Description**: Retrieve all user information.
+- **Request Body**:
+- **Response**:
+  - 200 OK on success.
 
 
 ### Update User
@@ -42,14 +102,14 @@ Welcome to the User Service API documentation. This API provides endpoints for m
 - **URL**: `/api/users/<int:user_id>`
 - **Method**: `PUT`
 - **Description**: Update user information.
+- **Request Header**: `Authorization`: `Bearer ` + <access_token>
 - **Request Body**:
   ```json
   {
-    "name": "new_john_doe",
+    "displayed_name": "new_john_doe",
   }
 - **Response**:
   - 202 Updated on success with updated user details.
-  - 404 Not Found if the user does not exist.
 
 
 ### Delete User 
@@ -57,6 +117,7 @@ Welcome to the User Service API documentation. This API provides endpoints for m
 - **URL**: `/api/users/<int:user_id>`
 - **Method**: `DELETE`
 - **Description**: Delete a user.
+- **Request Header**: `Authorization`: `Bearer ` + <access_token>
 - **Request Body**:
 - **Response**:
   - 204 No Content on success.
@@ -93,13 +154,14 @@ The User Service backend relies on environment variables for configuration. Thes
 Ensure that the .env file contains the necessary environment variables for your project to run correctly. Here is an example of a .env file:
 
 ```
-DJANGO_SECRET_KEY=your_secret_key_here
+DJANGO_SECRET_KEY=django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
 DJANGO_DEBUG=True
 DATABASE_NAME=user_service
 DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
-DATABASE_HOST=postgres_db
+DATABASE_HOST=db
 DATABASE_PORT=5432
+SECRET_KEY=django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
 ```
 
 The .env file allows you to configure your application without hardcoding sensitive information directly into your codebase. Keep the .env file secure and avoid committing it to version control systems to protect sensitive data.
