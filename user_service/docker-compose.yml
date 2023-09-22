@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  backend:
+  user_service:
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
 
-  db:
+  postgres_db:
     container_name: ${DATABASE_HOST}
     image: postgres:15.4
     restart: always
