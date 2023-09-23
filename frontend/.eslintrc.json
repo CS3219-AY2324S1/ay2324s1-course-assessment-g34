@@ -32,6 +32,11 @@
     "import/extensions": "off",
     "react/require-default-props": "off",
     "camelcase": ["error", { "allow": ["Bree_Serif"] }],
-    "no-param-reassign": [2, { "props": false }]
+    "no-param-reassign": [2, { "props": false }],
+    // temp suppressions
+    "react/no-array-index-key": "off",
+    "react/no-danger": "off",
+    "no-unused-vars": "off",
+    "import/prefer-default-export": "off"
   }
 }

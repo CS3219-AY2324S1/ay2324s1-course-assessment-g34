@@ -54,10 +54,10 @@ export default function QuestionForm({
       categories: [],
       link: '',
       complexity: 'Easy',
-    })
+    });
     setCategories([]);
     setDescription('');
-  }
+  };
 
   const resetErrors = () => {
     setTitleError(null);
@@ -79,10 +79,10 @@ export default function QuestionForm({
     });
   };
 
-  const validateQuestionData = (question) => {
+  const validateQuestionData = (q) => {
     const {
       title, complexity, link, description: desc,
-    } = question;
+    } = q;
     const errors = [];
 
     const titleValidationError = validateTitle(title);
@@ -132,7 +132,7 @@ export default function QuestionForm({
     onSubmit(newQuestionData);
 
     if (generalError == null) {
-      const isAddQuestion = question == defaultQuestion;
+      const isAddQuestion = question === defaultQuestion;
       if (isAddQuestion) {
         resetFields();
       }

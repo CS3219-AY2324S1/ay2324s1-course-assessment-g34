@@ -1,5 +1,4 @@
-import React from "react";
-import { Button, styled } from "@mui/material";
+import { Button, styled } from '@mui/material';
 
 const SolidButton = styled(Button)(({ theme, color = 'primary' }) => ({
   '&.MuiButton-contained': {
