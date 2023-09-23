@@ -75,6 +75,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
   }
 - **Response**:
   - 200 on valid token
+  - 401 if invalid or expired
 
 
 ### Get User by ID 
@@ -161,7 +162,7 @@ DJANGO_DEBUG=True
 DATABASE_NAME=user_service
 DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
-DATABASE_HOST=db
+DATABASE_HOST=postgres_db
 DATABASE_PORT=5432
 SECRET_KEY=django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
 ```
