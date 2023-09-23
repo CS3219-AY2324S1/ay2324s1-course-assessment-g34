@@ -24,6 +24,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = '__all__'
+
+class UpdateProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        exclude = ('user_role',)  # Exclude the 'user_role' field
         
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

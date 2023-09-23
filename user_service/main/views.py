@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Profile
-from .serializers import ProfileSerializer, UserSerializer
+from .serializers import ProfileSerializer, UpdateProfileSerializer, UserSerializer
 from .management.permissions import IsOwnerOrAdmin
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -32,7 +32,7 @@ class UserViewSet(viewsets.ModelViewSet):
             profile = user.profile
 
             # Update the profile fields based on the request data
-            serializer = ProfileSerializer(profile, data=request.data, partial=True)
+            serializer = UpdateProfileSerializer(profile, data=request.data, partial=True)
 
             if serializer.is_valid():
                 serializer.save()
