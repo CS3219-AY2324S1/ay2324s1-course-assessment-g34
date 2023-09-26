@@ -1,9 +1,3 @@
-// title: required, cannot be empty
-// categories: not required, can be empty
-// complexity: must be "Easy", "Medium", or "Hard", required, cant be empty
-// link: required, cannot be empty
-// description: required, cannot be empty
-
 export const validateTitle = (title) => {
   let errorMessage = null;
 
@@ -47,7 +41,7 @@ export const validateDescription = (description) => {
 };
 
 export const validatePassword = (password) => {
-  const errors = [];
+  let errorMessage = null;
   
   const digitRegex = /\d/;
   const specialCharRegex = /[!@#$%^&*-_]/;
@@ -61,28 +55,44 @@ export const validatePassword = (password) => {
   const hasMinLength = password.length >= 10;
 
   if (!password) {
-    errors.push("Password cannot be empty.");
+    errorMessage = "Password cannot be empty.";
+  } else if (!hasDigit) {
+    errorMessage = "Password must contain at least one digit.";
+  } else if (!hasSpecialChar) {
+    errorMessage = "Password must contain at least one special character.";
+  } else if (!hasUppercase) {
+    errorMessage = "Password must contain at least one uppercase character.";
+  } else if (!hasLowercase) {
+    errorMessage = "Password must contain at least one lowercase character.";
+  } else if (!hasMinLength) {
+    errorMessage = "Password must be at least 10 characters long.";
   }
 
-  if (!hasDigit) {
-    errors.push("Password must contain at least one digit.");
+  return errorMessage;
+}
+
+export const validateUsername = (username) => {
+  let errorMessage = null;
+
+  const containsWhiteSpaces = /\s/.test(username);
+
+  if (!username) {
+    errorMessage = "Username cannot be empty.";
+  } else if (containsWhiteSpaces) {
+    errorMessage = "Username must not contain white spaces.";
   }
 
-  if (!hasSpecialChar) {
-    errors.push("Password must contain at least one special character.");
+  return errorMessage;
+}
+
+export const validateConfirmPassword = (confirmPassword, password) => {
+  let errorMessage = null;
+
+  if (!confirmPassword) {
+    errorMessage = "Confirm password cannot be empty.";
+  } else if (confirmPassword !== password) {
+    errorMessage = "Confirmed password does not match.";
   }
 
-  if (!hasUppercase) {
-    errors.push("Password must contain at least one uppercase character.");
-  }
-
-  if (!hasLowercase) {
-    errors.push("Password must contain at least one lowercase character.");
-  }
-
-  if (!hasMinLength) {
-    errors.push("Password must be at least 10 characters long.");
-  }
-
-  return errors;
+  return errorMessage;
 }
