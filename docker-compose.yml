@@ -7,4 +7,30 @@ services:
       context: ./frontend
     command: npm run dev
     ports:
-      - "3000:3000"
+      - 3000:3000
+    depends_on:
+      - user_service
+
+  user_service:
+    container_name: user_service
+    build:
+      context: ./user_service
+    command: 'python manage.py runserver 0.0.0.0:8000'
+    ports:
+    -  8000:8000
+    depends_on: 
+    - postgres_db
+
+  postgres_db:
+    container_name: ${DATABASE_HOST}
+    image: postgres:15.4
+    restart: always
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - ./user_service/.pgdata:/var/lib/postgresql/data
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+

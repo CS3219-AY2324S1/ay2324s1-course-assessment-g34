@@ -32,8 +32,6 @@ export default function SignUpPage() {
     const username = userData.get("username").trim();
     const password = userData.get("password");
     const confirmPassword = userData.get("confirmPassword");
-    console.log(password);
-    console.log(confirmPassword);
 
     const errors = [];
 
@@ -61,36 +59,33 @@ export default function SignUpPage() {
     }
 
     try {
-      // TODO: handle duplicate usernames
+      // TODO: handle duplicate usernames more elegantly
 
-      const newUserData = {
-        username: username,
-        password: password,
-        displayed_name: userData.get("displayed_name").trim() || username
-      };
-
-      await axios.post(REGISTER_SVC_URI, newUserData);
+      await axios.post(REGISTER_SVC_URI, userData);
 
       router.push('/login');
     } catch (error) {
-      if (error.respnse && error.response.status === 400) {
-        console.error("Bad Request: ", error.response.data);
+      if (error.response && error.response.status === 400) {
+        console.debug("Bad Request: ", error.response.data);
+        // duplicate user name
+        setUsernameError(error.response.data.username);
       } else {
-        console.error("An error occurred: ", error);
+        console.debug("An error occurred: ", error);
+        setGeneralError("Registration failed. Please try again later.");
       }
-      setGeneralError("Registration failed. Please try again later.");
     }
   };
 
-  // sign up header
-  // username
-  // password
-  // confirm password
-  // optional display name (will be same as username by default)
-  // Have an account? Link to login page
-  // check user service for duplicate usernames
   return (
-    <Container component="main" sx={{ bgcolor: (theme) => theme.palette.primary.dark, display: 'flex', justifyContent: 'center' }} maxWidth="100vw">
+    <Container
+      component="main"
+      sx={{
+        bgcolor: (theme) => theme.palette.primary.dark,
+        display: 'flex',
+        justifyContent: 'center'
+      }}
+      maxWidth="100vw"
+    >
       <Box sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -117,22 +112,14 @@ export default function SignUpPage() {
         <Box
           component={Paper}
           elevation={4}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+          sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
         >
           <Typography
             variant="h5"
             noWrap
             component="h1"
             color="primary"
-            sx={{
-              mt: 2,
-              textAlign: 'center',
-              fontWeight: 'bold',
-            }}
+            sx={{ mt: 2, textAlign: 'center', fontWeight: 'bold' }}
           >
             Sign Up
           </Typography>
@@ -188,18 +175,6 @@ export default function SignUpPage() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  size="small"
-                  margin="dense"
-                  id="displayed_name"
-                  name="displayed_name"
-                  label="Displayed Name"
-                  type="text"
-                  fullWidth
-                  inputProps={{ maxLength: 60 }}
-                />
-              </Grid>
-              <Grid item xs={12}>
                 <SolidButton
                   fullWidth
                   variant="contained"
@@ -226,12 +201,7 @@ export default function SignUpPage() {
         <Box
           component={Paper}
           elevation={4}
-          sx={{
-            px: 4,
-            py: 3,
-            width: '100%',
-            textAlign: 'center'
-          }}
+          sx={{ px: 4, py: 3, width: '100%', textAlign: 'center' }}
         >
           Have an account?{' '}
           <Typography component="span" color="secondary" sx={{ ':hover': { textDecoration: 'underline' } }}>
