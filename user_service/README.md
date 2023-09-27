@@ -139,6 +139,8 @@ To run the User Service backend locally, follow these steps:
 4. Build and start the Docker containers:
    docker-compose up
 
+5. Now run the command `docker-compose exec user_service sh` to enter the shell, and run `python manage.py makemigrations` followed by `python manage.py migrate` for making migrations. 
+
 5. The backend service should now be running. You can access it at http://localhost:8000.
 
 6. To create a superuser with admin access, run `docker-compose exec user_service sh`, folllowed by `python manage.py createsuperuser`, and followed by `python manage.py create_admin_user {username of the superuser}`
