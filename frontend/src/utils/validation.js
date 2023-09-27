@@ -43,11 +43,13 @@ export const validateDescription = (description) => {
 export const validatePassword = (password) => {
   let errorMessage = null;
 
+  const whitespaceRegex = /\s/;
   const digitRegex = /\d/;
   const specialCharRegex = /[!@#$%^&*-_]/;
   const uppercaseRegex = /[A-Z]/;
   const lowercaseRegex = /[a-z]/;
 
+  const hasNoWhitespace = !whitespaceRegex.test(password);
   const hasDigit = digitRegex.test(password);
   const hasSpecialChar = specialCharRegex.test(password);
   const hasUppercase = uppercaseRegex.test(password);
@@ -56,6 +58,8 @@ export const validatePassword = (password) => {
 
   if (!password) {
     errorMessage = 'Password cannot be empty.';
+  } else if (!hasNoWhitespace) {
+    errorMessage = 'Password cannot contain whitespace.';
   } else if (!hasDigit) {
     errorMessage = 'Password must contain at least one digit.';
   } else if (!hasSpecialChar) {
