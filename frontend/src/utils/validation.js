@@ -42,7 +42,7 @@ export const validateDescription = (description) => {
 
 export const validatePassword = (password) => {
   let errorMessage = null;
-  
+
   const digitRegex = /\d/;
   const specialCharRegex = /[!@#$%^&*-_]/;
   const uppercaseRegex = /[A-Z]/;
@@ -55,21 +55,21 @@ export const validatePassword = (password) => {
   const hasMinLength = password.length >= 10;
 
   if (!password) {
-    errorMessage = "Password cannot be empty.";
+    errorMessage = 'Password cannot be empty.';
   } else if (!hasDigit) {
-    errorMessage = "Password must contain at least one digit.";
+    errorMessage = 'Password must contain at least one digit.';
   } else if (!hasSpecialChar) {
-    errorMessage = "Password must contain at least one special character.";
+    errorMessage = 'Password must contain at least one special character.';
   } else if (!hasUppercase) {
-    errorMessage = "Password must contain at least one uppercase character.";
+    errorMessage = 'Password must contain at least one uppercase character.';
   } else if (!hasLowercase) {
-    errorMessage = "Password must contain at least one lowercase character.";
+    errorMessage = 'Password must contain at least one lowercase character.';
   } else if (!hasMinLength) {
-    errorMessage = "Password must be at least 10 characters long.";
+    errorMessage = 'Password must be at least 10 characters long.';
   }
 
   return errorMessage;
-}
+};
 
 export const validateUsername = (username) => {
   let errorMessage = null;
@@ -77,22 +77,22 @@ export const validateUsername = (username) => {
   const containsWhiteSpaces = /\s/.test(username);
 
   if (!username) {
-    errorMessage = "Username cannot be empty.";
+    errorMessage = 'Username cannot be empty.';
   } else if (containsWhiteSpaces) {
-    errorMessage = "Username must not contain white spaces.";
+    errorMessage = 'Username must not contain white spaces.';
   }
 
   return errorMessage;
-}
+};
 
 export const validateConfirmPassword = (confirmPassword, password) => {
   let errorMessage = null;
 
   if (!confirmPassword) {
-    errorMessage = "Confirm password cannot be empty.";
+    errorMessage = 'Confirm password cannot be empty.';
   } else if (confirmPassword !== password) {
-    errorMessage = "Confirmed password does not match.";
+    errorMessage = 'Confirmed password does not match.';
   }
 
   return errorMessage;
-}
+};

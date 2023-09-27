@@ -1,12 +1,14 @@
-import SolidButton from "@/components/SolidButton";
-import { Box, Container, Grid, Paper, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import SolidButton from '@/components/SolidButton';
+import {
+  Box, Container, Grid, Paper, TextField, Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
 import { Bree_Serif } from 'next/font/google';
-import Link from "next/link";
-import { validateConfirmPassword, validatePassword, validateUsername } from "@/utils/validation";
-import axios from "axios";
-import { REGISTER_SVC_URI } from "@/config/uris";
-import { useRouter } from "next/router";
+import Link from 'next/link';
+import { validateConfirmPassword, validatePassword, validateUsername } from '@/utils/validation';
+import axios from 'axios';
+import { REGISTER_SVC_URI } from '@/config/uris';
+import { useRouter } from 'next/router';
 
 const breeSerif = Bree_Serif({ subsets: ['latin'], weight: '400' });
 const MAX_USERNAME_LENGTH = 60;
@@ -23,15 +25,15 @@ export default function SignUpPage() {
     setUsernameError(null);
     setPasswordError(null);
     setConfirmPasswordError(null);
-  }
+  };
 
   const handleSignup = async (event) => {
     event.preventDefault();
     resetAllErrors();
     const userData = new FormData(event.currentTarget);
-    const username = userData.get("username").trim();
-    const password = userData.get("password");
-    const confirmPassword = userData.get("confirmPassword");
+    const username = userData.get('username').trim();
+    const password = userData.get('password');
+    const confirmPassword = userData.get('confirmPassword');
 
     const errors = [];
 
@@ -66,12 +68,12 @@ export default function SignUpPage() {
       router.push('/login');
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        console.debug("Bad Request: ", error.response.data);
+        console.debug('Bad Request: ', error.response.data);
         // duplicate user name
         setUsernameError(error.response.data.username);
       } else {
-        console.debug("An error occurred: ", error);
-        setGeneralError("Registration failed. Please try again later.");
+        console.debug('An error occurred: ', error);
+        setGeneralError('Registration failed. Please try again later.');
       }
     }
   };
@@ -82,7 +84,7 @@ export default function SignUpPage() {
       sx={{
         bgcolor: (theme) => theme.palette.primary.dark,
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
       }}
       maxWidth="100vw"
     >
@@ -93,8 +95,9 @@ export default function SignUpPage() {
         alignItems: 'center',
         maxWidth: '350px',
         minHeight: '100vh',
-        gap: 2
-      }}>
+        gap: 2,
+      }}
+      >
         <Typography
           variant="h4"
           noWrap
@@ -112,7 +115,7 @@ export default function SignUpPage() {
         <Box
           component={Paper}
           elevation={4}
-          sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+          sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
           <Typography
             variant="h5"
@@ -193,17 +196,19 @@ export default function SignUpPage() {
                     {generalError}
                   </Typography>
                 </Grid>
-              )
-            }
+              )}
             </Grid>
           </Box>
         </Box>
         <Box
           component={Paper}
           elevation={4}
-          sx={{ px: 4, py: 3, width: '100%', textAlign: 'center' }}
+          sx={{
+            px: 4, py: 3, width: '100%', textAlign: 'center',
+          }}
         >
-          Have an account?{' '}
+          Have an account?
+          {' '}
           <Typography component="span" color="secondary" sx={{ ':hover': { textDecoration: 'underline' } }}>
             <Link href="/login">Log in</Link>
           </Typography>
