@@ -7,3 +7,4 @@ node_modules
 *.vscode
 
 .pgdata
+.DS_Store
