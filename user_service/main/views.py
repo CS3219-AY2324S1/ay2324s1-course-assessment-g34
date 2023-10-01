@@ -2,6 +2,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Profile
@@ -65,7 +66,23 @@ class UserViewSet(viewsets.ModelViewSet):
         user_data = self._get_profile(user)
 
         return Response(user_data, status=status.HTTP_200_OK)
-    
+
+class LoginViewSet(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        # Perform user authentication here (e.g., username and password validation)
+        # If authentication is successful, generate a token
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        user = User.objects.get(username=username)
+
+        if check_password(password, user.password):
+            # Authentication successful
+            response = super().post(request, *args, **kwargs)
+            return response
+        else:
+            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        
     
 class RegisterViewSet(viewsets.ModelViewSet):
     def register(self, request):
@@ -90,21 +107,3 @@ class RegisterViewSet(viewsets.ModelViewSet):
                 return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def login(self, request):
-        # Perform user authentication here (e.g., username and password validation)
-        # If authentication is successful, generate a token
-
-        username = request.data.get('username')
-        password = request.data.get('password')
-
-        user = User.objects.get(username=username)
-
-        if check_password(password, user.password):
-            # Authentication successful
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            refresh_token = str(refresh)
-            return Response({'access_token': access_token, 'refresh_token': refresh_token}, status=status.HTTP_200_OK)
-        else:
-            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
