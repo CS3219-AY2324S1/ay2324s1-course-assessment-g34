@@ -22,7 +22,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Register User
 
-- **URL**: `/api/register/`
+- **URL**: `/user-service/register`
 - **Method**: `POST`
 - **Description**: Create a new user.
 - **Request Body**:
@@ -37,7 +37,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
   - 400 Bad Request on failure
 
 ### Login User
-- **URL**: `/api/login/`
+- **URL**: `/user-service/login`
 - **Method**: `POST`
 - **Description**: Login as a user.
 - **Request Body**:
@@ -52,7 +52,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 
 ### Obtain new access token with refresh token
-- **URL**: `/api/token/refresh/`
+- **URL**: `/user-service/token/refresh`
 - **Method**: `POST`
 - **Description**: Obtain new access token.
 - **Request Body**:
@@ -65,7 +65,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 
 ### Verify the validity of a token
-- **URL**: `/api/token/verify/`
+- **URL**: `/user-service/token/verify`
 - **Method**: `POST`
 - **Description**: Verify a token.
 - **Request Body**:
@@ -80,7 +80,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Get User by ID 
 
-- **URL**: `/api/users/<str:username>`
+- **URL**: `/user-service/getUser/<str:username>`
 - **Method**: `GET`
 - **Description**: Retrieve user information by username.
 - **Request Body**:
@@ -90,7 +90,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Get all user
 
-- **URL**: `/api/users/`
+- **URL**: `/user-service/getUsers`
 - **Method**: `GET`
 - **Description**: Retrieve all user information.
 - **Request Body**:
@@ -100,7 +100,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Update User
 
-- **URL**: `/api/users/<int:user_id>`
+- **URL**: `/user-service/updateUser/<int:user_id>`
 - **Method**: `PUT`
 - **Description**: Update user information.
 - **Request Header**: `Authorization`: `Bearer ` + <access_token>
@@ -115,7 +115,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Delete User 
 
-- **URL**: `/api/users/<int:user_id>`
+- **URL**: `/user-service/deleteUser/<int:user_id>`
 - **Method**: `DELETE`
 - **Description**: Delete a user.
 - **Request Header**: `Authorization`: `Bearer ` + <access_token>

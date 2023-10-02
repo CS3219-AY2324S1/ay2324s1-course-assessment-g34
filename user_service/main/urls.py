@@ -8,15 +8,19 @@ from rest_framework_simplejwt.views import TokenVerifyView
 from .views import LoginViewSet, RegisterViewSet, UserViewSet
 
 urlpatterns = [
-    path('users', UserViewSet.as_view({
+    path('getUsers', UserViewSet.as_view({
         'get': 'list'
     })),
     path('register', RegisterViewSet.as_view({
         'post': 'register'
     })),
-    path('users/<str:pk>', UserViewSet.as_view({
+    path('getUser/<str:pk>', UserViewSet.as_view({
         'get': 'get',
+    })),
+    path('updateUser/<str:pk>', UserViewSet.as_view({
         'put': 'partial_update',
+    })),
+    path('deleteUser/<str:pk>', UserViewSet.as_view({
         'delete': 'delete'
     })),
     path('login', LoginViewSet.as_view()),
