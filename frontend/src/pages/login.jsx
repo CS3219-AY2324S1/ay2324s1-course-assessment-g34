@@ -1,85 +1,78 @@
 import SolidButton from '@/components/SolidButton';
-import {
-  Box, Container, Grid, Paper, TextField, Typography,
-} from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { Box, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import { Bree_Serif } from 'next/font/google';
 import Link from 'next/link';
-import { validateConfirmPassword, validatePassword, validateUsername } from '@/utils/validation';
 import axios from 'axios';
-import { REGISTER_SVC_URI } from '@/config/uris';
-import { useRouter } from 'next/router';
+import { LOGIN_SVC_URI } from '@/config/uris';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 const breeSerif = Bree_Serif({ subsets: ['latin'], weight: '400' });
-const MAX_USERNAME_LENGTH = 60;
 
-export default function SignUpPage() {
-  const router = useRouter();
-  const [generalError, setGeneralError] = useState(null);
+export default function LoginPage() {
+  const { login, error, setError } = useAuthContext();
   const [usernameError, setUsernameError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
-  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
 
   const resetAllErrors = () => {
-    setGeneralError(null);
+    setError(null);
     setUsernameError(null);
     setPasswordError(null);
-    setConfirmPasswordError(null);
   };
 
-  const handleSignup = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     resetAllErrors();
     const userData = new FormData(event.currentTarget);
     const username = userData.get('username').trim();
     const password = userData.get('password');
-    const confirmPassword = userData.get('confirmPassword');
 
     const errors = [];
 
-    const usernameValidationError = validateUsername(username);
-    const passwordValidationError = validatePassword(password);
-    const confirmPasswordValidationError = validateConfirmPassword(confirmPassword, password);
-
-    if (usernameValidationError) {
-      errors.push(usernameValidationError);
-      setUsernameError(usernameValidationError);
+    if (!username) {
+      const emptyUsernameError = "Username cannot be empty.";
+      errors.push(emptyUsernameError);
+      setUsernameError(emptyUsernameError);
     }
 
-    if (passwordValidationError) {
-      errors.push(passwordValidationError);
-      setPasswordError(passwordValidationError);
-    }
-
-    if (confirmPasswordValidationError) {
-      errors.push(confirmPasswordValidationError);
-      setConfirmPasswordError(confirmPasswordValidationError);
+    if (!password) {
+      const emptyPasswordError = "Password cannot be empty.";
+      errors.push(emptyPasswordError);
+      setPasswordError(emptyPasswordError);
     }
 
     if (errors.length > 0) {
       return;
     }
 
-    try {
-      // TODO: handle duplicate usernames more elegantly
-      const newUserData = {
-        username: username,
-        password: password
-      };
-      
-      await axios.post(REGISTER_SVC_URI, newUserData);
+    const newUserData = {
+      username: username,
+      password: password
+    };
 
-      router.push('/login');
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        console.debug('Bad Request: ', error.response.data);
-        // duplicate user name
-        setUsernameError(error.response.data.username);
-      } else {
-        console.debug('An error occurred: ', error);
-        setGeneralError('Registration failed. Please try again later.');
-      }
-    }
+    login(newUserData);
+
+    // try {
+    //   const newUserData = {
+    //     username: username,
+    //     password: password
+    //   };
+
+    //   const response = await axios.post(LOGIN_SVC_URI, newUserData);
+
+    //   // store refresh token in secure HttpOnly Cookie
+    //   Cookies.set('refresh', refresh_token);
+    //   router.push("/");
+    // } catch (error) {
+    //   if (error.response && error.response.status === 401) {
+    //     console.debug('Unauthorized: ', error.response.data);
+    //     setGeneralError('The username or password you entered is incorrect');
+    //   } else {
+    //     console.debug('An error occurred: ', error);
+    //     setGeneralError('An error occurred. Please try again later.');
+    //   }
+    // }
   };
 
   return (
@@ -128,9 +121,9 @@ export default function SignUpPage() {
             color="primary"
             sx={{ mt: 2, textAlign: 'center', fontWeight: 'bold' }}
           >
-            Sign Up
+            Sign In
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSignup} sx={{ p: 4 }}>
+          <Box component="form" noValidate onSubmit={handleLogin} sx={{ p: 4 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -146,7 +139,6 @@ export default function SignUpPage() {
                   helperText={usernameError}
                   onChange={() => setUsernameError(null)}
                   autoComplete="username"
-                  inputProps={{ maxLength: MAX_USERNAME_LENGTH }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -166,22 +158,6 @@ export default function SignUpPage() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  size="small"
-                  margin="dense"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  type="password"
-                  inputProps={{ maxLength: MAX_USERNAME_LENGTH }}
-                  fullWidth
-                  error={confirmPasswordError != null}
-                  helperText={confirmPasswordError}
-                  onChange={() => setConfirmPasswordError(null)}
-                />
-              </Grid>
-              <Grid item xs={12}>
                 <SolidButton
                   fullWidth
                   variant="contained"
@@ -190,14 +166,14 @@ export default function SignUpPage() {
                   type="submit"
                   sx={{ textTransform: 'none', fontWeight: 600, mt: 2 }}
                 >
-                  Sign Up
+                  Log In
                 </SolidButton>
               </Grid>
-              {generalError
+              {error
               && (
                 <Grid item xs={12}>
                   <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: 12 }}>
-                    {generalError}
+                    {error}
                   </Typography>
                 </Grid>
               )}
@@ -207,16 +183,18 @@ export default function SignUpPage() {
         <Box
           component={Paper}
           elevation={4}
-          sx={{ px: 4, py: 3, width: '100%', textAlign: 'center' }}
+          sx={{
+            px: 4, py: 3, width: '100%', textAlign: 'center',
+          }}
         >
-          Have an account?
+          Don't have an account?
           {' '}
           <Typography
             component="span"
             color="secondary"
             sx={{ fontWeight: 600, ':hover': { textDecoration: 'underline' } }}
           >
-            <Link href="/login">Log in</Link>
+            <Link href="/signup">Sign up</Link>
           </Typography>
         </Box>
       </Box>

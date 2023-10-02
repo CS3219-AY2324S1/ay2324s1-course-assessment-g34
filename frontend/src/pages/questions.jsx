@@ -5,6 +5,8 @@ import Layout from '@/components/Layout';
 import QuestionTable from '@/components/QuestionPage/QuestionTable';
 // import { GET_ALL_QUESTIONS_SVC_URI } from '@/config/uris';
 import AddQuestion from '@/components/QuestionPage/AddQuestion';
+import ProtectedPage from '@/components/ProtectedPage';
+import { Role } from '@/utils/constants';
 
 export default function QuestionPage() {
   const [questions, setQuestions] = useState([]);
@@ -41,36 +43,38 @@ export default function QuestionPage() {
   }, []);
 
   return (
-    <Layout>
-      <Container
-        maxWidth="xl"
-        sx={{ height: '100vh', my: 2 }}
-      >
-        <Typography
-          variant="h5"
-          noWrap
-          component="h5"
-          color="primary"
-          sx={{
-            marginTop: 0,
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: '30px',
-          }}
+    <ProtectedPage allowedRoles={[Role.ADMIN]}>
+      <Layout>
+        <Container
+          maxWidth="xl"
+          sx={{ height: '100vh', my: 2 }}
         >
-          Questions
-        </Typography>
-        <AddQuestion setQuestions={setQuestions} />
-        {error
-            && (
-            <Typography color="error" sx={{ textAlign: 'center' }} variant="h6">
-              {error}
-            </Typography>
-            )}
-        {isLoading
-          ? <Skeleton variant="rectangular" height="50vh" />
-          : <QuestionTable questions={questions} setQuestions={setQuestions} />}
-      </Container>
-    </Layout>
+          <Typography
+            variant="h5"
+            noWrap
+            component="h5"
+            color="primary"
+            sx={{
+              marginTop: 0,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: '30px',
+            }}
+          >
+            Questions
+          </Typography>
+          <AddQuestion setQuestions={setQuestions} />
+          {error
+              && (
+              <Typography color="error" sx={{ textAlign: 'center' }} variant="h6">
+                {error}
+              </Typography>
+              )}
+          {isLoading
+            ? <Skeleton variant="rectangular" height="50vh" />
+            : <QuestionTable questions={questions} setQuestions={setQuestions} />}
+        </Container>
+      </Layout>
+    </ProtectedPage>
   );
 }
