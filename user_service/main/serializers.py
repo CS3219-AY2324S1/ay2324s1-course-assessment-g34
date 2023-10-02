@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Profile
@@ -16,7 +16,18 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['user_role'] = user.profile.user_role
         
         return token
-    
+
+class MyTokenRefreshSerializer(TokenRefreshSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        token['user_role'] = user.profile.user_role
+
+        return token
+
 class ProfileSerializer(serializers.ModelSerializer):
     # Define the user_role field with choices
     user_role = serializers.ChoiceField(choices=Profile.USER_ROLE_CHOICES)
