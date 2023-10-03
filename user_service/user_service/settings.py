@@ -111,7 +111,7 @@ SIMPLE_JWT = {
 
     "ALGORITHM": "HS256",
     "SIGNING_KEY": os.environ.get('SECRET_KEY'),
-    "VERIFYING_KEY": "",
+    "VERIFYING_KEY": os.environ.get('SECRET_KEY'),
     "AUDIENCE": None,
     "ISSUER": None,
     "JSON_ENCODER": None,
