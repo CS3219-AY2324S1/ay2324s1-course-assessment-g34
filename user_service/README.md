@@ -80,7 +80,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Get User by ID 
 
-- **URL**: `/user-service/getUser/<str:username>`
+- **URL**: `/user-service/users/<str:username>`
 - **Method**: `GET`
 - **Description**: Retrieve user information by username.
 - **Request Body**:
@@ -90,7 +90,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Get all user
 
-- **URL**: `/user-service/getUsers`
+- **URL**: `/user-service/users`
 - **Method**: `GET`
 - **Description**: Retrieve all user information.
 - **Request Body**:
@@ -100,7 +100,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Update User
 
-- **URL**: `/user-service/updateUser/<int:user_id>`
+- **URL**: `/user-service/users/<str:username>`
 - **Method**: `PUT`
 - **Description**: Update user information.
 - **Request Header**: `Authorization`: `Bearer ` + <access_token>
@@ -115,7 +115,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Delete User 
 
-- **URL**: `/user-service/deleteUser/<int:user_id>`
+- **URL**: `/user-service/users/<str:username`
 - **Method**: `DELETE`
 - **Description**: Delete a user.
 - **Request Header**: `Authorization`: `Bearer ` + <access_token>
