@@ -5,6 +5,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
 import Logo from './Logo';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 const pages = [
   {
@@ -17,13 +18,14 @@ const pages = [
   },
 ];
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Account', 'Dashboard'];
 
 export default function Navbar() {
   // temporary avatar placeholder; to change later
   const [image, setImage] = useState('http://localhost:3000/images/user-avatar.png');
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const { logout } = useAuthContext();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -115,6 +117,9 @@ export default function Navbar() {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
+              <MenuItem onClick={logout}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
