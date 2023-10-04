@@ -5,8 +5,9 @@ import Layout from '@/components/Layout';
 import QuestionTable from '@/components/QuestionPage/QuestionTable';
 // import { GET_ALL_QUESTIONS_SVC_URI } from '@/config/uris';
 import AddQuestion from '@/components/QuestionPage/AddQuestion';
-import ProtectedPage from '@/components/ProtectedPage';
+import RouteGuard from '@/components/RouteGuard';
 import { Role } from '@/utils/constants';
+import ComponentGuard from '@/components/ComponentGuard';
 
 export default function QuestionPage() {
   const [questions, setQuestions] = useState([]);
@@ -43,7 +44,7 @@ export default function QuestionPage() {
   }, []);
 
   return (
-    <ProtectedPage allowedRoles={[Role.ADMIN]}>
+    <RouteGuard allowedRoles={[Role.USER, Role.ADMIN]}>
       <Layout>
         <Container
           maxWidth="xl"
@@ -63,7 +64,9 @@ export default function QuestionPage() {
           >
             Questions
           </Typography>
-          <AddQuestion setQuestions={setQuestions} />
+          <ComponentGuard allowedRoles={[Role.ADMIN]}>
+            <AddQuestion setQuestions={setQuestions} />
+          </ComponentGuard>
           {error
               && (
               <Typography color="error" sx={{ textAlign: 'center' }} variant="h6">
@@ -75,6 +78,6 @@ export default function QuestionPage() {
             : <QuestionTable questions={questions} setQuestions={setQuestions} />}
         </Container>
       </Layout>
-    </ProtectedPage>
+    </RouteGuard>
   );
 }

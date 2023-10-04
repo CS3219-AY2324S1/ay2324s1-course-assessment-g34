@@ -1,22 +1,21 @@
 import SolidButton from '@/components/SolidButton';
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import { Box, Container, Grid, Paper, TextField, Typography } from "@mui/material";
+import React, { useState } from 'react';
+import {
+  Box, Container, Grid, Paper, TextField, Typography,
+} from '@mui/material';
 import { Bree_Serif } from 'next/font/google';
 import Link from 'next/link';
-import axios from 'axios';
-import { LOGIN_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 const breeSerif = Bree_Serif({ subsets: ['latin'], weight: '400' });
 
 export default function LoginPage() {
-  const { login, error, setError } = useAuthContext();
+  const { login, loginError, setLoginError } = useAuthContext();
   const [usernameError, setUsernameError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
 
   const resetAllErrors = () => {
-    setError(null);
+    setLoginError(null);
     setUsernameError(null);
     setPasswordError(null);
   };
@@ -31,13 +30,13 @@ export default function LoginPage() {
     const errors = [];
 
     if (!username) {
-      const emptyUsernameError = "Username cannot be empty.";
+      const emptyUsernameError = 'Username cannot be empty.';
       errors.push(emptyUsernameError);
       setUsernameError(emptyUsernameError);
     }
 
     if (!password) {
-      const emptyPasswordError = "Password cannot be empty.";
+      const emptyPasswordError = 'Password cannot be empty.';
       errors.push(emptyPasswordError);
       setPasswordError(emptyPasswordError);
     }
@@ -47,32 +46,11 @@ export default function LoginPage() {
     }
 
     const newUserData = {
-      username: username,
-      password: password
+      username,
+      password,
     };
 
     login(newUserData);
-
-    // try {
-    //   const newUserData = {
-    //     username: username,
-    //     password: password
-    //   };
-
-    //   const response = await axios.post(LOGIN_SVC_URI, newUserData);
-
-    //   // store refresh token in secure HttpOnly Cookie
-    //   Cookies.set('refresh', refresh_token);
-    //   router.push("/");
-    // } catch (error) {
-    //   if (error.response && error.response.status === 401) {
-    //     console.debug('Unauthorized: ', error.response.data);
-    //     setGeneralError('The username or password you entered is incorrect');
-    //   } else {
-    //     console.debug('An error occurred: ', error);
-    //     setGeneralError('An error occurred. Please try again later.');
-    //   }
-    // }
   };
 
   return (
@@ -86,14 +64,14 @@ export default function LoginPage() {
       maxWidth="100vw"
     >
       <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          maxWidth: '350px',
-          minHeight: '100vh',
-          gap: 2,
-        }}
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        maxWidth: '350px',
+        minHeight: '100vh',
+        gap: 2,
+      }}
       >
         <Typography
           variant="h4"
@@ -169,11 +147,11 @@ export default function LoginPage() {
                   Log In
                 </SolidButton>
               </Grid>
-              {error
+              {loginError
               && (
                 <Grid item xs={12}>
                   <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: 12 }}>
-                    {error}
+                    {loginError}
                   </Typography>
                 </Grid>
               )}
@@ -187,7 +165,7 @@ export default function LoginPage() {
             px: 4, py: 3, width: '100%', textAlign: 'center',
           }}
         >
-          Don't have an account?
+          Don&apos;t have an account?
           {' '}
           <Typography
             component="span"

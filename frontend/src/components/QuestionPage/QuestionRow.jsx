@@ -9,6 +9,8 @@ import { PropTypes } from 'prop-types';
 import QuestionCategoryList from './QuestionCategoryList';
 import DeleteQuestionDialog from './DeleteQuestionDialog';
 import EditQuestion from './EditQuestion';
+import ComponentGuard from '../ComponentGuard';
+import { Role } from '@/utils/constants';
 
 const complexityToColorMap = {
   Easy: 'success',
@@ -77,11 +79,13 @@ export default function QuestionRow({ row, index, setQuestions }) {
               <LinkRounded />
             </IconButton>
           </Tooltip>
-          <EditQuestion setQuestions={setQuestions} index={index} question={row} />
-          <DeleteQuestionDialog
-            handleDelete={handleDelete}
-            title={row.title}
-          />
+          <ComponentGuard allowedRoles={[Role.ADMIN]}>
+            <EditQuestion setQuestions={setQuestions} index={index} question={row} />
+            <DeleteQuestionDialog
+              handleDelete={handleDelete}
+              title={row.title}
+            />
+          </ComponentGuard>
         </TableCell>
       </TableRow>
       <TableRow sx={{ bgcolor: '#fbfbfb' }}>

@@ -63,10 +63,10 @@ export default function SignUpPage() {
     try {
       // TODO: handle duplicate usernames more elegantly
       const newUserData = {
-        username: username,
-        password: password
+        username,
+        password,
       };
-      
+
       await axios.post(REGISTER_SVC_URI, newUserData);
 
       router.push('/login');
@@ -93,14 +93,14 @@ export default function SignUpPage() {
       maxWidth="100vw"
     >
       <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          maxWidth: '350px',
-          minHeight: '100vh',
-          gap: 2,
-        }}
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        maxWidth: '350px',
+        minHeight: '100vh',
+        gap: 2,
+      }}
       >
         <Typography
           variant="h4"
@@ -207,7 +207,9 @@ export default function SignUpPage() {
         <Box
           component={Paper}
           elevation={4}
-          sx={{ px: 4, py: 3, width: '100%', textAlign: 'center' }}
+          sx={{
+            px: 4, py: 3, width: '100%', textAlign: 'center',
+          }}
         >
           Have an account?
           {' '}

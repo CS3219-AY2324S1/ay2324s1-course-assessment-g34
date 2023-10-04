@@ -12,7 +12,7 @@ const DELETE_QUESTION = '/deleteQuestion';
 const GET_ALL_QUESTIONS = '/getAllQuestions';
 
 const USER_SVC_PREFIX = '/api/users';
-const TOKEN_SVC_PREFIX = 'api/token';
+const TOKEN_SVC_PREFIX = '/api/token';
 
 const REGISTER = '/api/register';
 const LOGIN = '/api/login';
