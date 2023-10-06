@@ -3,7 +3,7 @@
 node_modules
 
 # local config files
-*.env
+**.env
 *.vscode
 
 .pgdata
