@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Skeleton, Typography } from '@mui/material';
-// import axios from 'axios';
+import axios from 'axios';
 import Layout from '@/components/Layout';
 import QuestionTable from '@/components/QuestionPage/QuestionTable';
-// import { GET_ALL_QUESTIONS_SVC_URI } from '@/config/uris';
+import { GET_ALL_QUESTIONS_SVC_URI } from '@/config/uris';
 import AddQuestion from '@/components/QuestionPage/AddQuestion';
 import RouteGuard from '@/components/RouteGuard';
 import { Role } from '@/utils/constants';
@@ -14,33 +14,33 @@ export default function QuestionPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const getAllQuestions = async () => {
-  //   try {
-  //     const response = await axios.get(GET_ALL_QUESTIONS_SVC_URI);
-  //     setQuestions(response.data);
-  //   } catch (error) {
-  //     console.error('An error occurred:', error);
-  //     setError('An error occurred while retrieving the questions. Please try again later.');
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  const getQuestionsFromLocalStorage = () => {
-    const storedQuestions = localStorage.getItem('questions');
-
-    if (storedQuestions) {
-      setQuestions(JSON.parse(storedQuestions));
-    } else {
-      localStorage.setItem('questions', JSON.stringify([]));
+  const getAllQuestions = async () => {
+    try {
+      const response = await axios.get(GET_ALL_QUESTIONS_SVC_URI);
+      setQuestions(response.data);
+    } catch (error) {
+      console.error('An error occurred:', error);
+      setError('An error occurred while retrieving the questions. Please try again later.');
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
+  // const getQuestionsFromLocalStorage = () => {
+  //   const storedQuestions = localStorage.getItem('questions');
+
+  //   if (storedQuestions) {
+  //     setQuestions(JSON.parse(storedQuestions));
+  //   } else {
+  //     localStorage.setItem('questions', JSON.stringify([]));
+  //   }
+
+  //   setIsLoading(false);
+  // };
+
   useEffect(() => {
-    getQuestionsFromLocalStorage();
-    // getAllQuestions();
+    // getQuestionsFromLocalStorage();
+    getAllQuestions();
   }, []);
 
   return (

@@ -20,12 +20,6 @@ export default function AddQuestion({ setQuestions }) {
   };
 
   const handleSubmit = async (newQuestionData) => {
-    // local storage
-    // const questions = JSON.parse(localStorage.getItem('questions'));
-    // questions.push(newQuestionData);
-    // localStorage.setItem('questions', JSON.stringify(questions));
-    // updateQuestions(newQuestionData);
-
     // TODO: make some toast pop up to notify user that a question has been added successfully
     try {
       const token = await getAccessToken();
