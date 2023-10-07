@@ -11,7 +11,6 @@ export default function useAuth() {
   const [accessToken, setAccessToken] = useState(null);
   const [loginError, setLoginError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [redirect, setRedirect] = useState('/');
 
   const addRefreshToken = (refreshToken) => {
@@ -63,7 +62,6 @@ export default function useAuth() {
     setUser(null);
     removeAccessToken();
     removeRefreshToken();
-    // setIsAuthenticated(false);
     // TODO: redirect to '/', which redirects to /login if not auth
     router.push('/login');
   };
@@ -99,6 +97,8 @@ export default function useAuth() {
         // TODO: redirect to error page
         console.error('An error occurred: ', error);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -116,6 +116,8 @@ export default function useAuth() {
     } catch (err) {
       removeAccessToken();
       console.error('An error occurred: ', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -145,6 +147,7 @@ export default function useAuth() {
     logout,
     loginError,
     setLoginError,
-    setRedirect
+    setRedirect,
+    getAccessToken
   };
 }

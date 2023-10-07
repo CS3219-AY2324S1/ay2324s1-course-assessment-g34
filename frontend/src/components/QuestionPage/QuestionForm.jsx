@@ -120,7 +120,7 @@ export default function QuestionForm({
     const newQuestionData = {
       title: questionData.title.trim(),
       complexity: questionData.complexity.trim(),
-      categories,
+      categories: categories,
       link: questionData.link.trim(),
       description: description.trim(),
     };

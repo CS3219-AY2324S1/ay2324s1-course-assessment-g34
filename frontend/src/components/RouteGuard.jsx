@@ -23,7 +23,7 @@ export default function RouteGuard({ children, allowedRoles }) {
 
       setIsAuthorized(false);
     }
-  }, [isLoading, isAuthenticated, user, allowedRoles]);
+  }, [isAuthenticated, user, allowedRoles]);
 
   if (isLoading) {
     return (

@@ -3,7 +3,7 @@ const USER_SVC_URL = process.env.NEXT_PUBLIC_USER_SVC_URI || 'http://localhost:8
 
 // TODO: standardise to follow REST API URI naming conventions
 // should be /api/question
-const QUESTION_SVC_PREFIX = '/api';
+const QUESTION_SVC_PREFIX = '/question-service';
 
 const ADD_QUESTION = '/addQuestion';
 const GET_QUESTION_BY_ID = '/getQuestion';

@@ -8,7 +8,6 @@ export default function ComponentGuard({ children, allowedRoles, altComponent })
   const { user, isAuthenticated, isLoading } = useAuthContext();
 
   useEffect(() => {
-    console.log(user, isAuthenticated, isLoading)
     if (!isLoading) {
       if (isAuthenticated && allowedRoles.includes(user.role)) {
         setIsAuthorized(true);
