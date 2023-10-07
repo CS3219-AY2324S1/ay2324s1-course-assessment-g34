@@ -21,8 +21,11 @@ services:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
-      - .pgdata:/var/lib/postgresql/data
+      - postgres-db:/var/lib/postgresql/data
     ports:
       - ${DATABASE_PORT}:${DATABASE_PORT}
     env_file:
       - .env
+
+volumes:
+  postgres-db:
