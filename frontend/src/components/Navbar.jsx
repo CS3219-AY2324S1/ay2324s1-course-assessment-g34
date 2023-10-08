@@ -5,9 +5,9 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { Role } from '@/utils/constants';
 import Logo from './Logo';
 import ComponentGuard from './ComponentGuard';
-import { Role } from '@/utils/constants';
 import SolidButton from './SolidButton';
 
 const pages = [
@@ -23,7 +23,7 @@ const pages = [
 
 const settings = ['Profile', 'Account', 'Dashboard'];
 
-const LoginButton = () => {
+function LoginButton() {
   return (
     <Link href="/login">
       <SolidButton
@@ -119,7 +119,7 @@ export default function Navbar() {
             </Box>
           </ComponentGuard>
           <Box sx={{ flexGrow: 0, ml: 'auto' }}>
-            <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]} altComponent={<LoginButton/>}>
+            <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]} altComponent={<LoginButton />}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="User Avatar" src={image} />

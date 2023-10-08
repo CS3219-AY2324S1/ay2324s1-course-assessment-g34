@@ -2,13 +2,16 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { PropTypes } from 'prop-types';
 
-// guards routes/pages by redirecting user AND conditional rendering 
+// guards routes/pages by redirecting user AND conditional rendering
 export default function RouteGuard({ children, allowedRoles }) {
-  const router = useRouter();
+  const router = useRouter().asPath;
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const { user, isAuthenticated, isLoading, setRedirect } = useAuthContext();
+  const {
+    user, isAuthenticated, isLoading, setRedirect,
+  } = useAuthContext();
 
   useEffect(() => {
     if (!isLoading) {
@@ -16,14 +19,14 @@ export default function RouteGuard({ children, allowedRoles }) {
         setIsAuthorized(true);
         return;
       }
-      
+
       if (!isAuthenticated) {
         setRedirect(router.asPath);
       }
 
       setIsAuthorized(false);
     }
-  }, [isAuthenticated, user, allowedRoles]);
+  }, [isLoading, isAuthenticated, user, router.asPath, allowedRoles, setRedirect]);
 
   if (isLoading) {
     return (
@@ -61,3 +64,8 @@ export default function RouteGuard({ children, allowedRoles }) {
 
   return isAuthorized && children;
 }
+
+RouteGuard.propTypes = {
+  children: PropTypes.node.isRequired,
+  allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

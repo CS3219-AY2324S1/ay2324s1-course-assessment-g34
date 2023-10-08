@@ -29,7 +29,7 @@ router.get("/getAllQuestions", async (req, res) => {
 
 //Get by ID Method
 router.get('/getQuestion/:id', async (req, res) => {
-    try{
+    try {
         const data = await Question.findById(req.params.id);
         res.json(data)
     }

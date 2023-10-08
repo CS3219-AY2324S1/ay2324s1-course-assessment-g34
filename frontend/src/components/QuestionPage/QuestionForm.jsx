@@ -4,7 +4,9 @@ import {
   Toolbar, Typography,
 } from '@mui/material';
 import dynamic from 'next/dynamic';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, {
+  forwardRef, useEffect, useRef, useState,
+} from 'react';
 import {
   validateComplexity, validateDescription, validateLink, validateTitle,
 } from '@/utils/validation';
@@ -15,13 +17,13 @@ import SolidButton from '../SolidButton';
 
 const Editor = dynamic(() => import('./QuestionDescriptionEditor'), {
   ssr: false,
-  loading: () => <Skeleton variant="rectangular" height="40 vh" />,
+  loading: () => <Skeleton variant="rectangular" height="40vh" />,
 });
 
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 const defaultQuestion = {
-  id: '',
+  _id: '',
   title: '',
   description: '',
   categories: [],
@@ -40,6 +42,7 @@ export default function QuestionForm({
   const [categories, setCategories] = useState(question.categories);
   const [description, setDescription] = useState(question.description);
   const [questionData, setQuestionData] = useState({
+    _id: question._id,
     title: question.title,
     complexity: question.complexity,
     categories: question.categories,
@@ -49,6 +52,7 @@ export default function QuestionForm({
 
   const resetFields = () => {
     setQuestionData({
+      _id: '',
       title: '',
       description: '',
       categories: [],
@@ -120,7 +124,7 @@ export default function QuestionForm({
     const newQuestionData = {
       title: questionData.title.trim(),
       complexity: questionData.complexity.trim(),
-      categories: categories,
+      categories,
       link: questionData.link.trim(),
       description: description.trim(),
     };
@@ -139,6 +143,12 @@ export default function QuestionForm({
       handleClose();
     }
   };
+
+  useEffect(() => {
+    setQuestionData(question);
+    setDescription(question.description);
+    setCategories(question.categories);
+  }, [question]);
 
   return (
     <Dialog
@@ -260,7 +270,6 @@ export default function QuestionForm({
 
 QuestionForm.propTypes = {
   question: PropTypes.shape({
-    // id required after integration
     id: PropTypes.string,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,

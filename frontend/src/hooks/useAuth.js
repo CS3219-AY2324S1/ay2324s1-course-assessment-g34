@@ -1,6 +1,6 @@
 import { LOGIN_SVC_URI, VERIFY_TOKEN_SVC_URI, REFRESH_TOKEN_SVC_URI } from '@/config/uris';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { decode } from 'jsonwebtoken';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
@@ -31,7 +31,6 @@ export default function useAuth() {
     setAccessToken(token);
   };
 
-
   const login = async (userData) => {
     try {
       const response = await axios.post(LOGIN_SVC_URI, userData);
@@ -49,7 +48,7 @@ export default function useAuth() {
       router.push(redirect);
     } catch (err) {
       if (err.response && err.response.status === 401) {
-        console.debug('Unauthorized: ', err.response.data);
+        console.error('Unauthorized: ', err.response.data);
         setLoginError('The username or password you entered is incorrect');
       } else {
         console.error('An error occurred: ', err);
@@ -66,10 +65,9 @@ export default function useAuth() {
     router.push('/login');
   };
 
-  const refreshAccessToken = async () => {
-    setIsLoading(true);
+  const refreshAccessToken = useCallback(async () => {
     const refreshToken = getRefreshToken();
-
+    let newAccessToken;
     if (!refreshToken) {
       return;
     }
@@ -77,9 +75,10 @@ export default function useAuth() {
     const body = { refresh: refreshToken };
 
     try {
+      console.log('refreshing token...');
       const response = await axios.post(REFRESH_TOKEN_SVC_URI, body);
       const { access, refresh } = response.data;
-
+      newAccessToken = access;
       addAccessToken(access);
       addRefreshToken(refresh);
 
@@ -87,57 +86,67 @@ export default function useAuth() {
       const { username, user_role } = decode(refresh);
 
       setUser({
-        username: username,
+        username,
         role: user_role,
       });
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        console.error('Unauthorized: ', error.response.data);
+        console.error('Unauthorized: ', error);
       } else {
         // TODO: redirect to error page
         console.error('An error occurred: ', error);
       }
-    } finally {
-      setIsLoading(false);
     }
-  };
 
-  const verifyAccessToken = async () => {
-    setIsLoading(true);
+    return newAccessToken;
+  }, []);
 
+  const verifyAccessToken = useCallback(async () => {
     const body = { token: accessToken };
 
     try {
       const response = await axios.post(VERIFY_TOKEN_SVC_URI, body);
 
-      if (response && response.status == 200) {
+      if (response && response.status === 200) {
         addAccessToken(accessToken);
+        return true;
       }
     } catch (err) {
       removeAccessToken();
-      console.error('An error occurred: ', err);
-    } finally {
-      setIsLoading(false);
     }
-  };
 
-  const getAccessToken = () => {
+    return false;
+  }, [accessToken]);
+
+  const verifyAndRefreshAccessToken = useCallback(async () => {
     if (accessToken) {
-      verifyAccessToken();
-    }
+      const isValid = await verifyAccessToken();
 
-    if (!accessToken) {
-      refreshAccessToken();
+      if (!isValid) {
+        await refreshAccessToken();
+      }
+    } else {
+      await refreshAccessToken();
     }
+  }, [accessToken, refreshAccessToken, verifyAccessToken]);
 
-    return accessToken;
-  }
+  const getAccessToken = async () => {
+    if (accessToken) {
+      const isValid = await verifyAccessToken();
+
+      if (isValid) {
+        return accessToken;
+      }
+      return refreshAccessToken();
+    }
+    return refreshAccessToken();
+  };
 
   // resolve user
   useEffect(() => {
-    getAccessToken();
+    verifyAndRefreshAccessToken();
     setIsLoading(false);
-  }, [accessToken]);
+  }, [verifyAndRefreshAccessToken]);
 
   return {
     user,
@@ -148,6 +157,6 @@ export default function useAuth() {
     loginError,
     setLoginError,
     setRedirect,
-    getAccessToken
+    getAccessToken,
   };
 }

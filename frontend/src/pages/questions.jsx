@@ -8,38 +8,36 @@ import AddQuestion from '@/components/QuestionPage/AddQuestion';
 import RouteGuard from '@/components/RouteGuard';
 import { Role } from '@/utils/constants';
 import ComponentGuard from '@/components/ComponentGuard';
+import EditQuestion from '@/components/QuestionPage/EditQuestion';
 
 export default function QuestionPage() {
   const [questions, setQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState({
+    _id: '',
+    title: '',
+    description: '',
+    categories: [],
+    link: '',
+    complexity: 'Easy',
+  });
 
   const getAllQuestions = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(GET_ALL_QUESTIONS_SVC_URI);
       setQuestions(response.data);
-    } catch (error) {
-      console.error('An error occurred:', error);
+    } catch (err) {
+      console.error('An error occurred:', err);
       setError('An error occurred while retrieving the questions. Please try again later.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // const getQuestionsFromLocalStorage = () => {
-  //   const storedQuestions = localStorage.getItem('questions');
-
-  //   if (storedQuestions) {
-  //     setQuestions(JSON.parse(storedQuestions));
-  //   } else {
-  //     localStorage.setItem('questions', JSON.stringify([]));
-  //   }
-
-  //   setIsLoading(false);
-  // };
-
   useEffect(() => {
-    // getQuestionsFromLocalStorage();
     getAllQuestions();
   }, []);
 
@@ -66,6 +64,12 @@ export default function QuestionPage() {
           </Typography>
           <ComponentGuard allowedRoles={[Role.ADMIN]}>
             <AddQuestion setQuestions={setQuestions} />
+            <EditQuestion
+              setQuestions={setQuestions}
+              question={selectedQuestion}
+              isOpen={isEditModalOpen}
+              setIsOpen={setIsEditModalOpen}
+            />
           </ComponentGuard>
           {error
               && (
@@ -75,7 +79,15 @@ export default function QuestionPage() {
               )}
           {isLoading
             ? <Skeleton variant="rectangular" height="50vh" />
-            : <QuestionTable questions={questions} setQuestions={setQuestions} />}
+            : (
+              <QuestionTable
+                questions={questions}
+                setQuestions={setQuestions}
+                setError={setError}
+                setSelectedQuestion={setSelectedQuestion}
+                setIsEditModalOpen={setIsEditModalOpen}
+              />
+            )}
         </Container>
       </Layout>
     </RouteGuard>

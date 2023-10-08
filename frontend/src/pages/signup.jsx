@@ -72,11 +72,11 @@ export default function SignUpPage() {
       router.push('/login');
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        console.debug('Bad Request: ', error.response.data);
+        console.error('Bad Request: ', error.response.data);
         // duplicate user name
         setUsernameError(error.response.data.username);
       } else {
-        console.debug('An error occurred: ', error);
+        console.error('An error occurred: ', error);
         setGeneralError('Registration failed. Please try again later.');
       }
     }
