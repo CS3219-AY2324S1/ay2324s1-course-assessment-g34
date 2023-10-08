@@ -13,6 +13,18 @@ import { useRouter } from 'next/router';
 const breeSerif = Bree_Serif({ subsets: ['latin'], weight: '400' });
 const MAX_USERNAME_LENGTH = 60;
 
+/**
+ * SignUpPage component for user registration.
+ *
+ * @component
+ * @example
+ * // Usage within another React component
+ * import SignUpPage from './SignUpPage';
+ * // ...
+ * <SignUpPage />
+ *
+ * @returns {JSX.Element} The rendered SignUpPage component.
+ */
 export default function SignUpPage() {
   const router = useRouter();
   const [generalError, setGeneralError] = useState(null);

@@ -9,6 +9,18 @@ import { useAuthContext } from '@/contexts/AuthContext';
 
 const breeSerif = Bree_Serif({ subsets: ['latin'], weight: '400' });
 
+/**
+ * LoginPage component for user login.
+ *
+ * @component
+ * @example
+ * // Usage within another React component
+ * import LoginPage from './LoginPage';
+ * // ...
+ * <LoginPage />
+ *
+ * @returns {JSX.Element} The rendered LoginPage component.
+ */
 export default function LoginPage() {
   const { login, loginError, setLoginError } = useAuthContext();
   const [usernameError, setUsernameError] = useState(null);

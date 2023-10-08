@@ -30,8 +30,7 @@ export default function EditQuestion({
       const response = await axios.patch(`${UPDATE_QUESTION_SVC_URI}/${question._id}`, newQuestionData, config);
 
       // update state in client
-      newQuestionData._id = question._id;
-      updateQuestions(newQuestionData);
+      updateQuestions(response.data);
     } catch (err) {
       if (err.response && err.response.status === 400) {
         console.error('Bad Request: ', err);

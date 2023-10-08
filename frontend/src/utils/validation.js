@@ -1,3 +1,9 @@
+/**
+ * Validates a title input.
+ *
+ * @param {string} title - The title to be validated.
+ * @returns {string|null} An error message if validation fails, or null if validation passes.
+ */
 export const validateTitle = (title) => {
   let errorMessage = null;
 
@@ -8,6 +14,12 @@ export const validateTitle = (title) => {
   return errorMessage;
 };
 
+/**
+ * Validates a complexity input.
+ *
+ * @param {string} complexity - The complexity to be validated.
+ * @returns {string|null} An error message if validation fails, or null if validation passes.
+ */
 export const validateComplexity = (complexity) => {
   let errorMessage = null;
 
@@ -20,6 +32,12 @@ export const validateComplexity = (complexity) => {
   return errorMessage;
 };
 
+/**
+ * Validates a link input.
+ *
+ * @param {string} link - The link to be validated.
+ * @returns {string|null} An error message if validation fails, or null if validation passes.
+ */
 export const validateLink = (link) => {
   let errorMessage = null;
 
@@ -30,6 +48,12 @@ export const validateLink = (link) => {
   return errorMessage;
 };
 
+/**
+ * Validates a description input.
+ *
+ * @param {string} description - The description to be validated.
+ * @returns {string|null} An error message if validation fails, or null if validation passes.
+ */
 export const validateDescription = (description) => {
   let errorMessage = null;
 
@@ -40,6 +64,12 @@ export const validateDescription = (description) => {
   return errorMessage;
 };
 
+/**
+ * Validates a password input.
+ *
+ * @param {string} password - The password to be validated.
+ * @returns {string|null} An error message if validation fails, or null if validation passes.
+ */
 export const validatePassword = (password) => {
   let errorMessage = null;
 
@@ -75,6 +105,12 @@ export const validatePassword = (password) => {
   return errorMessage;
 };
 
+/**
+ * Validates a username input.
+ *
+ * @param {string} username - The username to be validated.
+ * @returns {string|null} An error message if validation fails, or null if validation passes.
+ */
 export const validateUsername = (username) => {
   let errorMessage = null;
 
@@ -89,6 +125,13 @@ export const validateUsername = (username) => {
   return errorMessage;
 };
 
+/**
+ * Validates a confirmed password input by comparing it with the original password.
+ *
+ * @param {string} confirmPassword - The confirmed password to be validated.
+ * @param {string} password - The original password for comparison.
+ * @returns {string|null} An error message if validation fails, or null if validation passes.
+ */
 export const validateConfirmPassword = (confirmPassword, password) => {
   let errorMessage = null;
 

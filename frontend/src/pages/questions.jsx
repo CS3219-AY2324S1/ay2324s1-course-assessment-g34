@@ -10,6 +10,18 @@ import { Role } from '@/utils/constants';
 import ComponentGuard from '@/components/ComponentGuard';
 import EditQuestion from '@/components/QuestionPage/EditQuestion';
 
+/**
+ * QuestionPage component for displaying and managing questions.
+ *
+ * @component
+ * @example
+ * // Usage within another React component
+ * import QuestionPage from './QuestionPage';
+ * // ...
+ * <QuestionPage />
+ *
+ * @returns {JSX.Element} The rendered QuestionPage component.
+ */
 export default function QuestionPage() {
   const [questions, setQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

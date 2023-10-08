@@ -2,11 +2,13 @@ import { Button, styled } from '@mui/material';
 
 /**
  * A customized MUI Button component with a solid background color.
- * This component styles a MUI Button to have a solid background color based on the specified color or the 'primary' color by default.
+ * This component styles a MUI Button to have a solid background color based on the specified color
+ * or the 'primary' color by default.
  *
  * @component
  * @param {object} props - The component's properties.
- * @param {string} [props.color='primary'] - The color to use for the button background. Should be a valid color key from the MUI theme's palette.
+ * @param {string} [props.color='primary'] - The color to use for the button background. Should be
+ * a valid color key from the MUI theme's palette.
  * @returns {React.Element} A styled MUI Button component.
  *
  * @example

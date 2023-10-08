@@ -5,6 +5,21 @@ import { decode } from 'jsonwebtoken';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
+/**
+ * Custom hook for handling authentication and user data.
+ *
+ * @returns {Object} An object containing authentication-related functions and state.
+ * @property {Object|null} user - The authenticated user's data, or null if not authenticated.
+ * @property {boolean} isAuthenticated - A boolean indicating whether the user is authenticated.
+ * @property {boolean} isLoading - A boolean indicating whether authentication data is being loaded.
+ * @property {Function} login - Function to log in a user with provided credentials.
+ * @property {Function} logout - Function to log out the user.
+ * @property {string|null} loginError - An error message if login fails, or null if there's no
+ * error.
+ * @property {Function} setLoginError - Function to set the login error message.
+ * @property {Function} setRedirect - Function to set the redirect URL after login.
+ * @property {Function} getAccessToken - Function to retrieve and refresh the access token.
+ */
 export default function useAuth() {
   const router = useRouter();
   const [user, setUser] = useState(null);
@@ -119,26 +134,20 @@ export default function useAuth() {
   }, [accessToken]);
 
   const verifyAndRefreshAccessToken = useCallback(async () => {
-    if (accessToken) {
-      const isValid = await verifyAccessToken();
+    const isValid = accessToken && await verifyAccessToken();
 
-      if (!isValid) {
-        await refreshAccessToken();
-      }
-    } else {
+    if (!isValid) {
       await refreshAccessToken();
     }
   }, [accessToken, refreshAccessToken, verifyAccessToken]);
 
   const getAccessToken = async () => {
-    if (accessToken) {
-      const isValid = await verifyAccessToken();
+    const isValid = accessToken && await verifyAccessToken();
 
-      if (isValid) {
-        return accessToken;
-      }
-      return refreshAccessToken();
+    if (isValid) {
+      return accessToken;
     }
+
     return refreshAccessToken();
   };
 

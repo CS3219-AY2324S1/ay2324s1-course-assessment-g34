@@ -1,8 +1,40 @@
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
+import { PropTypes } from 'prop-types';
 
-// guards components by hiding them from unauthenticated or unauthorised users
-// altComponent is displayed if user is not authenticated or does not have the required roles
+/**
+ * Guards components by conditionally rendering them based on user authentication and roles.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The component or content to be rendered if the user is
+ * authorized (required).
+ * @param {string[]} props.allowedRoles - The roles allowed to access the component (required).
+ * @param {React.ReactNode} props.altComponent - The component or content to be rendered if the
+ * user is not authorized (optional).
+ * @returns {React.ReactNode} The authorized component or alternate component based on user roles.
+ * @example
+ * // Usage in a React component
+ * import { Role } from '@/utils/constants';
+ * import ComponentGuard from '@/components/ComponentGuard';
+ *
+ * function MyProtectedComponent() {
+ *   return (
+ *     <ComponentGuard allowedRoles={[Role.ADMIN]}>
+ *       {/* Content for authorized users goes here *\/}
+ *     </ComponentGuard>
+ *   );
+ * }
+ *
+ * // Usage with an alternate component
+ * function MyComponentWithAlternate() {
+ *   return (
+ *     <ComponentGuard allowedRoles={[Role.USER]} altComponent={<UnauthorizedMessage />}>
+ *       {/* Content for authorized users goes here *\/}
+ *     </ComponentGuard>
+ *   );
+ * }
+ */
 export default function ComponentGuard({ children, allowedRoles, altComponent }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const { user, isAuthenticated, isLoading } = useAuthContext();
@@ -19,3 +51,19 @@ export default function ComponentGuard({ children, allowedRoles, altComponent })
 
   return isAuthorized ? children : altComponent;
 }
+
+/**
+ * PropTypes for the ComponentGuard component.
+ *
+ * @type {Object}
+ * @property {React.ReactNode} children - The component or content to be rendered if the user is
+ * authorized (required).
+ * @property {string[]} allowedRoles - The roles allowed to access the component (required).
+ * @property {React.ReactNode} altComponent - The component or content to be rendered if the user
+ * is not authorized (optional).
+ */
+ComponentGuard.propTypes = {
+  children: PropTypes.node.isRequired,
+  allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  altComponent: PropTypes.node,
+};
