@@ -1,5 +1,6 @@
 const express = require("express");
 const Question = require("../models/model");
+const isAdmin = require('../middlewares/authMiddleware');
 // const QuestionDescription = require("../models/model");
 
 const router = express.Router();
@@ -14,22 +15,7 @@ module.exports = router;
 //     description: "example only"
 // });
 
-
-//Post Method
-router.post("/addQuestion", async (req, res) => {
-
-    const { title, categories, complexity, link, description } = req.body;
-
-    // Create a new question
-    const newQuestion = new Question({ title, categories, complexity, link, description });
-
-    try {
-        const dataToSave = await newQuestion.save();
-        res.status(200).json(dataToSave);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
+//Public route accessible without authentication
 
 //Get all Method
 router.get("/getAllQuestions", async (req, res) => {
@@ -51,11 +37,31 @@ router.get('/getQuestion/:id', async (req, res) => {
         res.status(500).json({message: error.message})
     }
 })
+
+//Private route accessible by only the admins
+
+//Post Method
+router.post("/addQuestion", isAdmin, async (req, res) => {
+
+    const { title, categories, complexity, link, description } = req.body;
+
+    // Create a new question
+    const newQuestion = new Question({ title, categories, complexity, link, description });
+
+    try {
+        const dataToSave = await newQuestion.save();
+        res.status(200).json(dataToSave);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+
 // sample postman query PATCH localhost:3000/question-service/updateQuestion/6502de2c3f85e1f959cc97c4 
 // set body with question in json format to update any fields
 
 //Update by ID Method
-router.patch('/updateQuestion/:id', async (req, res) => {
+router.patch('/updateQuestion/:id', isAdmin, async (req, res) => {
     try {
         const id = req.params.id;
         const updatedData = req.body;
@@ -73,7 +79,7 @@ router.patch('/updateQuestion/:id', async (req, res) => {
 })
 
 //Delete by ID Method
-router.delete("/deleteQuestion/:id", async (req, res) => {
+router.delete("/deleteQuestion/:id", isAdmin, async (req, res) => {
     try {
         const id = req.params.id;
         const data = await Question.findByIdAndDelete(id);

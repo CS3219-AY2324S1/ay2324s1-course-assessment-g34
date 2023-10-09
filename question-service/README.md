@@ -14,6 +14,7 @@ This API provides endpoints for managing questions related operations. Use this 
 ### Add a question
 - **URL**: `/question-service/addQuestion`
 - **Method**: `POST`
+- **Request Header**: `Authorization`: <access_token>
 - **Description**: Create a new question.
 - **Request Body**:
   ```json
@@ -49,6 +50,7 @@ This API provides endpoints for managing questions related operations. Use this 
 ### Modify a question
 - **URL**: `/question-service/updateQuestion/:id`
 - **Method**: `PATCH`
+- **Request Header**: `Authorization`: <access_token>
 - **Description**: Modify any question details.
 - **Request Body**:
   ```json
@@ -66,6 +68,7 @@ This API provides endpoints for managing questions related operations. Use this 
 ### Delete a question
 - **URL**: `/question-service/deleteQuestion/:id`
 - **Method**: `DELETE`
+- **Request Header**: `Authorization`: <access_token>
 - **Description**: Delete a question by ID.
 - **Params**: ID
 - **Response**:
