@@ -12,4 +12,4 @@ The matching service will start matching 2 users based on their chosen level of 
 3. Run `npm start` to start the matching service server
 
 ## Usage
-Open 'localhost:3000' to view the index.html and test out the matchmaking service
+Open 'localhost:8001' to view the index.html and test out the matchmaking service
