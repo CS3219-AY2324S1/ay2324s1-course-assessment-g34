@@ -2,10 +2,8 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
-// const amqp = require("amqplib/callback_api");
 
 const PORT = 3000;
-// const AMQP_URL = "amqp://localhost";
 const MATCHMAKING_TIMEOUT = 30000; // 30 seconds
 
 const connectedUsers = [];
@@ -48,21 +46,23 @@ io.on("connection", (socket) => {
 });
 
 function tryMatchingUser(userId, userCriteria) {
+  var result;
   const matchingUser = matchingQueue.findIndex((user) =>
     isMatch(user.criteria, userCriteria)
   );
 
   if (matchingUser !== -1) {
     const user2 = matchingQueue.splice(matchingUser, 1)[0];
-    createMatch(userId, user2.userId);
+    result = createMatch(userId, user2.userId);
   } else {
     matchingQueue.push({ userId, criteria: userCriteria });
   }
-
   // Timeout for matchmaking of current user
   setTimeout(() => {
     handleMatchmakingTimeout(userId);
   }, MATCHMAKING_TIMEOUT);
+
+  return result;
 }
 
 function isMatch(criteria1, criteria2) {
@@ -104,48 +104,3 @@ app.get("/", (req, res) => {
 http.listen(PORT, () => {
   console.log(`Matching Service Server is running on http://localhost:${PORT}`);
 });
-
-// RabbitMQ setup
-// function startServer() {
-//     amqp.connect(AMQP_URL, (error0, connection) => {
-//     if (error0) {
-//         throw error0;
-//     }
-
-//     connection.createChannel((error1, channel) => {
-//         if (error1) {
-//         throw error1;
-//         }
-
-//         const exchange = "matchmaking-exchange";
-//         const queueName = "matchmaking-queue";
-
-//         channel.assertExchange(exchange, "direct", { durable: false });
-//         channel.assertQueue(queueName, { exclusive: false });
-
-//         channel.bindQueue(queueName, exchange, "");
-
-//         channel.consume(
-//         queueName,
-//         (msg) => {
-//             const message = JSON.parse(msg.content.toString());
-
-//             // Check if the message is a match cancellation request
-//             if (message.type === "cancel-match") {
-//             // Forward the cancellation request to the user's specific queue
-//             const userQueueName = `/user/${message.userId}/queue/matchmaking`;
-//             channel.sendToQueue(
-//                 userQueueName,
-//                 Buffer.from(JSON.stringify(message))
-//             );
-//             console.log(`Sent cancel-match message to user ${message.userId}`);
-//             }
-//         },
-//         {
-//             noAck: true,
-//         }
-//         );
-//     });
-//     });
-// }
-// startServer();
