@@ -18,7 +18,7 @@ module.exports = router;
 //Public route accessible without authentication
 
 //Get all Method
-router.get("/getAllQuestions", async (req, res) => {
+router.get("/questions", async (req, res) => {
     try {
         const data = await Question.find();
         res.json(data);
@@ -28,7 +28,7 @@ router.get("/getAllQuestions", async (req, res) => {
 });
 
 //Get by ID Method
-router.get('/getQuestion/:id', async (req, res) => {
+router.get('/questions/:id', async (req, res) => {
     try{
         const data = await Question.findById(req.params.id);
         res.json(data)
@@ -41,7 +41,7 @@ router.get('/getQuestion/:id', async (req, res) => {
 //Private route accessible by only the admins
 
 //Post Method
-router.post("/addQuestion", isAdmin, async (req, res) => {
+router.post("/questions", isAdmin, async (req, res) => {
 
     const { title, categories, complexity, link, description } = req.body;
 
@@ -57,11 +57,11 @@ router.post("/addQuestion", isAdmin, async (req, res) => {
 });
 
 
-// sample postman query PATCH localhost:3000/question-service/updateQuestion/6502de2c3f85e1f959cc97c4 
+// sample postman query PATCH localhost:3000/question-service/questions/6502de2c3f85e1f959cc97c4 
 // set body with question in json format to update any fields
 
 //Update by ID Method
-router.patch('/updateQuestion/:id', isAdmin, async (req, res) => {
+router.patch('/questions/:id', isAdmin, async (req, res) => {
     try {
         const id = req.params.id;
         const updatedData = req.body;
@@ -79,7 +79,7 @@ router.patch('/updateQuestion/:id', isAdmin, async (req, res) => {
 })
 
 //Delete by ID Method
-router.delete("/deleteQuestion/:id", isAdmin, async (req, res) => {
+router.delete("/questions/:id", isAdmin, async (req, res) => {
     try {
         const id = req.params.id;
         const data = await Question.findByIdAndDelete(id);
