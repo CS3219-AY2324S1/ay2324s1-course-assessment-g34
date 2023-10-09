@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  matching-service:
+    image: matching-service:latest
+    build: .
+    ports: 
+      - 8001:8001
