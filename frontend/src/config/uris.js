@@ -1,4 +1,5 @@
 const QUESTION_SVC_URL = process.env.NEXT_PUBLIC_QUESTION_SVC_URI || 'http://localhost:5000';
+const MATCHING_SVC_URL = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001'; // to be updated
 
 // should be /api/question
 const QUESTION_SVC_PREFIX = '/api';
