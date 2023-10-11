@@ -1,9 +1,12 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
+const { MatchEvent } = require("./constants/events");
 
-const PORT = 8001;
+const PORT = process.env.PORT || 8001;
 const MATCHMAKING_TIMEOUT = 30000; // 30 seconds
 
 const connectedUsers = [];
@@ -16,7 +19,7 @@ function isUserInQueue(userId) {
 function handleMatchingCancellation(userId) {
   if (isUserInQueue(userId)) {
     removeUserFromQueue(userId);
-    io.to(userId).emit("match-cancelled");
+    io.to(userId).emit(MatchEvent.CANCELLED);
     console.log(`User ${userId} cancelled matchmaking.`);
   }
 }
@@ -25,17 +28,17 @@ io.on("connection", (socket) => {
   console.log(`User ${socket.id} is connected`);
 
   // user data refers to chosen level of difficult and proficiency
-  socket.on("start-matching", (userData) => {
+  socket.on(MatchEvent.FIND, (userData) => {
     connectedUsers.push({ id: socket.id, ...userData });
     console.log(`User ${socket.id} trying to match with data:`, userData);
     tryMatchingUser(socket.id, userData);
   });
 
-  socket.on("cancel-matching", () => {
+  socket.on(MatchEvent.CANCEL, () => {
     handleMatchingCancellation(socket.id);
   });
 
-  socket.on("disconnect", () => {
+  socket.on(MatchEvent.DISCONNECT, () => {
     console.log(`User ${socket.id} has disconnected`);
     const index = connectedUsers.findIndex((user) => user.id === socket.id);
     if (index !== -1) {
@@ -73,8 +76,8 @@ function isMatch(criteria1, criteria2) {
 }
 
 function createMatch(userId1, userId2) {
-  io.to(userId1).emit("match-found", { userId: userId2 });
-  io.to(userId2).emit("match-found", { userId: userId1 });
+  io.to(userId1).emit(MatchEvent.FOUND, { userId: userId2 });
+  io.to(userId2).emit(MatchEvent.FOUND, { userId: userId1 });
   removeUserFromQueue(userId1);
   removeUserFromQueue(userId2);
   console.log(`Match found: ${userId1} and ${userId2}`);
@@ -92,7 +95,7 @@ function handleMatchmakingTimeout(userId) {
   removeUserFromQueue(userId);
 
   // Notify the user that matchmaking timed out
-  io.to(userId).emit("match-timeout");
+  io.to(userId).emit(MatchEvent.TIMEOUT);
 
   console.log(`User ${userId} has timed out from matching.`);
 }

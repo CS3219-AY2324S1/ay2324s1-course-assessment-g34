@@ -2,8 +2,12 @@ import Layout from "@/components/Layout";
 import MatchModal from "@/components/MatchPage/MatchModal";
 import ComplexitySelector from "@/components/QuestionPage/ComplexitySelector";
 import SolidButton from "@/components/SolidButton";
+import { MATCHING_SVC_URL } from "@/config/uris";
+import { MatchEvent } from "@/utils/constants";
+import { formatMatchSocketData } from "@/utils/socketUtils";
 import { Box, Container, LinearProgress, MenuItem, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { io } from "socket.io-client";
 
 const proficiencies = [
   {
@@ -24,6 +28,20 @@ export default function MatchPage() {
   const [isFinding, setIsFinding] = useState(false);
   const [isMatchFound, setIsMatchFound] = useState(false);
   const [matchedUser, setMatchedUser] = useState("Test_User");
+  const [matchSocket, setMatchSocket] = useState(null);
+
+  const connect = () => {
+    const socket = io(MATCHING_SVC_URL);
+    // TODO: add event to indicate waiting status?
+    // TODO: abstract away to util getter functions for msg data
+    socket.on(MatchEvent.TIMEOUT, (msg) => console.log(`Match found with user: ${matchedUser}`));
+    socket.on(MatchEvent.CANCELLED);
+    socket.on(MatchEvent.FOUND, (msg) => {
+      // set relevant states e.g. complexity, proficiency, etc.
+    });
+
+    return socket;
+  }
 
   const handleMatching = (e) => {
     e.preventDefault();
@@ -34,6 +52,10 @@ export default function MatchPage() {
 
     setIsFinding(true);
     // socket logic here
+    const socket = connect();
+    socket.emit(MatchEvent.FIND, formatMatchSocketData(user.username, complexity, proficiency));
+    setMatchSocket(socket);
+
   };
 
   const handleCancelSearch = (e) => {

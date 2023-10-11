@@ -8,3 +8,14 @@ services:
     command: npm run dev
     ports:
       - "3000:3000"
+    depends_on:
+      - matching-service
+
+  matching-service:
+    container_name: matching-service
+    build:
+      context: ./matching-service
+    environment:
+      - PORT: 8001
+    ports: 
+      - 8001:8001
