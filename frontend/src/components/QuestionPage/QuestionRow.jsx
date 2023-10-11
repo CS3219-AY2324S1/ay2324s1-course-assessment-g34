@@ -1,14 +1,19 @@
 import {
-  ArrowDropDownRounded, ArrowRightRounded, LinkRounded,
+  ArrowDropDownRounded, ArrowRightRounded, EditRounded, LinkRounded,
 } from '@mui/icons-material';
 import {
   Box, Chip, Collapse, IconButton, TableCell, TableRow, Tooltip,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import QuestionCategoryList from './QuestionCategoryList';
+import { Role } from '@/utils/constants';
+import { useAuthContext } from '@/contexts/AuthContext';
+import axios from 'axios';
+import { DELETE_QUESTION_SVC_URI } from '@/config/uris';
+import { useRouter } from 'next/router';
+import ComponentGuard from '../ComponentGuard';
 import DeleteQuestionDialog from './DeleteQuestionDialog';
-import EditQuestion from './EditQuestion';
+import QuestionCategoryList from './QuestionCategoryList';
 
 const complexityToColorMap = {
   Easy: 'success',
@@ -16,18 +21,53 @@ const complexityToColorMap = {
   Hard: 'error',
 };
 
-export default function QuestionRow({ row, index, setQuestions }) {
+export default function QuestionRow({
+  question, setQuestions, setError, setSelectedQuestion, setIsEditModalOpen,
+}) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const { getAccessToken, setRedirect } = useAuthContext();
 
   const updateDeletedQuestions = () => {
-    setQuestions((prevState) => prevState.filter((_, i) => i !== index));
+    setQuestions((prevState) => prevState.filter((q) => q._id !== question._id));
   };
 
   const handleDelete = async () => {
-    const questions = JSON.parse(localStorage.getItem('questions'));
-    questions.splice(index, 1);
-    localStorage.setItem('questions', JSON.stringify(questions));
-    updateDeletedQuestions(index);
+    try {
+      const token = await getAccessToken();
+      const config = {
+        headers: {
+          Authorization: token,
+        },
+      };
+
+      const response = await axios.delete(`${DELETE_QUESTION_SVC_URI}/${question._id}`, config);
+      updateDeletedQuestions();
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        console.error('Bad Request: ', err);
+        setError('An error occurred. Please try again later.');
+      } else if (err.response && err.response.status === 401) {
+        // invalid token/token not provided; redirect to login page
+        // TODO: logout
+        console.error('Unauthenticated: ', err);
+        setRedirect(router.asPath);
+        router.push('/login');
+      } else if (err.response && err.response.status === 403) {
+        // valid token but not admin
+        console.error('Forbidden: ', err);
+        setError('You do not have enough permissions to perform this action.');
+      } else {
+        console.error('An error occurred: ', err);
+        setError('An error occurred. Please try again later.');
+      }
+    }
+  };
+
+  const openEditModal = () => {
+    console.log(question);
+    setSelectedQuestion(question);
+    setIsEditModalOpen(true);
   };
 
   return (
@@ -60,37 +100,43 @@ export default function QuestionRow({ row, index, setQuestions }) {
             color: (theme) => theme.palette.primary.main,
           }}
         >
-          {row.title}
+          {question.title}
         </TableCell>
         <TableCell
           align="right"
           sx={{ py: 0, fontWeight: 600, borderColor: '#c4c4c4' }}
         >
-          <Chip color={complexityToColorMap[row.complexity]} label={row.complexity} />
+          <Chip color={complexityToColorMap[question.complexity]} label={question.complexity} />
         </TableCell>
         <TableCell
           align="right"
           sx={{ py: 0, pl: 0, borderColor: '#c4c4c4' }}
         >
           <Tooltip title="Link" arrow>
-            <IconButton href={row.link} color="secondary">
+            <IconButton href={question.link} color="secondary">
               <LinkRounded />
             </IconButton>
           </Tooltip>
-          <EditQuestion setQuestions={setQuestions} index={index} question={row} />
-          <DeleteQuestionDialog
-            handleDelete={handleDelete}
-            title={row.title}
-          />
+          <ComponentGuard allowedRoles={[Role.ADMIN]}>
+            <Tooltip title="Edit" arrow>
+              <IconButton onClick={openEditModal}>
+                <EditRounded />
+              </IconButton>
+            </Tooltip>
+            <DeleteQuestionDialog
+              handleDelete={handleDelete}
+              title={question.title}
+            />
+          </ComponentGuard>
         </TableCell>
       </TableRow>
       <TableRow sx={{ bgcolor: '#fbfbfb' }}>
         <TableCell sx={{ py: 0 }} colSpan={6}>
           <Collapse in={isOpen} timeout="auto" unmountOnExit>
             <Box sx={{ mx: 1, my: 2 }}>
-              <QuestionCategoryList categories={row.categories} />
+              <QuestionCategoryList categories={question.categories} />
               <Box sx={{ mx: 1, my: 3 }}>
-                <div className="ck-content" dangerouslySetInnerHTML={{ __html: row.description }} />
+                <div className="ck-content" dangerouslySetInnerHTML={{ __html: question.description }} />
               </Box>
             </Box>
           </Collapse>
@@ -101,15 +147,16 @@ export default function QuestionRow({ row, index, setQuestions }) {
 }
 
 QuestionRow.propTypes = {
-  row: PropTypes.shape({
-    // id requried after integration
-    id: PropTypes.string,
+  question: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     link: PropTypes.string.isRequired,
     complexity: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
   }).isRequired,
-  index: PropTypes.number.isRequired,
   setQuestions: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+  setSelectedQuestion: PropTypes.func.isRequired,
+  setIsEditModalOpen: PropTypes.func.isRequired,
 };

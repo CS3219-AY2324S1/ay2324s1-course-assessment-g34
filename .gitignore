@@ -1,0 +1,10 @@
+# Node
+**/node_modules
+node_modules
+
+# local config files
+**.env
+*.vscode
+
+.pgdata
+.DS_Store
