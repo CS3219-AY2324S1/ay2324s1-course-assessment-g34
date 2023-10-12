@@ -6,11 +6,7 @@ const Transition = forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function MatchModal({ isOpen, setIsOpen, matchedUser }) {
-
-  const handleClose = () => {
-    setIsOpen(false);
-  }
+export default function MatchModal({ isOpen, handleDecline, matchedUser }) {
 
   return (
     <Dialog
@@ -37,7 +33,7 @@ export default function MatchModal({ isOpen, setIsOpen, matchedUser }) {
           color="error"
           type="submit"
           sx={{ textTransform: 'none', fontWeight: 600 }}
-          onClick={handleClose}
+          onClick={handleDecline}
         >
           Decline
         </SolidButton>

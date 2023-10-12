@@ -11,4 +11,4 @@ export const MatchEvent = {
   CANCELLED: "match-cancelled",
   TIMEOUT: "match-timeout", // match not found
   DISCONNECT: "disconnect",
-}
+};

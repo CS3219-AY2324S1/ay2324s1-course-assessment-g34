@@ -82,4 +82,3 @@ services:
 volumes:
   postgres-db:
   mongo-db:
->>>>>>> master

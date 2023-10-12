@@ -76,11 +76,14 @@ function isMatch(criteria1, criteria2) {
 }
 
 function createMatch(userId1, userId2) {
+  // required to show log message indicating status of queue before and after match
+  console.log(`Users in queue before match: ${matchingQueue}`);
   io.to(userId1).emit(MatchEvent.FOUND, { userId: userId2 });
   io.to(userId2).emit(MatchEvent.FOUND, { userId: userId1 });
   removeUserFromQueue(userId1);
   removeUserFromQueue(userId2);
   console.log(`Match found: ${userId1} and ${userId2}`);
+  console.log(`Users in queue after match: ${matchingQueue}`);
 }
 
 function removeUserFromQueue(userId) {

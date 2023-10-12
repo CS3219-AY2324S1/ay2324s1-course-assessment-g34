@@ -3,8 +3,10 @@ import MatchModal from "@/components/MatchPage/MatchModal";
 import ComplexitySelector from "@/components/QuestionPage/ComplexitySelector";
 import SolidButton from "@/components/SolidButton";
 import { MATCHING_SVC_URL } from "@/config/uris";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { MatchEvent } from "@/utils/constants";
-import { formatMatchSocketData } from "@/utils/socketUtils";
+import { cancelMatch, disconnect, findMatch } from "@/utils/eventEmitters";
+import { getUsername } from "@/utils/socketUtils";
 import { Box, Container, LinearProgress, MenuItem, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { io } from "socket.io-client";
@@ -24,20 +26,44 @@ const proficiencies = [
   },
 ];
 
+// TODO: disable complexity & proficiency selectors when finding
 export default function MatchPage() {
   const [isFinding, setIsFinding] = useState(false);
   const [isMatchFound, setIsMatchFound] = useState(false);
-  const [matchedUser, setMatchedUser] = useState("Test_User");
+  const [matchedUser, setMatchedUser] = useState(null);
   const [matchSocket, setMatchSocket] = useState(null);
+  const [matchCriteria, setMatchCriteria] = useState({
+    complexity: "Easy",
+    proficiency: "Beginner",
+  });
+  const { user } = useAuthContext();
 
   const connect = () => {
     const socket = io(MATCHING_SVC_URL);
     // TODO: add event to indicate waiting status?
-    // TODO: abstract away to util getter functions for msg data
-    socket.on(MatchEvent.TIMEOUT, (msg) => console.log(`Match found with user: ${matchedUser}`));
-    socket.on(MatchEvent.CANCELLED);
+    socket.on(MatchEvent.TIMEOUT, (msg) => {
+      console.log(`User ${user.username} has timed out from matching`);
+      setIsFinding(false);
+      disconnect(socket, user.username);
+    });
+
+    socket.on(MatchEvent.CANCELLED, (msg) => {
+      const match = getUsername(msg);
+      console.log(`User ${match} declined the match`);
+      // reset timer
+      // TODO: create popup to inform user if match declined by other user
+      setMatchedUser(null);
+      setIsMatchFound(false);
+      findMatch(socket, user.username, matchCriteria.complexity, matchCriteria.proficiency);
+      setIsFinding(true);
+    });
+
     socket.on(MatchEvent.FOUND, (msg) => {
-      // set relevant states e.g. complexity, proficiency, etc.
+      const match = getUsername(msg);
+      setIsFinding(false);
+      setMatchedUser(match);
+      setIsMatchFound(true);
+      console.log(`Match found with user: ${match}`);
     });
 
     return socket;
@@ -46,22 +72,41 @@ export default function MatchPage() {
   const handleMatching = (e) => {
     e.preventDefault();
 
-    const matchCriteria = new FormData(e.currentTarget);
-    const complexity = matchCriteria.get('complexity');
-    const proficiency = matchCriteria.get('proficiency');
-
-    setIsFinding(true);
     // socket logic here
     const socket = connect();
-    socket.emit(MatchEvent.FIND, formatMatchSocketData(user.username, complexity, proficiency));
-    setMatchSocket(socket);
 
+    // TODO: include access token to handle auth
+    findMatch(socket, user.username, matchCriteria.complexity, matchCriteria.proficiency);
+    setMatchSocket(socket);
+    setIsFinding(true);
   };
 
-  const handleCancelSearch = (e) => {
-    e.preventDefault();
+  const handleCancelSearch = () => {
+    disconnect(socket, user.username);
+    setMatchSocket(null);
     setIsFinding(false);
-  }
+  };
+
+  const handleDecline = () => {
+    cancelMatch(matchSocket);
+    setMatchSocket(null);
+    setMatchedUser(null);
+    setIsMatchFound(false);
+    disconnect(socket, user.username);
+  };
+
+  const handleAccept = () => {
+    // TODO: to handle creating of collab session here
+    setIsMatchFound(false); // closes the modal
+  };
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setMatchCriteria({
+      ...matchCriteria,
+      [e.target.name]: value,
+    });
+  };
 
   return (
     <Layout>
@@ -95,6 +140,8 @@ export default function MatchPage() {
                 size="small"
                 sx={{ width: '20ch' }}
                 variant="standard"
+                onChange={(e) => handleChange(e)}
+                disabled={isFinding}
               />
               <TextField
                 required
@@ -106,6 +153,8 @@ export default function MatchPage() {
                 name="proficiency"
                 label="Proficiency"
                 defaultValue="Beginner"
+                onChange={(e) => handleChange(e)}
+                disabled={isFinding}
               >
                 {proficiencies.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -164,7 +213,12 @@ export default function MatchPage() {
             </Box>
           </Box>
         </Box>
-        <MatchModal isOpen={isMatchFound} setIsOpen={setIsMatchFound} matchedUser={matchedUser}/>
+        <MatchModal
+          isOpen={isMatchFound}
+          handleDecline={handleDecline}
+          handleAccept={handleAccept}
+          matchedUser={matchedUser}
+        />
       </Container>
     </Layout>
   );

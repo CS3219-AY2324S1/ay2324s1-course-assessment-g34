@@ -15,6 +15,7 @@ export default function AddQuestion({ setQuestions }) {
   const [error, setError] = useState(null);
   const { getAccessToken, setRedirect } = useAuthContext();
 
+  // TODO: consider using a reducer to handle question list instead
   const updateQuestions = (question) => {
     setQuestions((prev) => [...prev, question]);
   };
