@@ -25,3 +25,6 @@ To stop the service, use Ctrl+C in the terminal where Docker is running, or run:
 ```
 docker-compose down
 ```
+
+### Note
+Docker does not support Next.js hot reloading. To see changes made in the code, stop the services and run `docker-compose up --build` again.

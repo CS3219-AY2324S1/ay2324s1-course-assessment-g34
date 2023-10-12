@@ -5,18 +5,9 @@ import {
 } from '@mui/material';
 import QuestionRow from './QuestionRow';
 
-const createRows = (questions) => questions.map((q) => ({
-  id: q.id,
-  title: q.title,
-  description: q.description,
-  categories: q.categories,
-  link: q.link,
-  complexity: q.complexity,
-}));
-
-export default function QuestionTable({ questions, setQuestions }) {
-  const rows = createRows(questions);
-
+export default function QuestionTable({
+  questions, setQuestions, setError, setSelectedQuestion, setIsEditModalOpen,
+}) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
@@ -38,9 +29,15 @@ export default function QuestionTable({ questions, setQuestions }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => (
-            // change key to id after integration
-            <QuestionRow key={index} row={row} index={index} setQuestions={setQuestions} />
+          {questions.map((question) => (
+            <QuestionRow
+              key={question._id}
+              question={question}
+              setQuestions={setQuestions}
+              setError={setError}
+              setSelectedQuestion={setSelectedQuestion}
+              setIsEditModalOpen={setIsEditModalOpen}
+            />
           ))}
         </TableBody>
       </Table>
@@ -51,8 +48,7 @@ export default function QuestionTable({ questions, setQuestions }) {
 QuestionTable.propTypes = {
   questions: PropTypes.arrayOf(
     PropTypes.shape({
-      // id required after integration
-      id: PropTypes.string,
+      _id: PropTypes.string,
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -61,4 +57,7 @@ QuestionTable.propTypes = {
     }),
   ).isRequired,
   setQuestions: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+  setSelectedQuestion: PropTypes.func.isRequired,
+  setIsEditModalOpen: PropTypes.func.isRequired,
 };

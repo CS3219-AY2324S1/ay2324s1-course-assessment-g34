@@ -33,6 +33,7 @@
     "react/require-default-props": "off",
     "camelcase": ["error", { "allow": ["Bree_Serif"] }],
     "no-param-reassign": [2, { "props": false }],
+    "no-underscore-dangle":  ["error", { "allow": ["_id"] }],
     // temp suppressions
     "react/no-array-index-key": "off",
     "react/no-danger": "off",

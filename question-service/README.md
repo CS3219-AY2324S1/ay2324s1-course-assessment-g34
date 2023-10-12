@@ -78,7 +78,7 @@ This API provides endpoints for managing questions related operations. Use this 
 
 ## Environemnt .env file
 ```
-DATABASE_URL =unique_mongdoDB_url
+DATABASE_URL=unique_mongdoDB_url
 ```
 
 ## Setting Up Service

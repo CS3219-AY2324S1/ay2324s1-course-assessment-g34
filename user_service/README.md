@@ -143,7 +143,7 @@ To run the User Service backend locally, follow these steps:
 
 5. The backend service should now be running. You can access it at http://localhost:8000.
 
-6. To create a superuser with admin access, run `docker-compose exec user_service sh`, folllowed by `python manage.py createsuperuser`, and followed by `python manage.py create_admin_user --username {username of the superuser}`
+6. To create a superuser with admin access, run `docker-compose exec user_service sh`, followed by `python manage.py createsuperuser`, and followed by `python manage.py create_admin_user --username {username of the superuser}`
 
 6. To stop the service, use Ctrl+C in the terminal where docker-compose is running, or run:
    docker-compose down

@@ -7,4 +7,68 @@ services:
       context: ./frontend
     command: npm run dev
     ports:
-      - "3000:3000"
+      - 3000:3000
+    environment:
+      NEXT_PUBLIC_USER_SVC_URI: http://localhost:8000
+      NEXT_PUBLIC_QUESTION_SVC_URI: http://localhost:5000
+    depends_on:
+      - user_service
+      - question-service
+
+  # TODO: standardise container name
+  user_service:
+    container_name: user_service
+    build:
+      context: ./user_service
+    command: 'python manage.py runserver 0.0.0.0:8000'
+    environment:
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_PORT: 5432
+      DJANGO_DEBUG: ${DJANGO_DEBUG}
+      SECRET_KEY: ${SECRET_KEY}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+    ports:
+      - 8000:8000
+    depends_on: 
+      - postgres-db
+  
+  question-service:
+    container_name: question-service
+    build:
+      context: ./question-service
+    environment:
+      DATABASE_URL: mongodb://mongo-db:27017/questions
+      SECRET_KEY: ${SECRET_KEY}
+    ports: 
+      - 5000:5000
+    depends_on:
+      - mongo-db
+
+  postgres-db:
+    container_name: ${DATABASE_HOST}
+    image: postgres:15.4
+    restart: always
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+
+  mongo-db:
+    container_name: mongo-db
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo-db:/data/db
+    ports:
+      - 27017:27017
+
+volumes:
+  postgres-db:
+  mongo-db:
