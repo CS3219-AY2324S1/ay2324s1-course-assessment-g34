@@ -164,7 +164,7 @@ DJANGO_DEBUG=True
 DATABASE_NAME=user_service
 DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
-DATABASE_HOST=postgres_db
+DATABASE_HOST=postgres-db
 DATABASE_PORT=5432
 SECRET_KEY=django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
 ```
