@@ -27,7 +27,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use('/question-service', routes);
+app.use('/api/question-service', routes);
 
 app.listen(5000, () => {
   console.log(`Server Started at ${5000}`);

@@ -3,19 +3,19 @@ const USER_SVC_URL = process.env.NEXT_PUBLIC_USER_SVC_URI || 'http://localhost:8
 
 // TODO: standardise to follow REST API URI naming conventions
 // should be /api/question
-const QUESTION_SVC_PREFIX = '/question-service';
+const QUESTION_SVC_PREFIX = '/api/question-service';
 
-const ADD_QUESTION = '/addQuestion';
-const GET_QUESTION_BY_ID = '/getQuestion';
-const UPDATE_QUESTION = '/updateQuestion';
-const DELETE_QUESTION = '/deleteQuestion';
-const GET_ALL_QUESTIONS = '/getAllQuestions';
+const ADD_QUESTION = '/questions';
+const GET_QUESTION_BY_ID = '/questions';
+const UPDATE_QUESTION = '/questions';
+const DELETE_QUESTION = '/questions';
+const GET_ALL_QUESTIONS = '/questions';
 
-const USER_SVC_PREFIX = '/api/users';
-const TOKEN_SVC_PREFIX = '/api/token';
+const USER_SVC_PREFIX = '/api/user-service';
+const TOKEN_SVC_PREFIX = '/api/user-service/token';
 
-const REGISTER = '/api/register';
-const LOGIN = '/api/login';
+const REGISTER = '/api/user-service/register';
+const LOGIN = '/api/user-service/login';
 const REFRESH_TOKEN = '/refresh';
 const VERIFY_TOKEN = '/verify';
 
