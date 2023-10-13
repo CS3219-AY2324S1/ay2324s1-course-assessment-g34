@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "Gu Haiwei",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sharedb": "^3.3.2",
+    "sharedb-mongo": "^4.1.0",
+    "websocket-json-stream": "^0.0.3",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
