@@ -12,14 +12,13 @@ services:
       NEXT_PUBLIC_USER_SVC_URI: http://localhost:8000
       NEXT_PUBLIC_QUESTION_SVC_URI: http://localhost:5000
     depends_on:
-      - user_service
+      - user-service
       - question-service
 
-  # TODO: standardise container name
-  user_service:
-    container_name: user_service
+  user-service:
+    container_name: user-service
     build:
-      context: ./user_service
+      context: ./user-service
     command: 'python manage.py runserver 0.0.0.0:8000'
     environment:
       DATABASE_NAME: ${DATABASE_NAME}
