@@ -5,7 +5,7 @@ import SolidButton from "@/components/SolidButton";
 import { MATCHING_SVC_URL } from "@/config/uris";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { MatchEvent } from "@/utils/constants";
-import { cancelMatch, disconnect, findMatch } from "@/utils/eventEmitters";
+import { cancelMatch, disconnectMatch, findMatch } from "@/utils/eventEmitters";
 import { getUsername } from "@/utils/socketUtils";
 import { Box, Container, LinearProgress, MenuItem, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
@@ -41,10 +41,9 @@ export default function MatchPage() {
   const connect = () => {
     const socket = io(MATCHING_SVC_URL);
     // TODO: add event to indicate waiting status?
-    socket.on(MatchEvent.TIMEOUT, (msg) => {
+    socket.on(MatchEvent.TIMEOUT, () => {
       console.log(`User ${user.username} has timed out from matching`);
       setIsFinding(false);
-      disconnect(socket, user.username);
     });
 
     socket.on(MatchEvent.CANCELLED, (msg) => {
@@ -81,23 +80,25 @@ export default function MatchPage() {
     setIsFinding(true);
   };
 
-  const handleCancelSearch = () => {
-    disconnect(socket, user.username);
+  const handleCancelSearch = (e) => {
+    e.preventDefault();
+    cancelMatch(matchSocket);
+    disconnectMatch(matchSocket);
     setMatchSocket(null);
     setIsFinding(false);
   };
 
   const handleDecline = () => {
-    cancelMatch(matchSocket);
     setMatchSocket(null);
     setMatchedUser(null);
     setIsMatchFound(false);
-    disconnect(socket, user.username);
+    disconnectMatch(matchSocket);
   };
 
   const handleAccept = () => {
     // TODO: to handle creating of collab session here
     setIsMatchFound(false); // closes the modal
+    disconnectMatch(matchSocket);
   };
 
   const handleChange = (e) => {
@@ -185,8 +186,9 @@ export default function MatchPage() {
                     variant="contained"
                     size="medium"
                     color="secondary"
+                    type="button"
                     sx={{ textTransform: 'none', fontWeight: 600 }}
-                    onClick={handleCancelSearch}
+                    onClick={(e) => handleCancelSearch(e)}
                   >
                     Cancel Search
                   </SolidButton>

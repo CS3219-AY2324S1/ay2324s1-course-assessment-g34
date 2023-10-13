@@ -155,7 +155,7 @@ export default function useAuth() {
   useEffect(() => {
     verifyAndRefreshAccessToken();
     setIsLoading(false);
-  }, [verifyAndRefreshAccessToken]);
+  }, []);
 
   return {
     user,

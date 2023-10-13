@@ -53,7 +53,7 @@ services:
     build:
       context: ./matching-service
     environment:
-      - PORT: 8001
+      PORT: 8001
     ports: 
       - 8001:8001
   

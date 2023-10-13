@@ -6,10 +6,10 @@ export const findMatch = (socket, username, complexity, proficiency) => {
   socket.emit(MatchEvent.FIND, data);
 };
 
-export const cancelMatch = (socket, username) => {
-  socket.emit(MatchEvent.CANCEL, { username });
-}
+export const cancelMatch = (socket) => {
+  socket.emit(MatchEvent.CANCEL);
+};
 
-export const disconnect = (socket, username) => {
-  socket.emit(MatchEvent.DISCONNECT, { username });
-}
+export const disconnectMatch = (socket) => {
+  socket.disconnect();
+};
