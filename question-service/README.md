@@ -76,7 +76,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 400 Error
 
 ### Get a random question given complexity and catergories
-- **URL**: `api/random?complexity=<complexity_level>&categories=<categories>`
+- **URL**: `api/random?complexity=<complexity>&categories=<categories>`
 - **Method**: `GET`
 - **Description**: Get a random question given complexity and categories as input
 - **Params**: complexity, catergories 

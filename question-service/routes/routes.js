@@ -39,7 +39,7 @@ router.get('/questions/:id', async (req, res) => {
 })
 
 //Get random question by complexity and category
-// http://localhost:3000/api/random?complexity=<complexity_level>&categories=<categories>
+// http://localhost:3000/api/random?complexity=<complexity>&categories=<categories>
 router.get('/random', async (req, res) => {
     const { complexity, categories } = req.query;
     
