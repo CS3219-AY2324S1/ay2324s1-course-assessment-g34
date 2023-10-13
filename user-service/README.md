@@ -134,16 +134,16 @@ To run the User Service backend locally, follow these steps:
 2. Clone this repository.
 
 3. Change directory to the project folder:
-   cd .../user_service
+   cd .../user-service
 
 4. Build and start the Docker containers:
    docker-compose up
 
-5. Now run the command `docker-compose exec user_service sh` to enter the shell, and run `python manage.py makemigrations` followed by `python manage.py migrate` for making migrations. 
+5. Now run the command `docker-compose exec user-service sh` to enter the shell, and run `python manage.py makemigrations` followed by `python manage.py migrate` for making migrations. 
 
 5. The backend service should now be running. You can access it at http://localhost:8000.
 
-6. To create a superuser with admin access, run `docker-compose exec user_service sh`, followed by `python manage.py createsuperuser`, and followed by `python manage.py create_admin_user --username {username of the superuser}`
+6. To create a superuser with admin access, run `docker-compose exec user-service sh`, followed by `python manage.py createsuperuser`, and followed by `python manage.py create_admin_user --username {username of the superuser}`
 
 6. To stop the service, use Ctrl+C in the terminal where docker-compose is running, or run:
    docker-compose down
@@ -164,7 +164,7 @@ DJANGO_DEBUG=True
 DATABASE_NAME=user_service
 DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
-DATABASE_HOST=postgres_db
+DATABASE_HOST=postgres-db
 DATABASE_PORT=5432
 SECRET_KEY=django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
 ```
