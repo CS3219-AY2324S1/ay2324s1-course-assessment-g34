@@ -38,6 +38,43 @@ router.get('/questions/:id', async (req, res) => {
     }
 })
 
+//Get random question by complexity and category
+// http://localhost:3000/api/random?complexity=<complexity_level>&categories=<categories>
+router.get('/random', async (req, res) => {
+    const { complexity, categories } = req.query;
+    
+    // Filter questions based on complexity and category
+    // can be empty for both
+    // params are case sensitive
+    const filter = {};
+    if (complexity) {
+        filter.complexity = complexity;
+    }
+    if (categories) {
+        filter.categories = categories;
+    }
+
+    try {
+      // Use your Mongoose model to query the database
+      const filteredQuestions = await Question.find(filter);
+
+      // Check if any questions match the criteria
+      if (filteredQuestions.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "No questions found with the specified criteria" });
+      }
+
+      // Select a random question from the filtered list
+      const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+      const randomQuestion = filteredQuestions[randomIndex];
+
+      res.json(randomQuestion);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching random question" });
+    }
+});
+
 //Private route accessible by only the admins
 
 //Post Method

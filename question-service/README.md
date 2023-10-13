@@ -75,6 +75,15 @@ This API provides endpoints for managing questions related operations. Use this 
   - Document with 'title' has been deleted..
   - 400 Error
 
+### Get a random question given complexity and catergories
+- **URL**: `api/random?complexity=<complexity_level>&categories=<categories>`
+- **Method**: `GET`
+- **Description**: Get a random question given complexity and categories as input
+- **Params**: complexity, catergories 
+- **Response**:
+  - Document of specified params
+  - 404 "No questions found with the specified criteria"
+  - 500 "Error fetching random question"
 
 ## Environemnt .env file
 ```
