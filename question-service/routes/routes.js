@@ -75,6 +75,37 @@ router.get('/random', async (req, res) => {
     }
 });
 
+// filter by choice
+router.get("/filter", async (req, res) => {
+  const { categories, complexity } = req.query;
+
+  // can be empty for any
+  // params are case sensitive
+    const filter = {};
+    if (categories) {
+        filter.categories = categories;
+    }
+    if (complexity) {
+        filter.complexity = complexity;
+    }
+
+  try {
+    // Use your Mongoose model to query the database
+    const filteredQuestions = await Question.find(filter);
+
+    // Check if any questions match the criteria
+    if (filteredQuestions.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No questions found with the specified criteria" });
+    }
+
+    res.json(filteredQuestions);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching random question" });
+  }
+});
+
 //Private route accessible by only the admins
 
 //Post Method

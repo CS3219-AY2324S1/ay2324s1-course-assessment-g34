@@ -85,6 +85,16 @@ This API provides endpoints for managing questions related operations. Use this 
   - 404 "No questions found with the specified criteria"
   - 500 "Error fetching random question"
 
+### Get questions given complexity and catergories
+- **URL**: `api/filter?complexity=<complexity>&categories=<categories>`
+- **Method**: `GET`
+- **Description**: Get questions given complexity and/or categories as input
+- **Params**: complexity, catergories 
+- **Response**:
+  - Document of specified params
+  - 404 "No questions found with the specified criteria"
+  - 500 "Error fetching random question"
+
 ## Environemnt .env file
 ```
 DATABASE_URL=unique_mongdoDB_url
