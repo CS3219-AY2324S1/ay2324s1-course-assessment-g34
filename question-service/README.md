@@ -12,7 +12,7 @@ This API provides endpoints for managing questions related operations. Use this 
 <ins> Question repo services run on port 5000 </ins>
 
 ### Add a question
-- **URL**: `/question-service/addQuestion`
+- **URL**: `/api//question-service/questions`
 - **Method**: `POST`
 - **Request Header**: `Authorization`: <access_token>
 - **Description**: Create a new question.
@@ -30,7 +30,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 400 Error
 
 ### Get all questions
-- **URL**: `/question-service/getAllQuestions`
+- **URL**: `/api/question-service/questions
 - **Method**: `GET`
 - **Description**: Get all questions from repo.
 
@@ -39,7 +39,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 500 Error when failed to get
 
 ### Get a question by ID
-- **URL**: `/question-service/getQuestion/:id`
+- **URL**: `/api/question-service/questions/:id`
 - **Method**: `GET`
 - **Description**: Get question details by ID.
 - **Params**: ID
@@ -48,7 +48,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 500 Error when failed to get
 
 ### Modify a question
-- **URL**: `/question-service/updateQuestion/:id`
+- **URL**: `/api/question-service/questions/:id`
 - **Method**: `PATCH`
 - **Request Header**: `Authorization`: <access_token>
 - **Description**: Modify any question details.
@@ -66,7 +66,7 @@ This API provides endpoints for managing questions related operations. Use this 
   - 400 Error
 
 ### Delete a question
-- **URL**: `/question-service/deleteQuestion/:id`
+- **URL**: `/api/question-service/questions/:id`
 - **Method**: `DELETE`
 - **Request Header**: `Authorization`: <access_token>
 - **Description**: Delete a question by ID.

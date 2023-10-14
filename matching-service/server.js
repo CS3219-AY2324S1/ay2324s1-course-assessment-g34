@@ -15,6 +15,7 @@ const MATCHMAKING_TIMEOUT = 30000; // 30 seconds
 
 const connectedUsers = [];
 const matchingQueue = [];
+const matchingTimeouts = {};
 
 function isUserInQueue(userId) {
   return matchingQueue.some((entry) => entry.userId === userId);
@@ -23,6 +24,12 @@ function isUserInQueue(userId) {
 function handleMatchingCancellation(userId) {
   if (isUserInQueue(userId)) {
     removeUserFromQueue(userId);
+
+    // Cancel the timeout associated with the user
+    if (matchingTimeouts[userId]) {
+      clearTimeout(matchingTimeouts[userId]);
+      delete matchingTimeouts[userId];
+    }
     io.to(userId).emit(MatchEvent.CANCELLED);
     console.log(`User (id = ${userId}) cancelled matchmaking.`);
   }
@@ -65,10 +72,11 @@ function tryMatchingUser(userId, userData) {
     matchingQueue.push({ userId, criteria: userData });
   }
   // Timeout for matchmaking of current user
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     handleMatchmakingTimeout(userId);
   }, MATCHMAKING_TIMEOUT);
-
+  // Store the timeout ID associated with the user
+  matchingTimeouts[userId] = timeoutId;
   return result;
 }
 
@@ -100,6 +108,11 @@ function removeUserFromQueue(userId) {
 function handleMatchmakingTimeout(userId) {
   // Remove the user from the matching queue
   removeUserFromQueue(userId);
+
+  if (matchingTimeouts[userId]) {
+    clearTimeout(matchingTimeouts[userId]);
+    delete matchingTimeouts[userId];
+  }
 
   // Notify the user that matchmaking timed out
   io.to(userId).emit(MatchEvent.TIMEOUT);

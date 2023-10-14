@@ -56,7 +56,6 @@ export default function useAuth() {
         username: userData.username,
         role: user_role,
       };
-
       setUser(newUser);
       addAccessToken(access);
       addRefreshToken(refresh);
