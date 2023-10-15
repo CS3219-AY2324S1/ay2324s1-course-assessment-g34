@@ -32,7 +32,7 @@ This API provides endpoints for managing questions related operations. Use this 
 ### Get all questions
 - **URL**: `/api/question-service/questions
 - **Method**: `GET`
-- **Description**: Get all questions from repo.
+- **Description**: Get all questions sorted by title in ascending order from repo.
 
 - **Response**:
   - All question details in json

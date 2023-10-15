@@ -17,10 +17,10 @@ module.exports = router;
 
 //Public route accessible without authentication
 
-//Get all Method
+//Get all questions sorted by title in ascending order
 router.get("/questions", async (req, res) => {
     try {
-        const data = await Question.find();
+        const data = await Question.find().sort({title: 1});
         res.json(data);
     } catch (error) {
         res.status(500).json({ message: error.message });
