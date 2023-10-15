@@ -32,7 +32,7 @@ This API provides endpoints for managing questions related operations. Use this 
 ### Get all questions
 - **URL**: `/api/question-service/questions
 - **Method**: `GET`
-- **Description**: Get all questions from repo.
+- **Description**: Get all questions sorted by title in ascending order from repo.
 
 - **Response**:
   - All question details in json
@@ -75,8 +75,27 @@ This API provides endpoints for managing questions related operations. Use this 
   - Document with 'title' has been deleted..
   - 400 Error
 
+### Get a random question given complexity and catergories
+- **URL**: `api/random?complexity=<complexity>&categories=<categories>`
+- **Method**: `GET`
+- **Description**: Get a random question given complexity and categories as input
+- **Params**: complexity, catergories 
+- **Response**:
+  - Document of specified params
+  - 404 "No questions found with the specified criteria"
+  - 500 "Error fetching random question"
 
-## Environemnt .env file
+### Get questions given complexity and catergories
+- **URL**: `api/filter?complexity=<complexity>&categories=<categories>`
+- **Method**: `GET`
+- **Description**: Get questions given complexity and/or categories as input
+- **Params**: complexity, catergories 
+- **Response**:
+  - Document of specified params
+  - 200 "No questions found with the specified criteria"
+  - 500 "Error fetching random question"
+
+## Environment .env file
 ```
 DATABASE_URL=unique_mongdoDB_url
 ```
