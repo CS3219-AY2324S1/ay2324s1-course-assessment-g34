@@ -1,13 +1,12 @@
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from "@mui/material";
-import React, { forwardRef } from "react";
-import SolidButton from "../SolidButton";
+import {
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide,
+} from '@mui/material';
+import React, { forwardRef } from 'react';
+import SolidButton from '../SolidButton';
 
-const Transition = forwardRef((props, ref) => {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
-export default function MatchModal({ isOpen, handleDecline, matchedUser }) {
-
+export default function MatchModal({ isOpen, handleDecline, handleAccept, matchedUser }) {
   return (
     <Dialog
       open={isOpen}
@@ -15,7 +14,7 @@ export default function MatchModal({ isOpen, handleDecline, matchedUser }) {
       keepMounted
       fullWidth
       maxWidth="sm"
-      sx={{ textAlign: "center" }}
+      sx={{ textAlign: 'center' }}
     >
       <DialogTitle>Match Found!</DialogTitle>
       <DialogContent>
@@ -43,6 +42,7 @@ export default function MatchModal({ isOpen, handleDecline, matchedUser }) {
           color="success"
           type="submit"
           sx={{ textTransform: 'none', fontWeight: 600 }}
+          onClick={handleAccept}
         >
           Accept
         </SolidButton>

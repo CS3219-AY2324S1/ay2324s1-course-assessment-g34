@@ -23,12 +23,14 @@ function isUserInQueue(userId) {
 
 function handleMatchingCancellation(userId) {
   if (isUserInQueue(userId)) {
+    console.log(`removing user ${userId} from queue`)
     removeUserFromQueue(userId);
 
     // Cancel the timeout associated with the user
     if (matchingTimeouts[userId]) {
       clearTimeout(matchingTimeouts[userId]);
       delete matchingTimeouts[userId];
+      console.log("clear timeout")
     }
     io.to(userId).emit(MatchEvent.CANCELLED);
     console.log(`User (id = ${userId}) cancelled matchmaking.`);
@@ -46,6 +48,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on(MatchEvent.CANCEL, () => {
+    console.log(`${socket.id} cancelled matchmaking`)
     handleMatchingCancellation(socket.id);
   });
 
@@ -66,6 +69,7 @@ function tryMatchingUser(userId, userData) {
   );
 
   if (matchingUser !== -1) {
+    console.log(`Users in queue before match: ${JSON.stringify(matchingQueue, null, 2)}`);
     const user2 = matchingQueue.splice(matchingUser, 1)[0];
     result = createMatch({ id: userId, username: userData.username }, { id: user2.userId, username: user2.criteria.username });
   } else {
@@ -88,14 +92,22 @@ function isMatch(criteria1, criteria2) {
 }
 
 function createMatch(user1, user2) {
+  // Cancel the timeout associated with the user
+  if (matchingTimeouts[user1.id] && matchingTimeouts[user2.id]) {
+    clearTimeout(matchingTimeouts[user1.id]);
+    clearTimeout(matchingTimeouts[user2.id]);
+    delete matchingTimeouts[user1.id];
+    delete matchingTimeouts[user2.id];
+    console.log("clear timeout of matched users")
+  }
+
   // required to show log message indicating status of queue before and after match
-  console.log(`Users in queue before match: ${matchingQueue}`);
   io.to(user1.id).emit(MatchEvent.FOUND, { username: user2.username });
   io.to(user2.id).emit(MatchEvent.FOUND, { username: user1.username });
   removeUserFromQueue(user1.id);
   removeUserFromQueue(user2.id);
   console.log(`Match found: ${user1.username} (id = ${user1.id}) and ${user2.username} (id = ${user2.id})`);
-  console.log(`Users in queue after match: ${matchingQueue}`);
+  console.log(`Users in queue after match: ${JSON.stringify(matchingQueue, null, 2)}`);
 }
 
 function removeUserFromQueue(userId) {
@@ -106,18 +118,17 @@ function removeUserFromQueue(userId) {
 }
 
 function handleMatchmakingTimeout(userId) {
-  // Remove the user from the matching queue
-  removeUserFromQueue(userId);
-
   if (matchingTimeouts[userId]) {
+    console.log(`${userId} is in match timeouts`)
+    // Remove the user from the matching queue
+    removeUserFromQueue(userId);
     clearTimeout(matchingTimeouts[userId]);
     delete matchingTimeouts[userId];
+
+    // Notify the user that matchmaking timed out
+    io.to(userId).emit(MatchEvent.TIMEOUT);
+    console.log(`Client (id = ${userId}) has timed out from matching.`);
   }
-
-  // Notify the user that matchmaking timed out
-  io.to(userId).emit(MatchEvent.TIMEOUT);
-
-  console.log(`Client (id = ${userId}) has timed out from matching.`);
 }
 
 app.get("/", (req, res) => {

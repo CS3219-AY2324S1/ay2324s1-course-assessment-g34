@@ -1,5 +1,5 @@
-import { MatchEvent } from "./constants";
-import { formatMatchSocketData } from "./socketUtils";
+import { MatchEvent } from './constants';
+import { formatMatchSocketData } from './socketUtils';
 
 export const findMatch = (socket, username, complexity, proficiency) => {
   const data = formatMatchSocketData(username, complexity, proficiency);

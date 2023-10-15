@@ -1,28 +1,31 @@
-import Layout from "@/components/Layout";
-import MatchModal from "@/components/MatchPage/MatchModal";
-import ComplexitySelector from "@/components/QuestionPage/ComplexitySelector";
-import SolidButton from "@/components/SolidButton";
-import { MATCHING_SVC_URL } from "@/config/uris";
-import { useAuthContext } from "@/contexts/AuthContext";
-import { MatchEvent } from "@/utils/constants";
-import { cancelMatch, disconnectMatch, findMatch } from "@/utils/eventEmitters";
-import { getUsername } from "@/utils/socketUtils";
-import { Box, Container, LinearProgress, MenuItem, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { io } from "socket.io-client";
+import Layout from '@/components/Layout';
+import MatchModal from '@/components/MatchPage/MatchModal';
+import MatchingTimer from '@/components/MatchPage/MatchingTimer';
+import ComplexitySelector from '@/components/QuestionPage/ComplexitySelector';
+import SolidButton from '@/components/SolidButton';
+import { MATCHING_SVC_URL } from '@/config/uris';
+import { useAuthContext } from '@/contexts/AuthContext';
+import { MatchEvent } from '@/utils/constants';
+import { cancelMatch, disconnectMatch, findMatch } from '@/utils/eventEmitters';
+import { getUsername } from '@/utils/socketUtils';
+import {
+  Box, Container, MenuItem, TextField, Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
+import { io } from 'socket.io-client';
 
 const proficiencies = [
   {
-    value: "Beginner",
-    label: "Beginner",
+    value: 'Beginner',
+    label: 'Beginner',
   },
   {
-    value: "Intermediate",
-    label: "Intermediate",
+    value: 'Intermediate',
+    label: 'Intermediate',
   },
   {
-    value: "Advanced",
-    label: "Advanced",
+    value: 'Advanced',
+    label: 'Advanced',
   },
 ];
 
@@ -33,8 +36,8 @@ export default function MatchPage() {
   const [matchedUser, setMatchedUser] = useState(null);
   const [matchSocket, setMatchSocket] = useState(null);
   const [matchCriteria, setMatchCriteria] = useState({
-    complexity: "Easy",
-    proficiency: "Beginner",
+    complexity: 'Easy',
+    proficiency: 'Beginner',
   });
   const { user } = useAuthContext();
 
@@ -43,18 +46,16 @@ export default function MatchPage() {
     // TODO: add event to indicate waiting status?
     socket.on(MatchEvent.TIMEOUT, () => {
       console.log(`User ${user.username} has timed out from matching`);
-      setIsFinding(false);
     });
 
     socket.on(MatchEvent.CANCELLED, (msg) => {
-      const match = getUsername(msg);
-      console.log(`User ${match} declined the match`);
+      console.log(`User ${user.username} cancelled match finding`);
       // reset timer
       // TODO: create popup to inform user if match declined by other user
-      setMatchedUser(null);
       setIsMatchFound(false);
-      findMatch(socket, user.username, matchCriteria.complexity, matchCriteria.proficiency);
-      setIsFinding(true);
+      setIsFinding(false);
+      disconnectMatch(socket);
+      setMatchSocket(null);
     });
 
     socket.on(MatchEvent.FOUND, (msg) => {
@@ -66,7 +67,13 @@ export default function MatchPage() {
     });
 
     return socket;
-  }
+  };
+
+  const handleTimeout = () => {
+    setIsFinding(false);
+    disconnectMatch(matchSocket);
+    setMatchSocket(null);
+  };
 
   const handleMatching = (e) => {
     e.preventDefault();
@@ -74,31 +81,32 @@ export default function MatchPage() {
     // socket logic here
     const socket = connect();
 
+    setIsFinding(true);
     // TODO: include access token to handle auth
     findMatch(socket, user.username, matchCriteria.complexity, matchCriteria.proficiency);
     setMatchSocket(socket);
-    setIsFinding(true);
   };
 
   const handleCancelSearch = (e) => {
     e.preventDefault();
     cancelMatch(matchSocket);
-    disconnectMatch(matchSocket);
-    setMatchSocket(null);
-    setIsFinding(false);
   };
 
+  // this does not cancel the timeout
   const handleDecline = () => {
-    setMatchSocket(null);
     setMatchedUser(null);
     setIsMatchFound(false);
     disconnectMatch(matchSocket);
+    setMatchSocket(null);
   };
 
+  // this does not cancel the timeout
   const handleAccept = () => {
     // TODO: to handle creating of collab session here
-    setIsMatchFound(false); // closes the modal
+    setMatchedUser(null);
+    setIsMatchFound(false);
     disconnectMatch(matchSocket);
+    setMatchSocket(null);
   };
 
   const handleChange = (e) => {
@@ -113,7 +121,9 @@ export default function MatchPage() {
     <Layout>
       <Container
         maxWidth="xl"
-        sx={{ height: '100vh', my: 2, display: 'flex', justifyContent: 'center' }}
+        sx={{
+          height: '100vh', my: 2, display: 'flex', justifyContent: 'center',
+        }}
       >
         <Box>
           <Typography
@@ -133,9 +143,14 @@ export default function MatchPage() {
             component="form"
             noValidate
             onSubmit={handleMatching}
-            sx={{ display: 'flex', flexDirection: 'column', m: 2, gap: 3, justifyContent: 'center' }}
+            sx={{
+              display: 'flex', flexDirection: 'column', m: 2, gap: 3, justifyContent: 'center',
+            }}
           >
-            <Box sx={{ display: 'flex', m: 1, gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Box sx={{
+              display: 'flex', m: 1, gap: 3, flexWrap: 'wrap', justifyContent: 'center',
+            }}
+            >
               <ComplexitySelector
                 required
                 size="small"
@@ -164,25 +179,11 @@ export default function MatchPage() {
                 ))}
               </TextField>
             </Box>
-            {isFinding &&
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="h6"
-                  color="primary"
-                  sx={{
-                    textAlign: 'center',
-                  }}
-                >
-                  Finding a match...
-                </Typography>
-                <LinearProgress color="warning" sx={{ width: { xs: '20ch', sm: '100%' } }}/>
-              </Box>
-            }
+            {isFinding && <MatchingTimer handleTimeout={handleTimeout}/>}
             <Box sx={{ display: 'flex', m: 1, justifyContent: 'center' }}>
               {isFinding
-                ? <SolidButton
+                ? (
+                  <SolidButton
                     variant="contained"
                     size="medium"
                     color="secondary"
@@ -192,16 +193,18 @@ export default function MatchPage() {
                   >
                     Cancel Search
                   </SolidButton>
-                  : <SolidButton
-                      variant="contained"
-                      size="medium"
-                      color="secondary"
-                      type="submit"
-                      sx={{ textTransform: 'none', fontWeight: 600 }}
-                    >
-                      Find Match
-                    </SolidButton>
-              }
+                )
+                : (
+                  <SolidButton
+                    variant="contained"
+                    size="medium"
+                    color="secondary"
+                    type="submit"
+                    sx={{ textTransform: 'none', fontWeight: 600 }}
+                  >
+                    Find Match
+                  </SolidButton>
+                )}
             </Box>
             <Box sx={{ display: 'flex', m: 1, justifyContent: 'center' }}>
               <SolidButton
