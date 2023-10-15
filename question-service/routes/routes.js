@@ -96,7 +96,7 @@ router.get("/filter", async (req, res) => {
     // Check if any questions match the criteria
     if (filteredQuestions.length === 0) {
       return res
-        .status(404)
+        .status(200)
         .json({ message: "No questions found with the specified criteria" });
     }
 

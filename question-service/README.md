@@ -92,10 +92,10 @@ This API provides endpoints for managing questions related operations. Use this 
 - **Params**: complexity, catergories 
 - **Response**:
   - Document of specified params
-  - 404 "No questions found with the specified criteria"
+  - 200 "No questions found with the specified criteria"
   - 500 "Error fetching random question"
 
-## Environemnt .env file
+## Environment .env file
 ```
 DATABASE_URL=unique_mongdoDB_url
 ```
