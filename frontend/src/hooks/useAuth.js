@@ -138,6 +138,7 @@ export default function useAuth() {
     if (!isValid) {
       await refreshAccessToken();
     }
+    setIsLoading(false);
   }, [accessToken, refreshAccessToken, verifyAccessToken]);
 
   const getAccessToken = async () => {
@@ -153,7 +154,6 @@ export default function useAuth() {
   // resolve user
   useEffect(() => {
     verifyAndRefreshAccessToken();
-    setIsLoading(false);
   }, []);
 
   return {

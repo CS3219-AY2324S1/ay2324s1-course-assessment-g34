@@ -1,19 +1,9 @@
 import { MATCH_TIMEOUT_DURATION } from "@/utils/constants";
 import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
-export default function MatchingTimer({ handleTimeout }) {
-  const [isComplete, setIsComplete] = useState(false);
-
-  const handleComplete = () => {
-    setIsComplete(true);
-    setTimeout(() => {
-      handleTimeout();
-      setIsComplete(false);
-    }, 3000);
-  }
-
+export default function MatchingTimer({ handleTimeout, isTimeoutComplete }) {
   const showMatchingStatus = ({ remainingTime }) => {
     return (
       <Typography
@@ -34,12 +24,12 @@ export default function MatchingTimer({ handleTimeout }) {
         variant="h6"
         noWrap
         component="h6"
-        color="primary"
+        color={isTimeoutComplete ? "error" : "primary"}
         sx={{
           textAlign: 'center',
         }}
       >
-        {isComplete ? "No match found." : "Finding a match..."}
+        {isTimeoutComplete ? "No match found." : "Finding a match..."}
       </Typography>
       <CountdownCircleTimer
         isPlaying
@@ -47,7 +37,7 @@ export default function MatchingTimer({ handleTimeout }) {
         colors={[ '#62FBD7', '#FBBC1C', '#FB1C52', '#FB1C52']}
         size={200}
         colorsTime={[22.5, 15, 7.5, 0]}
-        onComplete={handleComplete}
+        onComplete={handleTimeout}
       >
         {showMatchingStatus}
       </CountdownCircleTimer>

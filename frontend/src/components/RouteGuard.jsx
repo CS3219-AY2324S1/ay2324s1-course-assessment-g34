@@ -31,7 +31,7 @@ import { PropTypes } from 'prop-types';
  * export default MyProtectedPage;
  */
 export default function RouteGuard({ children, allowedRoles }) {
-  const router = useRouter().asPath;
+  const path = useRouter().asPath;
   const [isAuthorized, setIsAuthorized] = useState(false);
   const {
     user, isAuthenticated, isLoading, setRedirect,
@@ -45,16 +45,16 @@ export default function RouteGuard({ children, allowedRoles }) {
       }
 
       if (!isAuthenticated) {
-        setRedirect(router.asPath);
+        setRedirect(path);
       }
 
       setIsAuthorized(false);
     }
-  }, [isLoading, isAuthenticated, user, router.asPath, allowedRoles, setRedirect]);
+  }, [isLoading, isAuthenticated, user, path, allowedRoles, setRedirect]);
 
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <CircularProgress />
       </Box>
     );

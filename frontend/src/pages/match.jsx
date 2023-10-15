@@ -2,16 +2,17 @@ import Layout from '@/components/Layout';
 import MatchModal from '@/components/MatchPage/MatchModal';
 import MatchingTimer from '@/components/MatchPage/MatchingTimer';
 import ComplexitySelector from '@/components/QuestionPage/ComplexitySelector';
+import RouteGuard from '@/components/RouteGuard';
 import SolidButton from '@/components/SolidButton';
 import { MATCHING_SVC_URL } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { MatchEvent } from '@/utils/constants';
+import { MatchEvent, Role } from '@/utils/constants';
 import { cancelMatch, disconnectMatch, findMatch } from '@/utils/eventEmitters';
 import { getUsername } from '@/utils/socketUtils';
 import {
   Box, Container, MenuItem, TextField, Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { io } from 'socket.io-client';
 
 const proficiencies = [
@@ -32,6 +33,7 @@ const proficiencies = [
 // TODO: disable complexity & proficiency selectors when finding
 export default function MatchPage() {
   const [isFinding, setIsFinding] = useState(false);
+  const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
   const [isMatchFound, setIsMatchFound] = useState(false);
   const [matchedUser, setMatchedUser] = useState(null);
   const [matchSocket, setMatchSocket] = useState(null);
@@ -70,9 +72,13 @@ export default function MatchPage() {
   };
 
   const handleTimeout = () => {
-    setIsFinding(false);
-    disconnectMatch(matchSocket);
-    setMatchSocket(null);
+    setIsTimeoutComplete(true);
+    setTimeout(() => {
+      setIsFinding(false);
+      disconnectMatch(matchSocket);
+      setMatchSocket(null);
+      setIsTimeoutComplete(false);
+    }, 2000);
   };
 
   const handleMatching = (e) => {
@@ -118,113 +124,116 @@ export default function MatchPage() {
   };
 
   return (
-    <Layout>
-      <Container
-        maxWidth="xl"
-        sx={{
-          height: '100vh', my: 2, display: 'flex', justifyContent: 'center',
-        }}
-      >
-        <Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="h5"
-            color="primary"
-            sx={{
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: '30px',
-            }}
-          >
-            Match Finder
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleMatching}
-            sx={{
-              display: 'flex', flexDirection: 'column', m: 2, gap: 3, justifyContent: 'center',
-            }}
-          >
-            <Box sx={{
-              display: 'flex', m: 1, gap: 3, flexWrap: 'wrap', justifyContent: 'center',
-            }}
+    <RouteGuard allowedRoles={[Role.USER, Role.ADMIN]}>
+      <Layout>
+        <Container
+          maxWidth="xl"
+          sx={{
+            height: '100vh', my: 2, display: 'flex', justifyContent: 'center',
+          }}
+        >
+          <Box>
+            <Typography
+              variant="h5"
+              noWrap
+              component="h5"
+              color="primary"
+              sx={{
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '30px',
+              }}
             >
-              <ComplexitySelector
-                required
-                size="small"
-                sx={{ width: '20ch' }}
-                variant="standard"
-                onChange={(e) => handleChange(e)}
-                disabled={isFinding}
-              />
-              <TextField
-                required
-                size="small"
-                sx={{ width: '20ch' }}
-                variant="standard"
-                select
-                id="proficiency"
-                name="proficiency"
-                label="Proficiency"
-                defaultValue="Beginner"
-                onChange={(e) => handleChange(e)}
-                disabled={isFinding}
+              Match Finder
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleMatching}
+              sx={{
+                display: 'flex', flexDirection: 'column', m: 2, gap: 3, justifyContent: 'center',
+              }}
+            >
+              <Box sx={{
+                display: 'flex', m: 1, gap: 3, flexWrap: 'wrap', justifyContent: 'center',
+              }}
               >
-                {proficiencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-            {isFinding && <MatchingTimer handleTimeout={handleTimeout}/>}
-            <Box sx={{ display: 'flex', m: 1, justifyContent: 'center' }}>
-              {isFinding
-                ? (
-                  <SolidButton
-                    variant="contained"
-                    size="medium"
-                    color="secondary"
-                    type="button"
-                    sx={{ textTransform: 'none', fontWeight: 600 }}
-                    onClick={(e) => handleCancelSearch(e)}
-                  >
-                    Cancel Search
-                  </SolidButton>
-                )
-                : (
-                  <SolidButton
-                    variant="contained"
-                    size="medium"
-                    color="secondary"
-                    type="submit"
-                    sx={{ textTransform: 'none', fontWeight: 600 }}
-                  >
-                    Find Match
-                  </SolidButton>
-                )}
-            </Box>
-            <Box sx={{ display: 'flex', m: 1, justifyContent: 'center' }}>
-              <SolidButton
-                variant="contained"
-                size="medium"
-                sx={{ textTransform: 'none', fontWeight: 600 }}
-                onClick={() => setIsMatchFound(true)}
-              >
-                Open Modal
-              </SolidButton>
+                <ComplexitySelector
+                  required
+                  size="small"
+                  sx={{ width: '20ch' }}
+                  variant="standard"
+                  onChange={(e) => handleChange(e)}
+                  disabled={isFinding}
+                />
+                <TextField
+                  required
+                  size="small"
+                  sx={{ width: '20ch' }}
+                  variant="standard"
+                  select
+                  id="proficiency"
+                  name="proficiency"
+                  label="Proficiency"
+                  defaultValue="Beginner"
+                  onChange={(e) => handleChange(e)}
+                  disabled={isFinding}
+                >
+                  {proficiencies.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+              {isFinding && <MatchingTimer handleTimeout={handleTimeout}/>}
+              <Box sx={{ display: 'flex', m: 1, justifyContent: 'center' }}>
+                {isFinding
+                  ? (
+                    <SolidButton
+                      variant="contained"
+                      size="medium"
+                      color="secondary"
+                      type="button"
+                      sx={{ textTransform: 'none', fontWeight: 600 }}
+                      onClick={(e) => handleCancelSearch(e)}
+                      disabled={isTimeoutComplete}
+                    >
+                      Cancel Search
+                    </SolidButton>
+                  )
+                  : (
+                    <SolidButton
+                      variant="contained"
+                      size="medium"
+                      color="secondary"
+                      type="submit"
+                      sx={{ textTransform: 'none', fontWeight: 600 }}
+                    >
+                      Find Match
+                    </SolidButton>
+                  )}
+              </Box>
+              <Box sx={{ display: 'flex', m: 1, justifyContent: 'center' }}>
+                <SolidButton
+                  variant="contained"
+                  size="medium"
+                  sx={{ textTransform: 'none', fontWeight: 600 }}
+                  onClick={() => setIsMatchFound(true)}
+                >
+                  Open Modal
+                </SolidButton>
+              </Box>
             </Box>
           </Box>
-        </Box>
-        <MatchModal
-          isOpen={isMatchFound}
-          handleDecline={handleDecline}
-          handleAccept={handleAccept}
-          matchedUser={matchedUser}
-        />
-      </Container>
-    </Layout>
+          <MatchModal
+            isOpen={isMatchFound}
+            handleDecline={handleDecline}
+            handleAccept={handleAccept}
+            matchedUser={matchedUser}
+          />
+        </Container>
+      </Layout>
+    </RouteGuard>
   );
 }

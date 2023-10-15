@@ -35,7 +35,7 @@ import { PropTypes } from 'prop-types';
  *   );
  * }
  */
-export default function ComponentGuard({ children, allowedRoles, altComponent }) {
+export default function ComponentGuard({ children, allowedRoles, altComponent, loadingComponent }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const { user, isAuthenticated, isLoading } = useAuthContext();
 
@@ -49,7 +49,15 @@ export default function ComponentGuard({ children, allowedRoles, altComponent })
     }
   }, [isLoading, isAuthenticated, user, allowedRoles]);
 
-  return isAuthorized ? children : altComponent;
+  if (isLoading) {
+    return loadingComponent;
+  }
+
+  if (!isAuthorized && !isLoading) {
+    return altComponent;
+  }
+
+  return isAuthorized && !isLoading && children;
 }
 
 /**
