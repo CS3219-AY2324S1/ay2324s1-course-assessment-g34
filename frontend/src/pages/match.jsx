@@ -30,7 +30,6 @@ const proficiencies = [
   },
 ];
 
-// TODO: disable complexity & proficiency selectors when finding
 export default function MatchPage() {
   const [isFinding, setIsFinding] = useState(false);
   const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
@@ -45,7 +44,7 @@ export default function MatchPage() {
 
   const connect = () => {
     const socket = io(MATCHING_SVC_URL);
-    // TODO: add event to indicate waiting status?
+
     socket.on(MatchEvent.TIMEOUT, () => {
       console.log(`User ${user.username} has timed out from matching`);
     });
@@ -78,7 +77,6 @@ export default function MatchPage() {
   const handleMatching = (e) => {
     e.preventDefault();
 
-    // socket logic here
     const socket = connect();
 
     setIsFinding(true);
