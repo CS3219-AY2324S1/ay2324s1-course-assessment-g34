@@ -132,15 +132,6 @@ export default function useAuth() {
     return false;
   }, [accessToken]);
 
-  const verifyAndRefreshAccessToken = useCallback(async () => {
-    const isValid = accessToken && await verifyAccessToken();
-
-    if (!isValid) {
-      await refreshAccessToken();
-    }
-    setIsLoading(false);
-  }, [accessToken, refreshAccessToken, verifyAccessToken]);
-
   const getAccessToken = async () => {
     const isValid = accessToken && await verifyAccessToken();
 
@@ -153,8 +144,17 @@ export default function useAuth() {
 
   // resolve user
   useEffect(() => {
+    const verifyAndRefreshAccessToken = async () => {
+      const isValid = accessToken && await verifyAccessToken();
+
+      if (!isValid) {
+        await refreshAccessToken();
+      }
+      setIsLoading(false);
+    };
+
     verifyAndRefreshAccessToken();
-  }, []);
+  }, [accessToken, refreshAccessToken, verifyAccessToken]);
 
   return {
     user,

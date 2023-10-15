@@ -12,6 +12,8 @@ import { PropTypes } from 'prop-types';
  * @param {string[]} props.allowedRoles - The roles allowed to access the component (required).
  * @param {React.ReactNode} props.altComponent - The component or content to be rendered if the
  * user is not authorized (optional).
+ * @param {React.ReactNode} props.loadingComponent - The component or content to be rendered during
+ * the loading state (optional).
  * @returns {React.ReactNode} The authorized component or alternate component based on user roles.
  * @example
  * // Usage in a React component
@@ -35,7 +37,9 @@ import { PropTypes } from 'prop-types';
  *   );
  * }
  */
-export default function ComponentGuard({ children, allowedRoles, altComponent, loadingComponent }) {
+export default function ComponentGuard({
+  children, allowedRoles, altComponent, loadingComponent,
+}) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const { user, isAuthenticated, isLoading } = useAuthContext();
 
@@ -69,9 +73,12 @@ export default function ComponentGuard({ children, allowedRoles, altComponent, l
  * @property {string[]} allowedRoles - The roles allowed to access the component (required).
  * @property {React.ReactNode} altComponent - The component or content to be rendered if the user
  * is not authorized (optional).
+ * @param {React.ReactNode} props.loadingComponent - The component or content to be rendered during
+ * the loading state (optional).
  */
 ComponentGuard.propTypes = {
   children: PropTypes.node.isRequired,
   allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   altComponent: PropTypes.node,
+  loadingComponent: PropTypes.node,
 };

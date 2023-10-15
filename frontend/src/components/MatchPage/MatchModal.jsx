@@ -2,11 +2,14 @@ import {
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide,
 } from '@mui/material';
 import React, { forwardRef } from 'react';
+import { PropTypes } from 'prop-types';
 import SolidButton from '../SolidButton';
 
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
-export default function MatchModal({ isOpen, handleDecline, handleAccept, matchedUser }) {
+export default function MatchModal({
+  isOpen, handleDecline, handleAccept, matchedUser,
+}) {
   return (
     <Dialog
       open={isOpen}
@@ -50,3 +53,10 @@ export default function MatchModal({ isOpen, handleDecline, handleAccept, matche
     </Dialog>
   );
 }
+
+MatchModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  handleDecline: PropTypes.func.isRequired,
+  handleAccept: PropTypes.func.isRequired,
+  matchedUser: PropTypes.string,
+};

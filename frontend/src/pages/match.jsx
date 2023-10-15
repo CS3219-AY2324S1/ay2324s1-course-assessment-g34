@@ -1,7 +1,7 @@
 import Layout from '@/components/Layout';
 import MatchModal from '@/components/MatchPage/MatchModal';
 import MatchingTimer from '@/components/MatchPage/MatchingTimer';
-import ComplexitySelector from '@/components/QuestionPage/ComplexitySelector';
+import DifficultySelector from '@/components/QuestionPage/DifficultySelector';
 import RouteGuard from '@/components/RouteGuard';
 import SolidButton from '@/components/SolidButton';
 import { MATCHING_SVC_URL } from '@/config/uris';
@@ -12,7 +12,7 @@ import { getUsername } from '@/utils/socketUtils';
 import {
   Box, Container, MenuItem, TextField, Typography,
 } from '@mui/material';
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 import { io } from 'socket.io-client';
 
 const proficiencies = [
@@ -50,14 +50,8 @@ export default function MatchPage() {
       console.log(`User ${user.username} has timed out from matching`);
     });
 
-    socket.on(MatchEvent.CANCELLED, (msg) => {
+    socket.on(MatchEvent.CANCELLED, () => {
       console.log(`User ${user.username} cancelled match finding`);
-      // reset timer
-      // TODO: create popup to inform user if match declined by other user
-      setIsMatchFound(false);
-      setIsFinding(false);
-      disconnectMatch(socket);
-      setMatchSocket(null);
     });
 
     socket.on(MatchEvent.FOUND, (msg) => {
@@ -96,6 +90,9 @@ export default function MatchPage() {
   const handleCancelSearch = (e) => {
     e.preventDefault();
     cancelMatch(matchSocket);
+    setIsFinding(false);
+    disconnectMatch(matchSocket);
+    setMatchSocket(null);
   };
 
   // this does not cancel the timeout
@@ -158,7 +155,7 @@ export default function MatchPage() {
                 display: 'flex', m: 1, gap: 3, flexWrap: 'wrap', justifyContent: 'center',
               }}
               >
-                <ComplexitySelector
+                <DifficultySelector
                   required
                   size="small"
                   sx={{ width: '20ch' }}
@@ -186,7 +183,13 @@ export default function MatchPage() {
                   ))}
                 </TextField>
               </Box>
-              {isFinding && <MatchingTimer handleTimeout={handleTimeout}/>}
+              {isFinding
+                && (
+                <MatchingTimer
+                  handleTimeout={handleTimeout}
+                  isTimeoutComplete={isTimeoutComplete}
+                />
+                )}
               <Box sx={{ display: 'flex', m: 1, justifyContent: 'center' }}>
                 {isFinding
                   ? (
@@ -213,16 +216,6 @@ export default function MatchPage() {
                       Find Match
                     </SolidButton>
                   )}
-              </Box>
-              <Box sx={{ display: 'flex', m: 1, justifyContent: 'center' }}>
-                <SolidButton
-                  variant="contained"
-                  size="medium"
-                  sx={{ textTransform: 'none', fontWeight: 600 }}
-                  onClick={() => setIsMatchFound(true)}
-                >
-                  Open Modal
-                </SolidButton>
               </Box>
             </Box>
           </Box>

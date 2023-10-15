@@ -31,7 +31,7 @@
     "react/forbid-prop-types": ["off", { "forbid": ["any"] }],
     "import/extensions": "off",
     "react/require-default-props": "off",
-    "camelcase": ["error", { "allow": ["Bree_Serif"] }],
+    "camelcase": ["error", { "allow": ["Bree_Serif", "user_role"] }],
     "no-param-reassign": [2, { "props": false }],
     "no-underscore-dangle":  ["error", { "allow": ["_id"] }],
     // temp suppressions

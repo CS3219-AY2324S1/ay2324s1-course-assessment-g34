@@ -1,7 +1,9 @@
-export const formatMatchSocketData = (username, complexity, proficiency) => ({ username, complexity, proficiency });
+export const formatMatchSocketData = (username, difficulty, proficiency) => (
+  { username, criteria: { difficulty, proficiency } }
+);
 
 export const getUsername = (msg) => msg.username;
 
-export const getComplexity = (msg) => msg.complexity;
+export const getDifficulty = (msg) => msg.difficulty;
 
 export const getProficiency = (msg) => msg.proficiency;
