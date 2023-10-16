@@ -7,14 +7,6 @@ const router = express.Router();
 
 module.exports = router;
 
-// const newQuestion = new Question({
-//     title: "Sample Question",
-//     categories: ["Math", "Algebra"],
-//     complexity: "Medium",
-//     link: "https://example.com/questions/1",
-//     description: "example only"
-// });
-
 //Public route accessible without authentication
 
 //Get all questions sorted by title in ascending order
@@ -38,17 +30,17 @@ router.get('/questions/:id', async (req, res) => {
     }
 })
 
-//Get random question by complexity and category
-// http://localhost:3000/api/random?complexity=<complexity>&categories=<categories>
+//Get random question by difficulty and category
+// http://localhost:3000/api/random?difficulty=<difficulty>&categories=<categories>
 router.get('/random', async (req, res) => {
-    const { complexity, categories } = req.query;
+    const { difficulty, categories } = req.query;
     
-    // Filter questions based on complexity and category
+    // Filter questions based on difficulty and category
     // can be empty for both
     // params are case sensitive
     const filter = {};
-    if (complexity) {
-        filter.complexity = complexity;
+    if (difficulty) {
+        filter.difficulty = difficulty;
     }
     if (categories) {
         filter.categories = categories;
@@ -77,7 +69,7 @@ router.get('/random', async (req, res) => {
 
 // filter by choice
 router.get("/filter", async (req, res) => {
-  const { categories, complexity } = req.query;
+  const { categories, difficulty } = req.query;
 
   // can be empty for any
   // params are case sensitive
@@ -85,8 +77,8 @@ router.get("/filter", async (req, res) => {
     if (categories) {
         filter.categories = categories;
     }
-    if (complexity) {
-        filter.complexity = complexity;
+    if (difficulty) {
+        filter.difficulty = difficulty;
     }
 
   try {
@@ -111,10 +103,10 @@ router.get("/filter", async (req, res) => {
 //Post Method
 router.post("/questions", isAdmin, async (req, res) => {
 
-    const { title, categories, complexity, link, description } = req.body;
+    const { title, categories, difficulty, link, description } = req.body;
 
     // Create a new question
-    const newQuestion = new Question({ title, categories, complexity, link, description });
+    const newQuestion = new Question({ title, categories, difficulty, link, description });
 
     try {
         const dataToSave = await newQuestion.save();

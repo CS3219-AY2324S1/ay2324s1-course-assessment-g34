@@ -8,7 +8,7 @@ import React, {
   forwardRef, useEffect, useRef, useState,
 } from 'react';
 import {
-  validateComplexity, validateDescription, validateLink, validateTitle,
+  validateDifficulty, validateDescription, validateLink, validateTitle,
 } from '@/utils/validation';
 import { PropTypes } from 'prop-types';
 import DifficultySelector from './DifficultySelector';
@@ -90,7 +90,7 @@ export default function QuestionForm({
     const errors = [];
 
     const titleValidationError = validateTitle(title);
-    const difficultyValidationError = validateComplexity(difficulty);
+    const difficultyValidationError = validateDifficulty(difficulty);
     const linkValidationError = validateLink(link);
     const descriptionValidationError = validateDescription(desc);
 

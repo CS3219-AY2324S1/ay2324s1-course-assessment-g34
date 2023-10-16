@@ -20,7 +20,7 @@ export const validateTitle = (title) => {
  * @param {string} difficulty - The difficulty to be validated.
  * @returns {string|null} An error message if validation fails, or null if validation passes.
  */
-export const validateComplexity = (difficulty) => {
+export const validateDifficulty = (difficulty) => {
   let errorMessage = null;
 
   if (!difficulty || difficulty.length === 0) {
