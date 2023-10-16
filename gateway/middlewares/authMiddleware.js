@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 dotenv.config();
 
-function isAdmin(req, res, next) {
+function isAuthorized(req, res, next) {
   const authorizationHeader = req.headers.authorization;
 
   if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
@@ -16,17 +16,11 @@ function isAdmin(req, res, next) {
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: 'Invalid token' });
-    } 
-    req.user = decoded;
+    } else {
+      // Token is valid; proceed to the next middleware or route handler
+      next();
+    }
   });
-
-  const userRole = req.user.user_role;
-
-  if (userRole === 'admin') {
-    next();
-  } else {
-    return res.status(403).json({ message: 'Access denied: Admin role required.' });
-  }
 }
 
-module.exports = isAdmin;
+module.exports = isAuthorized;
