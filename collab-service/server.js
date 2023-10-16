@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const http = require('http');
 const ShareDB = require('sharedb');
@@ -7,7 +8,8 @@ const WebSocketJSONStream = require('websocket-json-stream');
 
 const mongodbPort = 27017;
 const sharedbPort = 8080;
-const db = new ShareDB({ db: ShareDBMongo(`mongodb://localhost:${mongodbPort}/collab-docs`) });
+const dbURL = process.env.DATABASE_URL || `mongodb://localhost:${mongodbPort}/collab-docs`;
+const db = new ShareDB({ db: ShareDBMongo(dbURL) });
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server: server });

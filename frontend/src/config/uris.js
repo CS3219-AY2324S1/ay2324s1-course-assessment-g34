@@ -1,5 +1,6 @@
 const QUESTION_SVC_URL = process.env.NEXT_PUBLIC_QUESTION_SVC_URI || 'http://localhost:5000';
 const USER_SVC_URL = process.env.NEXT_PUBLIC_USER_SVC_URI || 'http://localhost:8000';
+export const COLLAB_SVC_URL = process.env.NEXT_PUBLIC_COLLAB_SVC_URI || 'ws://localhost:8080';
 
 // TODO: standardise to follow REST API URI naming conventions
 // should be /api/question
