@@ -12,29 +12,21 @@ services:
       NEXT_PUBLIC_USER_SVC_URI: http://localhost:8000
       NEXT_PUBLIC_QUESTION_SVC_URI: http://localhost:5000
     depends_on:
-      - user_service
+      - user-service
       - question-service
       - matching-service
 
-  # TODO: standardise container name
-  user_service:
-    container_name: user_service
+  user-service:
+    container_name: user-service
     build:
-      context: ./user_service
+      context: ./user-service
     command: 'python manage.py runserver 0.0.0.0:8000'
-    environment:
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_PORT: 5432
-      DJANGO_DEBUG: ${DJANGO_DEBUG}
-      SECRET_KEY: ${SECRET_KEY}
-      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
     ports:
       - 8000:8000
     depends_on: 
       - postgres-db
+    env_file:
+      - .env
   
   question-service:
     container_name: question-service
