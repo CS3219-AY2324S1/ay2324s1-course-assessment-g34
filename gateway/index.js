@@ -1,6 +1,7 @@
 const helmet = require('helmet');
 const express = require("express");
 const cors = require("cors");
+
 const {
     userProxy,
     questionProxy
@@ -10,9 +11,9 @@ const app = express();
 
 const isAuthenticated = require('./middlewares/authMiddleware');
 
-// Configure CORS for requests from http://localhost:3000
+// Configure CORS for requests from anywhere
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: '*',
   credentials: true
 };
 

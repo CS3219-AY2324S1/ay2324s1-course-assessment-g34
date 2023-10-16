@@ -6,6 +6,7 @@ class IsOwnerOrAdmin(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
+    
         # Check if the user is authenticated
         if not request.user.is_authenticated:
             return False

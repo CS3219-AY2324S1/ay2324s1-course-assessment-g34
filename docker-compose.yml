@@ -15,6 +15,18 @@ services:
       - user-service
       - question-service
 
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./gateway
+    ports:
+      - 3001:3001
+    depends_on:
+      - user-service
+      - question-service
+    env_file:
+      - .env
+
   user-service:
     container_name: user-service
     build:
