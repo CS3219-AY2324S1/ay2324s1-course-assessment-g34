@@ -37,7 +37,7 @@ export default function MatchPage() {
   const [matchedUser, setMatchedUser] = useState(null);
   const [matchSocket, setMatchSocket] = useState(null);
   const [matchCriteria, setMatchCriteria] = useState({
-    complexity: 'Easy',
+    difficulty: 'Easy',
     proficiency: 'Beginner',
   });
   const { user } = useAuthContext();
@@ -47,10 +47,14 @@ export default function MatchPage() {
 
     socket.on(MatchEvent.TIMEOUT, () => {
       console.log(`User ${user.username} has timed out from matching`);
+      socket.disconnect();
+      setMatchSocket(null);
     });
 
     socket.on(MatchEvent.CANCELLED, () => {
       console.log(`User ${user.username} cancelled match finding`);
+      socket.disconnect();
+      setMatchSocket(null);
     });
 
     socket.on(MatchEvent.FOUND, (msg) => {
@@ -68,8 +72,6 @@ export default function MatchPage() {
     setIsTimeoutComplete(true);
     setTimeout(() => {
       setIsFinding(false);
-      disconnectMatch(matchSocket);
-      setMatchSocket(null);
       setIsTimeoutComplete(false);
     }, 2000);
   };
@@ -81,7 +83,7 @@ export default function MatchPage() {
 
     setIsFinding(true);
     // TODO: include access token to handle auth
-    findMatch(socket, user.username, matchCriteria.complexity, matchCriteria.proficiency);
+    findMatch(socket, user.username, matchCriteria.difficulty, matchCriteria.proficiency);
     setMatchSocket(socket);
   };
 
@@ -89,8 +91,6 @@ export default function MatchPage() {
     e.preventDefault();
     cancelMatch(matchSocket);
     setIsFinding(false);
-    disconnectMatch(matchSocket);
-    setMatchSocket(null);
   };
 
   // this does not cancel the timeout
