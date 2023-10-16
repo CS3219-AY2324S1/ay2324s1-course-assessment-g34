@@ -1,6 +1,6 @@
 const express = require("express");
 const Question = require("../models/model");
-const isAdmin = require('../middlewares/authMiddleware');
+const isAdmin = require('../middlewares/authorizedMiddleware');
 const isAuthenticated = require('../middlewares/authMiddleware');
 // const QuestionDescription = require("../models/model");
 
@@ -19,7 +19,7 @@ module.exports = router;
 //Public route accessible without authentication
 
 //Get all questions sorted by title in ascending order
-router.get("/questions", async (req, res) => {
+router.get("/questions", isAuthenticated, async (req, res) => {
     try {
         const data = await Question.find().sort({title: 1});
         res.json(data);

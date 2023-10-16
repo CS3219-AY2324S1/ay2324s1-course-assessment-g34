@@ -44,7 +44,7 @@ export default function QuestionPage() {
       const token = await getAccessToken();
       const config = {
         headers: {
-          Authorization: "Bearer ${token}",
+          Authorization: `Bearer ${token}`,
         },
       };
       const response = await axios.get(GET_ALL_QUESTIONS_SVC_URI, config);

@@ -23,7 +23,7 @@ export default function EditQuestion({
       const token = await getAccessToken();
       const config = {
         headers: {
-          Authorization: "Bearer ${token}",
+          Authorization: `Bearer ${token}`,
         },
       };
 
