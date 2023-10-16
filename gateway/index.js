@@ -2,7 +2,6 @@ const helmet = require('helmet');
 const express = require("express");
 const cors = require("cors");
 const {
-    authProxy,
     userProxy,
     questionProxy
 } = require('./proxy');
@@ -22,12 +21,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 
-app.use('/api/user-service/token', authProxy);
+// Test route
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    message: 'Hello',
+  });
+});
+
+// filter out user-service endpoints
+app.use('/api/user-service', userProxy);
 
 app.use(isAuthorized)
 
-app.use('/api/user-service/token', authProxy);
-app.use('/api/user-service/token', authProxy);
+// allows only authorized user to access these endpoints
+app.use('/api/question-service', questionProxy);
 
 app.listen(3001, () => {
   console.log(`Server Started at ${3001}`);
