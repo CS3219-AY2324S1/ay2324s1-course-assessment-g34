@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 dotenv.config();
 
-function isAuthorized(req, res, next) {
+function isAuthenticated(req, res, next) {
   const authorizationHeader = req.headers.authorization;
 
   if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
@@ -23,4 +23,4 @@ function isAuthorized(req, res, next) {
   });
 }
 
-module.exports = isAuthorized;
+module.exports = isAuthenticated;

@@ -8,7 +8,7 @@ const {
 
 const app = express();
 
-const isAuthorized = require('./middlewares/authMiddleware');
+const isAuthenticated = require('./middlewares/authMiddleware');
 
 // Configure CORS for requests from http://localhost:3000
 const corsOptions = {
@@ -31,7 +31,7 @@ app.get('/', (_req, res) => {
 // filter out user-service endpoints
 app.use('/api/user-service', userProxy);
 
-app.use(isAuthorized)
+app.use(isAuthenticated)
 
 // allows only authorized user to access these endpoints
 app.use('/api/question-service', questionProxy);
