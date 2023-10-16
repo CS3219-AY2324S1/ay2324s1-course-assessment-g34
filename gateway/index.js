@@ -13,7 +13,7 @@ const isAuthenticated = require('./middlewares/authMiddleware');
 
 // Configure CORS for requests from anywhere
 const corsOptions = {
-  origin: '*',
+  origin: 'http://localhost:3000',
   credentials: true
 };
 
@@ -30,12 +30,16 @@ app.get('/', (_req, res) => {
 });
 
 // filter out user-service endpoints
-app.use('/api/user-service', userProxy);
+app.use('/api/user-service', (req, res) => {
+  userProxy(req, res);
+});
 
 app.use(isAuthenticated)
 
 // allows only authorized user to access these endpoints
-app.use('/api/question-service', questionProxy);
+app.use('/api/user-service', (req, res) => {
+  questionProxy(req, res);
+})
 
 app.listen(3001, () => {
   console.log(`Server Started at ${3001}`);

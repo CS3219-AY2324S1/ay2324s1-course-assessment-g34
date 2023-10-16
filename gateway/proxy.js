@@ -11,12 +11,14 @@ const USER_BASE_URL = process.env.USER_BASE_URL;
 const QUESTION_BASE_URL = process.env.QUESTION_BASE_URL;
 //const MATCHING_BASE_URL = process.env.MATCHING_URL;
 
-const userProxy = createProxyMiddleware('/api/user-service', {
-  target: USER_BASE_URL
+const userProxy = createProxyMiddleware({
+  target: USER_BASE_URL,
+  changeOrigin: true, // Required for the target server to receive the request
 });
 
-const questionProxy = createProxyMiddleware('/api/question-service', {
-  target: QUESTION_BASE_URL
+const questionProxy = createProxyMiddleware({
+  target: QUESTION_BASE_URL,
+  changeOrigin: true
 });
 
 module.exports = {
