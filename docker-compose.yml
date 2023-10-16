@@ -14,6 +14,7 @@ services:
     depends_on:
       - user_service
       - question-service
+      - collab-service
 
   # TODO: standardise container name
   user_service:
@@ -44,6 +45,17 @@ services:
       SECRET_KEY: ${SECRET_KEY}
     ports: 
       - 5000:5000
+    depends_on:
+      - mongo-db
+
+  collab-service:
+    container_name: collab-service
+    build:
+      context: ./collab-service
+    environment:
+      DATABASE_URL: mongodb://mongo-db:27017/collab-docs
+    ports:
+      - 8080:8080
     depends_on:
       - mongo-db
 
