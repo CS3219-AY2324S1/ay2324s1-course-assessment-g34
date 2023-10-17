@@ -1,7 +1,6 @@
 const express = require("express");
 const Question = require("../models/model");
 const isAdmin = require('../middlewares/authorizedMiddleware');
-const isAuthenticated = require('../middlewares/authMiddleware');
 // const QuestionDescription = require("../models/model");
 
 const router = express.Router();
@@ -19,7 +18,7 @@ module.exports = router;
 //Public route accessible without authentication
 
 //Get all questions sorted by title in ascending order
-router.get("/questions", isAuthenticated, async (req, res) => {
+router.get("/questions", async (req, res) => {
     try {
         const data = await Question.find().sort({title: 1});
         res.json(data);
@@ -29,7 +28,7 @@ router.get("/questions", isAuthenticated, async (req, res) => {
 });
 
 //Get by ID Method
-router.get('/questions/:id', isAuthenticated, async (req, res) => {
+router.get('/questions/:id', async (req, res) => {
     try{
         const data = await Question.findById(req.params.id);
         res.json(data)
@@ -41,7 +40,7 @@ router.get('/questions/:id', isAuthenticated, async (req, res) => {
 
 //Get random question by complexity and category
 // http://localhost:3000/api/random?complexity=<complexity>&categories=<categories>
-router.get('/random', isAuthenticated, async (req, res) => {
+router.get('/random', async (req, res) => {
     const { complexity, categories } = req.query;
     
     // Filter questions based on complexity and category
@@ -77,7 +76,7 @@ router.get('/random', isAuthenticated, async (req, res) => {
 });
 
 // filter by choice
-router.get("/filter", isAuthenticated, async (req, res) => {
+router.get("/filter", async (req, res) => {
   const { categories, complexity } = req.query;
 
   // can be empty for any

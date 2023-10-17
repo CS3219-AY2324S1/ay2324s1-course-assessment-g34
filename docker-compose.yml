@@ -20,6 +20,23 @@ services:
     depends_on:
       - user-service
       - question-service
+  
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./gateway
+    ports:
+      - 3001:3001
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - user-service
+      - question-service
+    environment:
+      USER_BASE_URL: http://user-service:8000
+      QUESTION_BASE_URL: http://question-service:5000
+      SECRET_KEY: ${SECRET_KEY}
 
   user-service:
     container_name: user-service
