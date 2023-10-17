@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
+const { v4: uuidv4 } = require("uuid");
 
 const PORT = 8001;
 const MATCHMAKING_TIMEOUT = 30000; // 30 seconds
@@ -79,9 +80,15 @@ function isMatch(criteria1, criteria2) {
   );
 }
 
+function generateUniqueSessionId() {
+  // Generate a unique session ID 
+  return "session_" + uuidv4();
+}
+
 function createMatch(userId1, userId2) {
-  io.to(userId1).emit("match-found", { userId: userId2 });
-  io.to(userId2).emit("match-found", { userId: userId1 });
+  const sessionId = generateUniqueSessionId();
+  io.to(userId1).emit("match-found", { userId: userId2, sessionId: sessionId });
+  io.to(userId2).emit("match-found", { userId: userId1, sessionId: sessionId });
   removeUserFromQueue(userId1);
   removeUserFromQueue(userId2);
   console.log(`Match found: ${userId1} and ${userId2}`);

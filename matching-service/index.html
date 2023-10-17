@@ -95,7 +95,7 @@
                 }
             });
             socket.on('match-found', (data) => {
-            matchStatus.innerHTML = `Match found with user ${data.userId}`;
+            matchStatus.innerHTML = `Match found with user ${data.userId} session ID ${data.sessionId}`;
             isMatching = false;
 
             // Hide the "Cancel Match" button and show the "Find Match" button
