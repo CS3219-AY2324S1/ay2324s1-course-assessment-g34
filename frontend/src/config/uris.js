@@ -1,5 +1,5 @@
-
 export const COLLAB_SVC_URI = process.env.NEXT_PUBLIC_COLLAB_SVC_URI || 'ws://localhost:8080';
+export const MATCHING_SVC_URI = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001';
 // const QUESTION_SVC_URL = process.env.NEXT_PUBLIC_QUESTION_SVC_URI || 'http://localhost:5000';
 // const USER_SVC_URL = process.env.NEXT_PUBLIC_USER_SVC_URI || 'http://localhost:8000';
 

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const questionSchema = new mongoose.Schema({
 	title: { type: String, required: true },
 	categories: [String],
-	complexity: {
+	difficulty: {
 		type: String,
 		enum: ["Easy", "Medium", "Hard"],
 		required: true,
@@ -16,17 +16,5 @@ const questionSchema = new mongoose.Schema({
 });
 
 const Question = mongoose.model("Question", questionSchema);
-
-// const questionDescriptionSchema = new mongoose.Schema({
-// 	qid: { type: Number, required: true },
-// 	description: { type: String, required: true },
-// 	});
-
-// 	const QuestionDescription = mongoose.model(
-// 	"QuestionDescription",
-// 	questionDescriptionSchema
-// );
-
-// module.exports = QuestionDescription;
 
 module.exports = Question;
