@@ -115,7 +115,7 @@ export default function useAuth() {
     return newAccessToken;
   }, []);
 
-  const verifyAccessToken = useCallback(async () => {
+  const verifyAccessToken = async () => {
     const body = { token: accessToken };
 
     try {
@@ -130,15 +130,7 @@ export default function useAuth() {
     }
 
     return false;
-  }, [accessToken]);
-
-  const verifyAndRefreshAccessToken = useCallback(async () => {
-    const isValid = accessToken && await verifyAccessToken();
-
-    if (!isValid) {
-      await refreshAccessToken();
-    }
-  }, [accessToken, refreshAccessToken, verifyAccessToken]);
+  };
 
   const getAccessToken = async () => {
     const isValid = accessToken && await verifyAccessToken();
@@ -152,9 +144,17 @@ export default function useAuth() {
 
   // resolve user
   useEffect(() => {
+    const verifyAndRefreshAccessToken = async () => {
+      const isValid = accessToken && await verifyAccessToken();
+
+      if (!isValid) {
+        await refreshAccessToken();
+      }
+      setIsLoading(false);
+    };
+
     verifyAndRefreshAccessToken();
-    setIsLoading(false);
-  }, [verifyAndRefreshAccessToken]);
+  }, []);
 
   return {
     user,

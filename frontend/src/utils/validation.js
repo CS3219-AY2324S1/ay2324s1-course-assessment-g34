@@ -15,18 +15,18 @@ export const validateTitle = (title) => {
 };
 
 /**
- * Validates a complexity input.
+ * Validates a difficulty input.
  *
- * @param {string} complexity - The complexity to be validated.
+ * @param {string} difficulty - The difficulty to be validated.
  * @returns {string|null} An error message if validation fails, or null if validation passes.
  */
-export const validateComplexity = (complexity) => {
+export const validateDifficulty = (difficulty) => {
   let errorMessage = null;
 
-  if (!complexity || complexity.length === 0) {
-    errorMessage = 'Complexity cannot be empty.';
-  } else if (complexity !== 'Easy' && complexity !== 'Medium' && complexity !== 'Hard') {
-    errorMessage = 'Complexity must be Easy, Medium or Hard.';
+  if (!difficulty || difficulty.length === 0) {
+    errorMessage = 'Difficulty cannot be empty.';
+  } else if (difficulty !== 'Easy' && difficulty !== 'Medium' && difficulty !== 'Hard') {
+    errorMessage = 'Difficulty must be Easy, Medium or Hard.';
   }
 
   return errorMessage;

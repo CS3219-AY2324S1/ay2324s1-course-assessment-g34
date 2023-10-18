@@ -74,7 +74,7 @@ EditQuestion.propTypes = {
     description: PropTypes.string.isRequired,
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     link: PropTypes.string.isRequired,
-    complexity: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
+    difficulty: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
   }),
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,

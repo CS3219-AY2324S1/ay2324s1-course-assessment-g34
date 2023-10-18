@@ -1,5 +1,8 @@
+
+// export const MATCHING_SVC_URL = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001';
 // const QUESTION_SVC_URL = process.env.NEXT_PUBLIC_QUESTION_SVC_URI || 'http://localhost:5000';
 // const USER_SVC_URL = process.env.NEXT_PUBLIC_USER_SVC_URI || 'http://localhost:8000';
+
 
 const GATEWAY_BASE_URL = 'http://localhost:3001';
 
@@ -31,3 +34,5 @@ export const LOGIN_SVC_URI = GATEWAY_BASE_URL + LOGIN;
 export const REFRESH_TOKEN_SVC_URI = GATEWAY_BASE_URL + TOKEN_SVC_PREFIX + REFRESH_TOKEN;
 export const VERIFY_TOKEN_SVC_URI = GATEWAY_BASE_URL + TOKEN_SVC_PREFIX + VERIFY_TOKEN;
 export const USER_SVC_URI = GATEWAY_BASE_URL + USER_SVC_PREFIX;
+
+export const MATCHING_SVC_URI = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001';

@@ -23,7 +23,7 @@ export default function QuestionTable({
               align="right"
               sx={{ color: (theme) => theme.palette.secondary.main, borderColor: '#747474' }}
             >
-              Complexity
+              Difficulty
             </TableCell>
             <TableCell sx={{ borderColor: '#747474' }} />
           </TableRow>
@@ -53,7 +53,7 @@ QuestionTable.propTypes = {
       description: PropTypes.string.isRequired,
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
       link: PropTypes.string.isRequired,
-      complexity: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
+      difficulty: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
     }),
   ).isRequired,
   setQuestions: PropTypes.func.isRequired,

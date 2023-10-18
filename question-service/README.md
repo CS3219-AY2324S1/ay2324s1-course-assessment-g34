@@ -21,7 +21,7 @@ This API provides endpoints for managing questions related operations. Use this 
     {
     "title": "Sample Question",
     "categories": ["Math", "Algebra"],
-    "complexity": "Medium",
+    "difficulty": "Medium",
     "link": "https://example.com/questions/1",
     "description": "This is the description for Sample Question.",
     }
@@ -57,7 +57,7 @@ This API provides endpoints for managing questions related operations. Use this 
     {
     "title": "Edited Question",
     "categories": ["Math", "Algebra", "New Category"],
-    "complexity": "Medium",
+    "difficulty": "Medium",
     "link": "https://example.com/questions/1",
     "description": "This is the description for Sample Question.",
     }
@@ -75,21 +75,21 @@ This API provides endpoints for managing questions related operations. Use this 
   - Document with 'title' has been deleted..
   - 400 Error
 
-### Get a random question given complexity and catergories
-- **URL**: `api/random?complexity=<complexity>&categories=<categories>`
+### Get a random question given difficulty and catergories
+- **URL**: `api/random?difficulty=<difficulty>&categories=<categories>`
 - **Method**: `GET`
-- **Description**: Get a random question given complexity and categories as input
-- **Params**: complexity, catergories 
+- **Description**: Get a random question given difficulty and categories as input
+- **Params**: difficulty, catergories 
 - **Response**:
   - Document of specified params
   - 404 "No questions found with the specified criteria"
   - 500 "Error fetching random question"
 
-### Get questions given complexity and catergories
-- **URL**: `api/filter?complexity=<complexity>&categories=<categories>`
+### Get questions given difficulty and catergories
+- **URL**: `api/filter?difficulty=<difficulty>&categories=<categories>`
 - **Method**: `GET`
-- **Description**: Get questions given complexity and/or categories as input
-- **Params**: complexity, catergories 
+- **Description**: Get questions given difficulty and/or categories as input
+- **Params**: difficulty, catergories 
 - **Response**:
   - Document of specified params
   - 200 "No questions found with the specified criteria"
