@@ -42,7 +42,7 @@ Ensure you have Docker installed on your system. If not, you can download and in
 
 ### Configuring the `.env` File
 
-Create a `.env`file in the root of the project with the following contents:
+Create a `.env` file in the root of the project with the following contents:
 
 ```env
 DATABASE_NAME=user-service
