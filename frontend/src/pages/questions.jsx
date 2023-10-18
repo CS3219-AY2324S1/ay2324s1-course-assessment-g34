@@ -9,6 +9,7 @@ import RouteGuard from '@/components/RouteGuard';
 import { Role } from '@/utils/constants';
 import ComponentGuard from '@/components/ComponentGuard';
 import EditQuestion from '@/components/QuestionPage/EditQuestion';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 /**
  * QuestionPage component for displaying and managing questions.
@@ -27,19 +28,26 @@ export default function QuestionPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { getAccessToken } = useAuthContext();
   const [selectedQuestion, setSelectedQuestion] = useState({
     _id: '',
     title: '',
     description: '',
     categories: [],
     link: '',
-    complexity: 'Easy',
+    difficulty: 'Easy',
   });
 
   const getAllQuestions = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(GET_ALL_QUESTIONS_SVC_URI);
+      const token = await getAccessToken();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(GET_ALL_QUESTIONS_SVC_URI, config);
       setQuestions(response.data);
     } catch (err) {
       console.error('An error occurred:', err);

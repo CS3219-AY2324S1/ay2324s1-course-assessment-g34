@@ -8,10 +8,10 @@ import React, {
   forwardRef, useEffect, useRef, useState,
 } from 'react';
 import {
-  validateComplexity, validateDescription, validateLink, validateTitle,
+  validateDifficulty, validateDescription, validateLink, validateTitle,
 } from '@/utils/validation';
 import { PropTypes } from 'prop-types';
-import ComplexitySelector from './ComplexitySelector';
+import DifficultySelector from './DifficultySelector';
 import CategoriesInput from './CategoriesInput';
 import SolidButton from '../SolidButton';
 
@@ -28,7 +28,7 @@ const defaultQuestion = {
   description: '',
   categories: [],
   link: '',
-  complexity: 'Easy',
+  difficulty: 'Easy',
 };
 
 export default function QuestionForm({
@@ -36,7 +36,7 @@ export default function QuestionForm({
 }) {
   const editorRef = useRef(null);
   const [titleError, setTitleError] = useState(null);
-  const [complexityError, setComplexityError] = useState(null);
+  const [difficultyError, setDifficultyError] = useState(null);
   const [linkError, setLinkError] = useState(null);
   const [descriptionError, setDescriptionError] = useState(null);
   const [categories, setCategories] = useState(question.categories);
@@ -44,7 +44,7 @@ export default function QuestionForm({
   const [questionData, setQuestionData] = useState({
     _id: question._id,
     title: question.title,
-    complexity: question.complexity,
+    difficulty: question.difficulty,
     categories: question.categories,
     link: question.link,
     description: question.description,
@@ -57,7 +57,7 @@ export default function QuestionForm({
       description: '',
       categories: [],
       link: '',
-      complexity: 'Easy',
+      difficulty: 'Easy',
     });
     setCategories([]);
     setDescription('');
@@ -65,7 +65,7 @@ export default function QuestionForm({
 
   const resetErrors = () => {
     setTitleError(null);
-    setComplexityError(null);
+    setDifficultyError(null);
     setLinkError(null);
     setDescriptionError(null);
   };
@@ -85,12 +85,12 @@ export default function QuestionForm({
 
   const validateQuestionData = (q) => {
     const {
-      title, complexity, link, description: desc,
+      title, difficulty, link, description: desc,
     } = q;
     const errors = [];
 
     const titleValidationError = validateTitle(title);
-    const complexityValidationError = validateComplexity(complexity);
+    const difficultyValidationError = validateDifficulty(difficulty);
     const linkValidationError = validateLink(link);
     const descriptionValidationError = validateDescription(desc);
 
@@ -99,9 +99,9 @@ export default function QuestionForm({
       setTitleError(titleValidationError);
     }
 
-    if (complexityValidationError) {
-      errors.push(complexityValidationError);
-      setComplexityError(complexityValidationError);
+    if (difficultyValidationError) {
+      errors.push(difficultyValidationError);
+      setDifficultyError(difficultyValidationError);
     }
 
     if (linkValidationError) {
@@ -123,7 +123,7 @@ export default function QuestionForm({
 
     const newQuestionData = {
       title: questionData.title.trim(),
-      complexity: questionData.complexity.trim(),
+      difficulty: questionData.difficulty.trim(),
       categories,
       link: questionData.link.trim(),
       description: description.trim(),
@@ -191,13 +191,13 @@ export default function QuestionForm({
                 helperText={titleError}
                 onChange={(e) => handleChange(e)}
               />
-              <ComplexitySelector
+              <DifficultySelector
                 required
-                value={questionData.complexity}
+                value={questionData.difficulty}
                 size="small"
                 sx={{ mt: 1, width: '20ch' }}
-                error={complexityError != null}
-                helperText={complexityError}
+                error={difficultyError != null}
+                helperText={difficultyError}
                 onChange={(e) => handleChange(e)}
               />
             </Box>
@@ -275,7 +275,7 @@ QuestionForm.propTypes = {
     description: PropTypes.string.isRequired,
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     link: PropTypes.string.isRequired,
-    complexity: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
+    difficulty: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
   }),
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,

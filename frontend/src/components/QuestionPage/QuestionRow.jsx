@@ -15,7 +15,7 @@ import ComponentGuard from '../ComponentGuard';
 import DeleteQuestionDialog from './DeleteQuestionDialog';
 import QuestionCategoryList from './QuestionCategoryList';
 
-const complexityToColorMap = {
+const difficultyToColorMap = {
   Easy: 'success',
   Medium: 'warning',
   Hard: 'error',
@@ -37,11 +37,11 @@ export default function QuestionRow({
       const token = await getAccessToken();
       const config = {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       };
 
-      const response = await axios.delete(`${DELETE_QUESTION_SVC_URI}/${question._id}`, config);
+      await axios.delete(`${DELETE_QUESTION_SVC_URI}/${question._id}`, config);
       updateDeletedQuestions();
     } catch (err) {
       if (err.response && err.response.status === 400) {
@@ -106,7 +106,7 @@ export default function QuestionRow({
           align="right"
           sx={{ py: 0, fontWeight: 600, borderColor: '#c4c4c4' }}
         >
-          <Chip color={complexityToColorMap[question.complexity]} label={question.complexity} />
+          <Chip color={difficultyToColorMap[question.difficulty]} label={question.difficulty} />
         </TableCell>
         <TableCell
           align="right"
@@ -153,7 +153,7 @@ QuestionRow.propTypes = {
     description: PropTypes.string.isRequired,
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     link: PropTypes.string.isRequired,
-    complexity: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
+    difficulty: PropTypes.oneOf(['Easy', 'Medium', 'Hard']).isRequired,
   }).isRequired,
   setQuestions: PropTypes.func.isRequired,
   setError: PropTypes.func.isRequired,

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
-  AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography,
+  AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Skeleton, Toolbar, Tooltip,
+  Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
@@ -36,6 +37,12 @@ function LoginButton() {
         Log In
       </SolidButton>
     </Link>
+  );
+}
+
+function LoadingPlaceholder() {
+  return (
+    <Skeleton variant="circular" width={40} height={40} />
   );
 }
 
@@ -119,7 +126,11 @@ export default function Navbar() {
             </Box>
           </ComponentGuard>
           <Box sx={{ flexGrow: 0, ml: 'auto' }}>
-            <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]} altComponent={<LoginButton />}>
+            <ComponentGuard
+              allowedRoles={[Role.USER, Role.ADMIN]}
+              altComponent={<LoginButton />}
+              loadingComponent={<LoadingPlaceholder />}
+            >
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="User Avatar" src={image} />
