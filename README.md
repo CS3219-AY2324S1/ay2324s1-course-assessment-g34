@@ -111,6 +111,8 @@ After installing the dependencies, you can run the frontend by executing the fol
 npm run dev
 ```
 
+You can access the running frontend application in your web browser at http://localhost:3000.
+
 ### User Service
 
 ### Question Service
