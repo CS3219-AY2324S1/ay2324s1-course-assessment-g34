@@ -1,6 +1,6 @@
 const express = require("express");
 const Question = require("../models/model");
-const isAdmin = require('../middlewares/authMiddleware');
+const isAdmin = require('../middlewares/authorizedMiddleware');
 // const QuestionDescription = require("../models/model");
 
 const router = express.Router();

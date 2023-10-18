@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import { Box, Container, Skeleton } from "@mui/material";
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket'
-import { COLLAB_SVC_URL } from "@/config/uris";
+import { COLLAB_SVC_URI } from "@/config/uris";
 import dynamic from "next/dynamic";
 
 const Editor = dynamic(() => import('../components/CollabPage/CollabEditor'), {
@@ -13,7 +13,7 @@ const Editor = dynamic(() => import('../components/CollabPage/CollabEditor'), {
 
 const connect = () => {
   // TODO: try socket.io instead of reconnecting-websocket
-  const socket = new ReconnectingWebSocket(COLLAB_SVC_URL);
+  const socket = new ReconnectingWebSocket(COLLAB_SVC_URI);
   const connection = new ShareDBClient.Connection(socket);
   return connection;
 }

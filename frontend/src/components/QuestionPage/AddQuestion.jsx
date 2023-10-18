@@ -26,7 +26,7 @@ export default function AddQuestion({ setQuestions }) {
       // KIV: "Bearer ${token}" results in invalid token error
       const config = {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       };
 
