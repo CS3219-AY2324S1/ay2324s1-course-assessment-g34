@@ -24,10 +24,9 @@ export default function AddQuestion({ setQuestions }) {
     // TODO: make some toast pop up to notify user that a question has been added successfully
     try {
       const token = await getAccessToken();
-      // KIV: "Bearer ${token}" results in invalid token error
       const config = {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       };
 

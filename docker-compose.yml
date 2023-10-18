@@ -1,5 +1,9 @@
 version: '3.8'
 
+networks:
+  frontend:
+  backend:
+
 services:
   frontend:
     container_name: frontend
@@ -8,13 +12,33 @@ services:
     command: npm run dev
     ports:
       - 3000:3000
+    networks:
+      - frontend
     environment:
       NEXT_PUBLIC_USER_SVC_URI: http://localhost:8000
       NEXT_PUBLIC_QUESTION_SVC_URI: http://localhost:5000
+      NEXT_PUBLIC_MATCHING_SVC_URI: http://localhost:8001
     depends_on:
       - user-service
       - question-service
       - matching-service
+  
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./gateway
+    ports:
+      - 3001:3001
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - user-service
+      - question-service
+    environment:
+      USER_BASE_URL: http://user-service:8000
+      QUESTION_BASE_URL: http://question-service:5000
+      SECRET_KEY: ${SECRET_KEY}
 
   user-service:
     container_name: user-service
@@ -23,6 +47,8 @@ services:
     command: 'python manage.py runserver 0.0.0.0:8000'
     ports:
       - 8000:8000
+    networks:
+      - backend
     depends_on: 
       - postgres-db
     env_file:
@@ -37,6 +63,8 @@ services:
       SECRET_KEY: ${SECRET_KEY}
     ports: 
       - 5000:5000
+    networks:
+      - backend
     depends_on:
       - mongo-db
 
@@ -44,6 +72,8 @@ services:
     container_name: matching-service
     build:
       context: ./matching-service
+    networks:
+      - backend
     environment:
       PORT: 8001
     ports: 
@@ -61,6 +91,8 @@ services:
       - postgres-db:/var/lib/postgresql/data
     ports:
       - ${DATABASE_PORT}:${DATABASE_PORT}
+    networks:
+      - backend
 
   mongo-db:
     container_name: mongo-db
@@ -70,6 +102,8 @@ services:
       - mongo-db:/data/db
     ports:
       - 27017:27017
+    networks:
+      - backend
 
 volumes:
   postgres-db:

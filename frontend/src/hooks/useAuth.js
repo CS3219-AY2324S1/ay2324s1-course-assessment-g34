@@ -115,7 +115,7 @@ export default function useAuth() {
     return newAccessToken;
   }, []);
 
-  const verifyAccessToken = useCallback(async () => {
+  const verifyAccessToken = async () => {
     const body = { token: accessToken };
 
     try {
@@ -130,7 +130,7 @@ export default function useAuth() {
     }
 
     return false;
-  }, [accessToken]);
+  };
 
   const getAccessToken = async () => {
     const isValid = accessToken && await verifyAccessToken();
@@ -154,7 +154,7 @@ export default function useAuth() {
     };
 
     verifyAndRefreshAccessToken();
-  }, [accessToken, refreshAccessToken, verifyAccessToken]);
+  }, []);
 
   return {
     user,

@@ -4,7 +4,7 @@ import MatchingTimer from '@/components/MatchPage/MatchingTimer';
 import DifficultySelector from '@/components/QuestionPage/DifficultySelector';
 import RouteGuard from '@/components/RouteGuard';
 import SolidButton from '@/components/SolidButton';
-import { MATCHING_SVC_URL } from '@/config/uris';
+import { MATCHING_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { MatchEvent, Role } from '@/utils/constants';
 import { cancelMatch, disconnectMatch, findMatch } from '@/utils/eventEmitters';
@@ -43,7 +43,7 @@ export default function MatchPage() {
   const { user } = useAuthContext();
 
   const connect = () => {
-    const socket = io(MATCHING_SVC_URL);
+    const socket = io(MATCHING_SVC_URI);
 
     socket.on(MatchEvent.TIMEOUT, () => {
       console.log(`User ${user.username} has timed out from matching`);
