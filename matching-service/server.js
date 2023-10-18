@@ -76,13 +76,13 @@ function tryMatchingUser(user) {
     result = createMatch(user, matchedUser);
   } else {
     matchingQueue.push(user);
+    // Timeout for matchmaking of current user
+    const timeoutId = setTimeout(() => {
+      handleMatchmakingTimeout(user.id);
+    }, MATCHMAKING_TIMEOUT);
+    // Store the timeout ID associated with the user
+    matchingTimeouts[user.id] = timeoutId;
   }
-  // Timeout for matchmaking of current user
-  const timeoutId = setTimeout(() => {
-    handleMatchmakingTimeout(user.id);
-  }, MATCHMAKING_TIMEOUT);
-  // Store the timeout ID associated with the user
-  matchingTimeouts[user.id] = timeoutId;
   return result;
 }
 
@@ -100,7 +100,7 @@ function generateUniqueSessionId() {
 
 function createMatch(user1, user2) {
   // Cancel the timeout associated with the user
-  if (matchingTimeouts[user1.id] && matchingTimeouts[user2.id]) {
+  if (matchingTimeouts[user1.id] || matchingTimeouts[user2.id]) {
     clearTimeout(matchingTimeouts[user1.id]);
     clearTimeout(matchingTimeouts[user2.id]);
     delete matchingTimeouts[user1.id];
@@ -111,6 +111,8 @@ function createMatch(user1, user2) {
   // required to show log message indicating status of queue before and after match
   io.to(user1.id).emit(MatchEvent.FOUND, { username: user2.username, sessionId: sessionId });
   io.to(user2.id).emit(MatchEvent.FOUND, { username: user1.username, sessionId: sessionId });
+  user1.sessionId = sessionId;
+  user2.sessionId = sessionId;
   removeUserFromQueue(user1.id);
   removeUserFromQueue(user2.id);
   console.log(`Match found: ${user1.username} (id = ${user1.id}) and ${user2.username} (id = ${user2.id} with session id = ${sessionId})`);
