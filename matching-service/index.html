@@ -72,7 +72,7 @@
                 const proficiency = document.getElementById('proficiency').value;
                 
                 // Send the Matching criteria to the server using the 'register' event
-                socket.emit('start-matching', { difficulty, proficiency });
+                socket.emit('find-match', { difficulty, proficiency });
                 
                 // Display a message indicating that Matching is in progress
                 matchStatus.innerHTML = 'Searching for a match...';
@@ -85,7 +85,7 @@
 
             cancelButton.addEventListener('click', () => {
                 if (isMatching) {
-                    socket.emit('cancel-matching');
+                    socket.emit('cancel-match');
                     matchStatus.innerHTML = 'Matching cancelled.';
                     isMatching = false;
 

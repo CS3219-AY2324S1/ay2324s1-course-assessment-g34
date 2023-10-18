@@ -15,6 +15,7 @@ export default function AddQuestion({ setQuestions }) {
   const [error, setError] = useState(null);
   const { getAccessToken, setRedirect } = useAuthContext();
 
+  // TODO: consider using a reducer to handle question list instead
   const updateQuestions = (question) => {
     setQuestions((prev) => [...prev, question]);
   };
@@ -23,10 +24,9 @@ export default function AddQuestion({ setQuestions }) {
     // TODO: make some toast pop up to notify user that a question has been added successfully
     try {
       const token = await getAccessToken();
-      // KIV: "Bearer ${token}" results in invalid token error
       const config = {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       };
 

@@ -115,7 +115,7 @@ Replace <access_token> with a valid access token obtained by logging in using th
 
 ### Delete User 
 
-- **URL**: `/api/user-service/users/<str:username`
+- **URL**: `/api/user-service/users/<str:username>`
 - **Method**: `DELETE`
 - **Description**: Delete a user.
 - **Request Header**: `Authorization`: `Bearer ` + <access_token>

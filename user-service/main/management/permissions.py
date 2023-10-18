@@ -6,14 +6,15 @@ class IsOwnerOrAdmin(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        # Allow GET requests (read-only) for all users
-        if request.method == 'GET':
-            return True
-
+    
         # Check if the user is authenticated
         if not request.user.is_authenticated:
             return False
-
+        
+        # Allow GET requests (read-only) for all auth users
+        if request.method == 'GET':
+            return True
+        
         # Allow admin users to perform any action
         if request.user.is_superuser:
             return True

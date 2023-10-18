@@ -1,7 +1,7 @@
 import { MenuItem, TextField } from '@mui/material';
 import React from 'react';
 
-const complexities = [
+const difficulties = [
   {
     value: 'Easy',
     label: 'Easy',
@@ -16,17 +16,17 @@ const complexities = [
   },
 ];
 
-export default function ComplexitySelector(props) {
+export default function DifficultySelector(props) {
   return (
     <TextField
       {...props}
       select
-      id="complexity"
-      name="complexity"
-      label="Complexity"
+      id="difficulty"
+      name="difficulty"
+      label="Difficulty"
       defaultValue="Easy"
     >
-      {complexities.map((option) => (
+      {difficulties.map((option) => (
         <MenuItem key={option.value} value={option.value}>
           {option.label}
         </MenuItem>
