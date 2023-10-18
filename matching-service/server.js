@@ -113,7 +113,7 @@ function createMatch(user1, user2) {
   io.to(user2.id).emit(MatchEvent.FOUND, { username: user1.username, sessionId: sessionId });
   removeUserFromQueue(user1.id);
   removeUserFromQueue(user2.id);
-  console.log(`Match found: ${user1.username} (id = ${user1.id}) and ${user2.username} (id = ${user2.id})`);
+  console.log(`Match found: ${user1.username} (id = ${user1.id}) and ${user2.username} (id = ${user2.id} with session id = ${sessionId})`);
   console.log(`Users in queue after match: ${JSON.stringify(matchingQueue, null, 2)}`);
 }
 
