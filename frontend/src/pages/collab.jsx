@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
-import { Box, Container, TextField } from "@mui/material";
+import { Box, Container, Skeleton } from "@mui/material";
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { COLLAB_SVC_URL } from "@/config/uris";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import('../components/CollabPage/CollabEditor'), {
+  ssr: false,
+  loading: () => <Skeleton variant="rectangular" height="100vh" />,
+})
 
 const connect = () => {
   // TODO: try socket.io instead of reconnecting-websocket
@@ -22,7 +28,7 @@ export default function CollabPage() {
     const id = "test_id"
 
     const doc = connect().get('collab-docs', id);
-    console.log("connect to doc");
+    console.log(`connect to doc with id ${id}`);
     setCollabDoc(doc);
 
     doc.subscribe((err) => {
@@ -54,8 +60,8 @@ export default function CollabPage() {
     }
   }, []);
 
-  const handleInputChange = (e) => {
-    const newContent = e.target.value;
+  const handleInputChange = (value, e) => {
+    const newContent = value;
     collabDoc.submitOp([{ p: ['content'], oi: newContent }]);
     setContent(collabDoc.data.content);
   }
@@ -67,7 +73,7 @@ export default function CollabPage() {
         sx={{ height: '100vh', my: 2 }}
       >
         <Box>
-          <TextField multiline fullWidth value={content} onChange={(e) => handleInputChange(e)}/>
+          <Editor value={content} onChange={handleInputChange} />
         </Box>
       </Container>
     </Layout>
