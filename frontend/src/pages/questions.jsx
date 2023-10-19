@@ -35,7 +35,7 @@ export default function QuestionPage() {
     description: '',
     categories: [],
     link: '',
-    complexity: 'Easy',
+    difficulty: 'Easy',
   });
 
   const getAllQuestions = async () => {
