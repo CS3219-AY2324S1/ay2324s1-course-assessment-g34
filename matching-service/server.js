@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
+const { v4: uuidv4 } = require("uuid");
 const io = require("socket.io")(http, {
   cors: {
     origin: "http://localhost:3000"
@@ -75,13 +76,13 @@ function tryMatchingUser(user) {
     result = createMatch(user, matchedUser);
   } else {
     matchingQueue.push(user);
+    // Timeout for matchmaking of current user
+    const timeoutId = setTimeout(() => {
+      handleMatchmakingTimeout(user.id);
+    }, MATCHMAKING_TIMEOUT);
+    // Store the timeout ID associated with the user
+    matchingTimeouts[user.id] = timeoutId;
   }
-  // Timeout for matchmaking of current user
-  const timeoutId = setTimeout(() => {
-    handleMatchmakingTimeout(user.id);
-  }, MATCHMAKING_TIMEOUT);
-  // Store the timeout ID associated with the user
-  matchingTimeouts[user.id] = timeoutId;
   return result;
 }
 
@@ -92,21 +93,29 @@ function isMatch(criteria1, criteria2) {
   );
 }
 
+function generateUniqueSessionId() {
+  // Generate a unique session ID 
+  return "session_" + uuidv4();
+}
+
 function createMatch(user1, user2) {
   // Cancel the timeout associated with the user
-  if (matchingTimeouts[user1.id] && matchingTimeouts[user2.id]) {
+  if (matchingTimeouts[user1.id] || matchingTimeouts[user2.id]) {
     clearTimeout(matchingTimeouts[user1.id]);
     clearTimeout(matchingTimeouts[user2.id]);
     delete matchingTimeouts[user1.id];
     delete matchingTimeouts[user2.id];
   }
 
+  const sessionId = generateUniqueSessionId();
   // required to show log message indicating status of queue before and after match
-  io.to(user1.id).emit(MatchEvent.FOUND, { username: user2.username });
-  io.to(user2.id).emit(MatchEvent.FOUND, { username: user1.username });
+  io.to(user1.id).emit(MatchEvent.FOUND, { username: user2.username, sessionId: sessionId });
+  io.to(user2.id).emit(MatchEvent.FOUND, { username: user1.username, sessionId: sessionId });
+  user1.sessionId = sessionId;
+  user2.sessionId = sessionId;
   removeUserFromQueue(user1.id);
   removeUserFromQueue(user2.id);
-  console.log(`Match found: ${user1.username} (id = ${user1.id}) and ${user2.username} (id = ${user2.id})`);
+  console.log(`Match found: ${user1.username} (id = ${user1.id}) and ${user2.username} (id = ${user2.id} with session id = ${sessionId})`);
   console.log(`Users in queue after match: ${JSON.stringify(matchingQueue, null, 2)}`);
 }
 
