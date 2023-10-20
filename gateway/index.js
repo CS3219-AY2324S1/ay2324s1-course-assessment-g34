@@ -4,7 +4,8 @@ const cors = require("cors");
 
 const {
     userProxy,
-    questionProxy
+    questionProxy,
+    matchingProxy
 } = require('./proxy');
 
 const app = express();
@@ -18,7 +19,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(helmet());
+// app.use(helmet());
 
 // Test route
 app.get('/', (_req, res) => {
@@ -31,6 +32,8 @@ app.get('/', (_req, res) => {
 app.use('/api/user-service', (req, res) => {
   userProxy(req, res);
 });
+
+app.use(matchingProxy);
 
 app.use(isAuthenticated)
 
