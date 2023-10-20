@@ -22,7 +22,7 @@ const questionProxy = createProxyMiddleware({
 });
 
 const matchingProxy = createProxyMiddleware(
-  '/socket.io', {
+  '/api/matching-service/socket.io', {
     target: MATCHING_BASE_URL,
     changeOrigin: true,
     ws: true
