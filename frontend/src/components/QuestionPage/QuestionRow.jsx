@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import ComponentGuard from '../ComponentGuard';
 import DeleteQuestionDialog from './DeleteQuestionDialog';
 import QuestionCategoryList from './QuestionCategoryList';
+import DifficultyChip from '../DifficultyChip';
 
 const difficultyToColorMap = {
   Easy: 'success',
@@ -106,7 +107,7 @@ export default function QuestionRow({
           align="right"
           sx={{ py: 0, fontWeight: 600, borderColor: '#c4c4c4' }}
         >
-          <Chip color={difficultyToColorMap[question.difficulty]} label={question.difficulty} />
+          <DifficultyChip difficulty={question.difficulty} />
         </TableCell>
         <TableCell
           align="right"

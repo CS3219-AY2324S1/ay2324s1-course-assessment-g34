@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Layout from "@/components/Layout";
-import { Box, Container, Skeleton } from "@mui/material";
+import { Box, Skeleton, Toolbar } from "@mui/material";
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { COLLAB_SVC_URI } from "@/config/uris";
 import dynamic from "next/dynamic";
+import DescriptionPanel from "@/components/CollabPage/DescriptionPanel";
 
 const Editor = dynamic(() => import('../components/CollabPage/CollabEditor'), {
   ssr: false,
@@ -12,7 +12,7 @@ const Editor = dynamic(() => import('../components/CollabPage/CollabEditor'), {
 })
 
 const connect = () => {
-  // TODO: try socket.io instead of reconnecting-websocket
+  // TODO: try socket.io with reconnecting-websocket
   const socket = new ReconnectingWebSocket(COLLAB_SVC_URI);
   const connection = new ShareDBClient.Connection(socket);
   return connection;
@@ -66,16 +66,24 @@ export default function CollabPage() {
     setContent(collabDoc.data.content);
   }
 
+  // 4 main components: *question, *editor, program output, video chat
+  // all components should be resizable
+  // video window should be draggable
   return (
-    <Layout>
-      <Container
-        maxWidth="xl"
-        sx={{ height: '100vh', my: 2 }}
-      >
-        <Box>
+    <Box
+      sx={{ m: 0, width: "100vw", height: "100vh", bgcolor: (theme) => theme.palette.primary.dark }}
+    >
+      <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', height: '100%', p: 1, gap: 1}}>
+        <Box sx={{ minWidth: 290, width: 750 }}>
+          <DescriptionPanel />
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: 'lightblue', width: '100%', minWidth: 180 }}>
+          <Toolbar variant="dense" sx={{ width: '100%', minWidth: 180}}>
+            Choose language here
+          </Toolbar>
           <Editor value={content} onChange={handleInputChange} />
         </Box>
-      </Container>
-    </Layout>
+      </Box>
+    </Box>
   );
 }
