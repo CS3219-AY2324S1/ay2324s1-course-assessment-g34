@@ -1,6 +1,6 @@
-import React from "react";
-import Editor from "@monaco-editor/react";
-import { Skeleton } from "@mui/material";
+import React from 'react';
+import Editor from '@monaco-editor/react';
+import { Skeleton } from '@mui/material';
 
 export default function CollabEditor({ value, onChange, language }) {
   const options = {
@@ -9,11 +9,11 @@ export default function CollabEditor({ value, onChange, language }) {
     scrollBeyondLastLine: 'false',
     padding: {
       top: 8,
-      bottom: 8
+      bottom: 8,
     },
 
   };
-  
+
   return (
     <Editor
       width="100%"
@@ -27,4 +27,4 @@ export default function CollabEditor({ value, onChange, language }) {
       options={options}
     />
   );
-};
+}
