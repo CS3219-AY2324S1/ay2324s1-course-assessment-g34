@@ -40,6 +40,7 @@ services:
     environment:
       USER_BASE_URL: http://user-service:8000
       QUESTION_BASE_URL: http://question-service:5000
+      MATCHING_BASE_URL: http://matching-service:8001
       SECRET_KEY: ${SECRET_KEY}
 
   user-service:

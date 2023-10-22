@@ -43,7 +43,9 @@ export default function MatchPage() {
   const { user } = useAuthContext();
 
   const connect = () => {
-    const socket = io(MATCHING_SVC_URI);
+    const socket = io(MATCHING_SVC_URI, { 
+      path: "/api/matching-service/socket.io" 
+    });
 
     socket.on(MatchEvent.TIMEOUT, () => {
       console.log(`User ${user.username} has timed out from matching`);

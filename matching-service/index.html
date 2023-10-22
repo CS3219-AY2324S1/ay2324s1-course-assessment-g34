@@ -72,7 +72,11 @@
                 const proficiency = document.getElementById('proficiency').value;
                 
                 // Send the Matching criteria to the server using the 'register' event
-                socket.emit('find-match', { difficulty, proficiency });
+                socket.emit('find-match', {
+                    criteria: { difficulty, proficiency },
+                    username: "testuser"
+                }
+                );
                 
                 // Display a message indicating that Matching is in progress
                 matchStatus.innerHTML = 'Searching for a match...';
@@ -95,7 +99,7 @@
                 }
             });
             socket.on('match-found', (data) => {
-            matchStatus.innerHTML = `Match found with user ${data.userId}`;
+            matchStatus.innerHTML = `Match found with user ${data.userId} session ID ${data.sessionId}`;
             isMatching = false;
 
             // Hide the "Cancel Match" button and show the "Find Match" button

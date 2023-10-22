@@ -9,7 +9,7 @@ const proxy = httpProxy.createProxyServer();
 
 const USER_BASE_URL = process.env.USER_BASE_URL;
 const QUESTION_BASE_URL = process.env.QUESTION_BASE_URL;
-//const MATCHING_BASE_URL = process.env.MATCHING_URL;
+const MATCHING_BASE_URL = process.env.MATCHING_BASE_URL;
 
 const userProxy = createProxyMiddleware({
   target: USER_BASE_URL,
@@ -21,8 +21,16 @@ const questionProxy = createProxyMiddleware({
   changeOrigin: true
 });
 
+const matchingProxy = createProxyMiddleware(
+  '/api/matching-service/socket.io', {
+    target: MATCHING_BASE_URL,
+    changeOrigin: true,
+    ws: true
+  }
+);
+
 module.exports = {
   userProxy,
   questionProxy,
-  //matchingProxy,
+  matchingProxy,
 };
