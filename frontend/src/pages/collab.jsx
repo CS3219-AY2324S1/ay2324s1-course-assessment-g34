@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Box, Skeleton, Toolbar } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { COLLAB_SVC_URI } from "@/config/uris";
-import dynamic from "next/dynamic";
 import DescriptionPanel from "@/components/CollabPage/DescriptionPanel";
-
-const Editor = dynamic(() => import('../components/CollabPage/CollabEditor'), {
-  ssr: false,
-  loading: () => <Skeleton variant="rectangular" height="100vh" />,
-})
+import EditorPanel from "@/components/CollabPage/EditorPanel";
 
 const connect = () => {
   // TODO: try socket.io with reconnecting-websocket
@@ -22,6 +17,9 @@ export default function CollabPage() {
   const [content, setContent] = useState('');
   const [sessionId, setSessionId] = useState(null);
   const [collabDoc, setCollabDoc] = useState(null);
+  const [language, setLanguage] = useState("javascript");
+
+  // TODO: find a way to share the value of editor's language
 
   useEffect(() => {
     // TODO: fetch and set session id here
@@ -36,16 +34,18 @@ export default function CollabPage() {
         console.error(err);
       } else {
         if (!doc.type) {
-          doc.create({ content: '' });
+          doc.create({ content: '', language: 'javascript' });
         }
-        console.log("subscribe and set data", doc.data.content)
+        console.log("subscribe and set data");
         setContent(doc.data.content);
+        setLanguage(doc.data.language);
       }
     });
 
     doc.on('op', (op, source) => {
       if (source !== doc) {
         setContent(doc.data.content);
+        setLanguage(doc.data.language);
       }
     });
 
@@ -66,6 +66,12 @@ export default function CollabPage() {
     setContent(collabDoc.data.content);
   }
 
+  const handleLanguageSelect = (e) => {
+    const newLanguage = e.target.value;
+    collabDoc.submitOp([{ p: ['language'], oi: newLanguage }]);
+    setLanguage(collabDoc.data.language);
+  }
+
   // 4 main components: *question, *editor, program output, video chat
   // all components should be resizable
   // video window should be draggable
@@ -77,12 +83,7 @@ export default function CollabPage() {
         <Box sx={{ minWidth: 290, width: 750 }}>
           <DescriptionPanel />
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: 'lightblue', width: '100%', minWidth: 180 }}>
-          <Toolbar variant="dense" sx={{ width: '100%', minWidth: 180}}>
-            Choose language here
-          </Toolbar>
-          <Editor value={content} onChange={handleInputChange} />
-        </Box>
+        <EditorPanel value={content} onChange={handleInputChange} language={language} handleLanguageSelect={handleLanguageSelect} />
       </Box>
     </Box>
   );

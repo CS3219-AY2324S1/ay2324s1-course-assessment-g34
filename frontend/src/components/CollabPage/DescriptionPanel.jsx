@@ -25,10 +25,6 @@ export default function DescriptionPanel() {
       + "<p>test sada sadadadkpdakdpakdpakdpakdpokrsarraraaradpkkdsdsdsdsdsdsdsddsds adkapdkapd opaskd pakpd kspodaopko da</p>"
       + "<p>test sada sadadadkpdakdpakdpakdpakdpokrsarraraaradpkkdsdsdsdsdsdsdsddsds adkapdkapd opaskd pakpd kspodaopko da</p>"
       + "<p>test sada sadadadkpdakdpakdpakdpakdpokrsarraraaradpkkdsdsdsdsdsdsdsddsds adkapdkapd opaskd pakpd kspodaopko da</p>"
-      + "<p>test sada sadadadkpdakdpakdpakdpakdpokrsarraraaradpkkdsdsdsdsdsdsdsddsds adkapdkapd opaskd pakpd kspodaopko da</p>"
-      + "<p>test sada sadadadkpdakdpakdpakdpakdpokrsarraraaradpkkdsdsdsdsdsdsdsddsds adkapdkapd opaskd pakpd kspodaopko da</p>"
-      + "<p>test sada sadadadkpdakdpakdpakdpakdpokrsarraraaradpkkdsdsdsdsdsdsdsddsds adkapdkapd opaskd pakpd kspodaopko da</p>"
-
   }
 
   return (
@@ -37,7 +33,7 @@ export default function DescriptionPanel() {
         <Typography sx={{ fontWeight: 600, fontSize: 14, color: (theme) => theme.palette.primary.contrastText }}>
           Description
         </Typography>
-        <SolidButton variant="contained" color="secondary" sx={{ ml: 'auto', fontSize: 12, textTransform: 'none' }}>
+        <SolidButton variant="contained" color="secondary" size="small" sx={{ ml: 'auto', fontSize: 12, textTransform: 'none' }}>
           Next Question
         </SolidButton>
       </Toolbar>
@@ -51,9 +47,9 @@ export default function DescriptionPanel() {
         <Box sx={{
           fontSize: 14,
           wordBreak: 'break-word',
-          '-webkit-hyphens': 'auto',
-          '-moz-hyphens': 'auto',
-          '-ms-hyphens': 'auto',
+          WebkitHyphens: 'auto',
+          MozHyphens: 'auto',
+          msHyphens: 'auto',
           hyphens: 'auto',
         }}>
           <div className="ck-content" dangerouslySetInnerHTML={{ __html: question.description }} />
