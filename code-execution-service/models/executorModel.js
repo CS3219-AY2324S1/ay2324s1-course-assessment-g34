@@ -36,6 +36,24 @@ async function executeCodeInDocker(code, language) {
   return { output, exitCode: StatusCode };
 }
 
+function isSafeUserCode(userCode) {
+  // Regular expressions to match unsafe patterns
+  const unsafePatterns = [
+    /(require\(['"]fs['"]\))|(\bfs\.[a-zA-Z_]+\b)/, // Filesystem access
+    /(require\(['"]net['"]\))|(\bnet\.[a-zA-Z_]+\b)/, // Network access
+    /(process\.|(function\w+\s*\(.*\)\s*{)|\bexec\b)/, // Signals and syscalls
+  ];
+
+  for (const pattern of unsafePatterns) {
+    if (pattern.test(userCode)) {
+      return false; // Unsafe code found
+    }
+  }
+
+  return true; // Code is safe
+}
+
 module.exports = {
-  executeCodeInDocker,
+  executeCodeInDocker, 
+  isSafeUserCode
 };
