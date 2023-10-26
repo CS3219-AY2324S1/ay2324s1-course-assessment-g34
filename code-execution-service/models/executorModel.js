@@ -1,6 +1,7 @@
 // models/codeModel.js
 const { Docker } = require("node-docker-api");
-const containerTypes = require("../config/containerTypes");
+const containerTypes = require("../config/containerConfig");
+const secureProfiles = require("../config/containerConfig");
 
 async function executeCodeInDocker(code, language) {
   const docker = new Docker();
@@ -11,6 +12,7 @@ async function executeCodeInDocker(code, language) {
     Image: containerConfig.image,
     Cmd: [containerConfig.cmd, containerConfig.cmdFlag, code],
     Tty: true,
+    ...secureProfiles,
   });
 
   await container.start();
