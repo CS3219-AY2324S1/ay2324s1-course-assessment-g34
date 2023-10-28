@@ -1,13 +1,12 @@
-import { SessionEvent } from "./constants";
-import { setIsOnGoing, setIsQuestionLoading, setQuestionId } from "@/features/session/sessionSlice";
+import { setIsOnGoing, setIsQuestionLoading, setQuestionId } from '@/features/session/sessionSlice';
+import { SessionEvent } from './constants';
 
 export const handleMatchEvents = (socket, dispatch) => {
-  
+
 };
 
 export const handleSessionEvents = (socket, dispatch) => {
   socket.on(SessionEvent.ENDED, () => {
-    console.log("Other user ended session");
     dispatch(setIsOnGoing(false));
   });
 
@@ -23,4 +22,4 @@ export const handleSessionEvents = (socket, dispatch) => {
   socket.on(SessionEvent.ERROR, (data) => {
     console.error(data.error);
   });
-}
+};
