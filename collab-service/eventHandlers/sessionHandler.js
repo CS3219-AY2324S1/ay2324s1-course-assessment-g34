@@ -88,10 +88,14 @@ const handleDisconnect = async (io, socket) => {
 
   socket.rooms.forEach((roomId) => {
     const clientCount = io.sockets.adapter.rooms.get(roomId).size;
-    console.log(roomId);
-    if (roomId !== socket.id && clientCount === 1) {
+
+    if (roomId !== socket.id){
+      console.log(roomId);
       emitSessionEndedEvent(roomId);
       console.log("emitted session ended event to: ", roomId)
+    }
+    
+    if (roomId !== socket.id && clientCount === 1) {
       deleteDocument(roomId)
     }
   });

@@ -1,4 +1,4 @@
-import { selectMatchedUsername } from "@/features/match/matchSlice";
+import { selectMatchedUsername, selectSessionId } from "@/features/match/matchSlice";
 import { selectIsOngoing } from "@/features/session/sessionSlice";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Typography } from "@mui/material";
 import React, { forwardRef } from "react";
@@ -10,10 +10,11 @@ const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {.
 export default function LeaveSessionModal({ handleEndSession }) {
   const isOngoing = useSelector(selectIsOngoing);
   const matchedUser = useSelector(selectMatchedUsername);
+  const sessionId = useSelector(selectSessionId);
 
   return (
     <Dialog
-      open={!isOngoing}
+      open={!isOngoing && sessionId !== null}
       TransitionComponent={Transition}
       keepMounted
       fullWidth
