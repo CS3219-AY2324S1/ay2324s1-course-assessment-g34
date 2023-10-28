@@ -3,9 +3,13 @@ const MatchEvent = {
   FIND: 'find-match',
   FOUND: 'match-found',
   CANCEL: 'cancel-match',
-  CANCELLED: 'match-cancelled',
   TIMEOUT: 'match-timeout', // match not found
   DISCONNECT: 'disconnect'
 };
 
-module.exports = { MatchEvent };
+const SessionEvent = {
+  CREATE:'create-session',
+  ERROR: 'session-error'
+};
+
+module.exports = { MatchEvent, SessionEvent };

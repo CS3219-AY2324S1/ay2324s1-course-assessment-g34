@@ -2,7 +2,7 @@ import {
   ArrowDropDownRounded, ArrowRightRounded, EditRounded, LinkRounded,
 } from '@mui/icons-material';
 import {
-  Box, Chip, Collapse, IconButton, TableCell, TableRow, Tooltip,
+  Box, Collapse, IconButton, TableCell, TableRow, Tooltip,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
@@ -15,12 +15,6 @@ import ComponentGuard from '../ComponentGuard';
 import DeleteQuestionDialog from './DeleteQuestionDialog';
 import QuestionCategoryList from './QuestionCategoryList';
 import DifficultyChip from '../DifficultyChip';
-
-const difficultyToColorMap = {
-  Easy: 'success',
-  Medium: 'warning',
-  Hard: 'error',
-};
 
 export default function QuestionRow({
   question, setQuestions, setError, setSelectedQuestion, setIsEditModalOpen,

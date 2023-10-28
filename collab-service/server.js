@@ -1,23 +1,35 @@
 require("dotenv").config();
 const express = require('express');
 const http = require('http');
-const ShareDB = require('sharedb');
 const WebSocket = require('ws');
-const ShareDBMongo = require('sharedb-mongo');
-const WebSocketJSONStream = require('websocket-json-stream');
 
-const mongodbPort = 27017;
 const sharedbPort = 8080;
-const dbURL = process.env.DATABASE_URL || `mongodb://localhost:${mongodbPort}/collab-docs`;
-const db = new ShareDB({ db: ShareDBMongo(dbURL) });
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server: server });
 
-wss.on('connection', (ws, req) => {
-    const stream = new WebSocketJSONStream(ws);
-    db.listen(stream);
+const shareDBSocketServer = new WebSocket.Server({ noServer: true });
+
+server.on('upgrade', (req, socket, head) => {
+    console.log("req url: ", req.url)
+    if (!req.url.startsWith('/api/collab-service/socket.io')) {
+        console.log("upgrade to shareDBSocketServer");
+        shareDBSocketServer.handleUpgrade(req, socket, head, (ws) => {
+            shareDBSocketServer.emit('connection', ws, req);
+        })
+    }
 });
+
+const { initializeShareDbStream } = require("./utils/dbUtils");
+const { connect } = require("./utils/socket");
+const sessionHandler = require("./eventHandlers/sessionHandler");
+
+const onShareDbConnection = (ws, req) => {
+    initializeShareDbStream(ws);
+};
+
+shareDBSocketServer.on('connection', onShareDbConnection);
+
+connect(server, sessionHandler);
 
 server.listen(sharedbPort, () => {
     console.log(`Server started on http://localhost:${sharedbPort}`);

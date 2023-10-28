@@ -1,7 +1,7 @@
 import {
   Box, IconButton, MenuItem, Paper, Select, Skeleton, Toolbar,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 import { ExitToApp } from '@mui/icons-material';
 import SolidButton from '../SolidButton';
@@ -20,7 +20,7 @@ const languageOptions = [
 ];
 
 export default function EditorPanel({
-  value, onChange, language, handleLanguageSelect,
+  value, onChange, language, handleLanguageSelect, openConfirmationModal
 }) {
   return (
     <Box
@@ -55,10 +55,11 @@ export default function EditorPanel({
           sx={{
             display: { xs: 'none', sm: 'block' }, ml: 'auto', fontSize: 12, fontWeight: 600, textTransform: 'none',
           }}
+          onClick={openConfirmationModal}
         >
           End Session
         </SolidButton>
-        <IconButton color="error" sx={{ display: { sm: 'none' }, ml: 'auto' }}>
+        <IconButton color="error" sx={{ display: { sm: 'none' }, ml: 'auto' }} onClick={openConfirmationModal}>
           <ExitToApp />
         </IconButton>
       </Toolbar>

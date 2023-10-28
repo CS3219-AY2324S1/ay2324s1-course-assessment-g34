@@ -19,20 +19,12 @@ router.get("/questions", async (req, res) => {
     }
 });
 
-//Get by ID Method
-router.get('/questions/:id', async (req, res) => {
-    try{
-        const data = await Question.findById(req.params.id);
-        res.json(data)
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
+// Need to put these routes before `/questions/:id or "random" and "filter" will
+// be counted as question ids and throw an ObjectId error
 
 //Get random question by difficulty and category
-// http://localhost:3000/api/random?difficulty=<difficulty>&categories=<categories>
-router.get('/random', async (req, res) => {
+// http://localhost:5000/api/questions-service/questions/random?difficulty=<difficulty>&categories=<categories>
+router.get('/questions/random', async (req, res) => {
     const { difficulty, categories } = req.query;
     
     // Filter questions based on difficulty and category
@@ -63,12 +55,12 @@ router.get('/random', async (req, res) => {
 
       res.json(randomQuestion);
     } catch (error) {
-        res.status(500).json({ error: "Error fetching random question" });
+      es.status(500).json({ error: "Error fetching random question" });
     }
 });
 
 // filter by choice
-router.get("/filter", async (req, res) => {
+router.get("/questions/filter", async (req, res) => {
   const { categories, difficulty } = req.query;
 
   // can be empty for any
@@ -97,6 +89,17 @@ router.get("/filter", async (req, res) => {
     res.status(500).json({ error: "Error fetching random question" });
   }
 });
+
+//Get by ID Method
+router.get('/questions/:id', async (req, res) => {
+    try {
+        const data = await Question.findById(req.params.id);
+        res.json(data)
+    } catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
 
 //Private route accessible by only the admins
 
