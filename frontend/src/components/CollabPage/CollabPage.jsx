@@ -7,14 +7,9 @@ import QuestionPanel from '@/components/CollabPage/QuestionPanel';
 import EditorPanel from '@/components/CollabPage/EditorPanel';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  resetMatchedUser, resetSession, selectMatchedUsername, selectSessionId, setMatchedUser,
-  setSession,
-} from '@/features/match/matchSlice';
+import { resetMatchedUser, resetSession, selectMatchedUsername, selectSessionId, setMatchedUser, setSession } from '@/features/match/matchSlice';
 import { useRouter } from 'next/router';
-import {
-  selectDifficulty, selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId,
-} from '@/features/session/sessionSlice';
+import { selectDifficulty, selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId } from '@/features/session/sessionSlice';
 import { handleSessionEvents } from '@/utils/eventHandlers';
 import { fetchSessionQuestion, joinSession } from '@/utils/eventEmitters';
 import LeaveSessionModal from '@/components/CollabPage/LeaveSessionModal';
@@ -28,18 +23,18 @@ const connectShareDBSocket = () => {
 
 const connectSessionSocket = () => {
   const socket = io(COLLAB_SVC_URI, {
-    path: '/api/collab-service/socket.io',
+    path: "/api/collab-service/socket.io" 
   });
 
   return socket;
-};
+}
 
 export default function CollabPage() {
   const router = useRouter();
   const sessionId = useSelector(selectSessionId);
   const matchedUser = useSelector(selectMatchedUsername);
   const difficulty = useSelector(selectDifficulty);
-  const isOnGoing = useSelector(selectIsOngoing);
+  const isOnGoing = useSelector(selectIsOngoing); 
   const dispatch = useDispatch();
   const [content, setContent] = useState('');
   const [collabDoc, setCollabDoc] = useState(null);
@@ -54,8 +49,8 @@ export default function CollabPage() {
     dispatch(resetMatchedUser());
     dispatch(resetSession());
     dispatch(setQuestionId(null));
-    router.push('/');
-  };
+    router.push("/");
+  }
 
   const openSnackbar = () => {
     setIsSnackbarOpen(true);
@@ -63,14 +58,18 @@ export default function CollabPage() {
 
   const closeSnackbar = () => {
     setIsSnackbarOpen(false);
-  };
+  }
 
+  // TODO: redirect/show 404 not found when no session id is present
   useEffect(() => {
+    console.log("session id: ", sessionId)
+  
     if (!sessionId) {
-      setTimeout(() => router.push('/'), 1000);
+      setTimeout(() => router.push("/"), 1000);
     } else {
       dispatch(setSession(sessionId));
     }
+
   }, [sessionId]);
 
   useEffect(() => {
@@ -81,6 +80,7 @@ export default function CollabPage() {
 
   useEffect(() => {
     if (!sessionSocket) {
+      console.log("connecting to collab socket...");
       const socket = connectSessionSocket();
       setSessionSocket(socket);
       handleSessionEvents(socket, dispatch);
@@ -98,28 +98,33 @@ export default function CollabPage() {
     dispatch(setIsOnGoing(isOnGoing));
   }, [isOnGoing]);
 
-  useEffect(() => () => {
-    dispatch(setIsOnGoing(false));
-    dispatch(resetMatchedUser());
-    dispatch(resetSession());
-    dispatch(setDifficulty(''));
-    dispatch(setQuestionId(null));
+  useEffect(() => {
+    return () => {
+      dispatch(setIsOnGoing(false));
+      dispatch(resetMatchedUser());
+      dispatch(resetSession());
+      dispatch(setDifficulty(""));
+      dispatch(setQuestionId(null));
+    }
   }, []);
 
   useEffect(() => {
     if (sessionId) {
       const doc = connectShareDBSocket().get('collab-docs', sessionId);
+      console.log(`connect to doc with id ${sessionId}`);
       setCollabDoc(doc);
 
       doc.subscribe((err) => {
         if (err) {
-          console.log('Error on subscribe');
+          console.log("Error on subscribe")
           console.error(err);
         } else {
-          console.log('doc type: ', doc.type);
+          console.log("doc type: ", doc.type);
           if (!doc.type) {
             doc.create({ content: '', language: 'javascript' });
+            console.log("DOC CREATED");
           }
+          console.log('subscribe and set data');
           setContent(doc.data.content);
           setLanguage(doc.data.language);
         }
@@ -142,7 +147,7 @@ export default function CollabPage() {
         });
       };
     }
-  }, [sessionId]);
+  }, []);
 
   const handleInputChange = (value, e) => {
     const newContent = value;
@@ -158,7 +163,7 @@ export default function CollabPage() {
 
   const handleFetchQuestion = () => {
     fetchSessionQuestion(sessionSocket, sessionId, difficulty);
-  };
+  }
 
   // 4 main components: *question, *editor, program output, video chat
   // all components should be resizable
@@ -188,17 +193,13 @@ export default function CollabPage() {
         />
       </Box>
       <LeaveSessionModal handleEndSession={handleEndSession} />
-      <ConfirmEndModal
-        isOpen={isConfirmationModalOpen}
-        setIsOpen={setIsConfirmationModalOpen}
-        handleEndSession={handleEndSession}
-      />
+      <ConfirmEndModal isOpen={isConfirmationModalOpen} setIsOpen={setIsConfirmationModalOpen} handleEndSession={handleEndSession} />
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={isSnackbarOpen}
         onClose={closeSnackbar}
         message="No questions found."
-        key="topcenter"
+        key={'top' + 'center'}
       />
     </Box>
   );

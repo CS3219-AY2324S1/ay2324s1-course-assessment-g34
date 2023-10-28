@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const matchSlice = createSlice({
-  name: 'match',
+  name: "match",
   initialState: {
-    sessionId: null,
+    sessionId: null
   },
   reducers: {
     setMatchedUser: (state, action) => {
@@ -17,13 +17,11 @@ export const matchSlice = createSlice({
     },
     resetSession: (state) => {
       state.sessionId = null;
-    },
-  },
+    }
+  }
 });
 
-export const {
-  setMatchedUser, resetMatchedUser, setSession, resetSession,
-} = matchSlice.actions;
+export const { setMatchedUser, resetMatchedUser, setSession, resetSession } = matchSlice.actions;
 export default matchSlice.reducer;
 
 export const selectSessionId = (state) => state.match.sessionId;

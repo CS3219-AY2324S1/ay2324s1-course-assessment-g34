@@ -1,15 +1,13 @@
-import {
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide,
-} from '@mui/material';
-import React, { forwardRef } from 'react';
-import SolidButton from '../SolidButton';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from "@mui/material";
+import React, { forwardRef } from "react";
+import SolidButton from "../SolidButton";
 
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession }) {
   const handleClose = () => {
     setIsOpen(false);
-  };
+  }
 
   return (
     <Dialog
@@ -24,7 +22,7 @@ export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession })
       <DialogTitle>End Session</DialogTitle>
       <DialogContent dividers>
         <DialogContentText>
-          Are you sure you want to end this session?
+          Are you sure you want to end this session? 
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>

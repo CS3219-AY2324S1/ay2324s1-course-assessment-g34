@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const sessionSlice = createSlice({
-  name: 'session',
+  name: "session",
   initialState: {
     questionId: null,
     isQuestionLoading: true,
-    difficulty: '',
+    difficulty: "",
     isOngoing: false,
   },
   reducers: {
@@ -20,13 +20,11 @@ export const sessionSlice = createSlice({
     },
     setIsOnGoing: (state, action) => {
       state.isOngoing = action.payload;
-    },
-  },
+    }
+  }
 });
 
-export const {
-  setQuestionId, setIsQuestionLoading, setDifficulty, setIsOnGoing,
-} = sessionSlice.actions;
+export const { setQuestionId, setIsQuestionLoading, setDifficulty, setIsOnGoing } = sessionSlice.actions;
 export default sessionSlice.reducer;
 
 export const selectQuestionId = (state) => state.session.questionId;

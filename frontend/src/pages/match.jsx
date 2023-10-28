@@ -15,13 +15,9 @@ import {
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectMatchedUsername, selectSessionId, setMatchedUser, setSession,
-} from '@/features/match/matchSlice';
+import { selectMatchedUsername, selectSessionId, setMatchedUser, setSession } from '@/features/match/matchSlice';
 import { useRouter } from 'next/router';
-import {
-  selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId,
-} from '@/features/session/sessionSlice';
+import { selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId } from '@/features/session/sessionSlice';
 
 const proficiencies = [
   {
@@ -55,22 +51,25 @@ export default function MatchPage() {
   const { user } = useAuthContext();
 
   const connect = () => {
-    const socket = io(MATCHING_SVC_URI, {
-      path: '/api/matching-service/socket.io',
+    const socket = io(MATCHING_SVC_URI, { 
+      path: "/api/matching-service/socket.io" 
     });
+
+    console.log(socket);
+    console.log(socket.connected);
 
     socket.on(MatchEvent.TIMEOUT, () => {
       console.log(`User ${user.username} has timed out from matching`);
       socket.disconnect();
       setMatchSocket(null);
     });
-
+    
     socket.on(MatchEvent.FOUND, (msg) => {
       const match = getUsername(msg);
       setIsFinding(false);
       dispatch(setMatchedUser(match));
       setIsMatchFound(true);
-      console.log('session id: ', getSessionId(msg));
+      console.log("session id: ", getSessionId(msg));
       dispatch(setSession(getSessionId(msg)));
       dispatch(setDifficulty(matchCriteria.difficulty));
       dispatch(setIsOnGoing(true));
@@ -118,8 +117,8 @@ export default function MatchPage() {
 
   useEffect(() => {
     if (sessionId && isCollabOngoing) {
-      console.log('Redirecting to collab page, Session id: ', sessionId);
-      setTimeout(() => router.push('/collab'), 2000);
+      console.log("Redirecting to collab page, Session id: ", sessionId);
+      setTimeout(() => router.push("/collab"), 2000);
     }
   }, [sessionId, isCollabOngoing]);
 
