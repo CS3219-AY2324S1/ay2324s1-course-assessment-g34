@@ -1,11 +1,13 @@
-import { selectMatchedUsername, selectSessionId } from "@/features/match/matchSlice";
-import { selectIsOngoing } from "@/features/session/sessionSlice";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Typography } from "@mui/material";
-import React, { forwardRef } from "react";
-import { useSelector } from "react-redux";
-import SolidButton from "../SolidButton";
+import { selectMatchedUsername, selectSessionId } from '@/features/match/matchSlice';
+import { selectIsOngoing } from '@/features/session/sessionSlice';
+import {
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Typography,
+} from '@mui/material';
+import React, { forwardRef } from 'react';
+import { useSelector } from 'react-redux';
+import SolidButton from '../SolidButton';
 
-const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props}/>);
+const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function LeaveSessionModal({ handleEndSession }) {
   const isOngoing = useSelector(selectIsOngoing);
@@ -25,11 +27,13 @@ export default function LeaveSessionModal({ handleEndSession }) {
       <DialogContent dividers>
         <DialogContentText>
           <Typography component="span" color="secondary" sx={{ fontWeight: 600 }}>{matchedUser}</Typography>
-          {' '} has left the room.
+          {' '}
+          {' '}
+          has left the room.
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
-        <SolidButton 
+        <SolidButton
           onClick={handleEndSession}
           variant="contained"
           size="medium"
@@ -41,5 +45,5 @@ export default function LeaveSessionModal({ handleEndSession }) {
         </SolidButton>
       </DialogActions>
     </Dialog>
-  )
+  );
 }

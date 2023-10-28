@@ -3,21 +3,23 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ExpandMore } from '@mui/icons-material';
-import SolidButton from '../SolidButton';
-import DifficultyChip from '../DifficultyChip';
-import QuestionCategoryList from '../QuestionPage/QuestionCategoryList';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsQuestionLoading, selectQuestionId, setIsQuestionLoading, setQuestionId } from '@/features/session/sessionSlice';
+import {
+  selectIsQuestionLoading, selectQuestionId, setIsQuestionLoading, setQuestionId,
+} from '@/features/session/sessionSlice';
 import axios from 'axios';
 import { GET_QUESTION_BY_ID_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
+import QuestionCategoryList from '../QuestionPage/QuestionCategoryList';
+import DifficultyChip from '../DifficultyChip';
+import SolidButton from '../SolidButton';
 
 export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
   const { getAccessToken } = useAuthContext();
   const questionId = useSelector(selectQuestionId);
   const [question, setQuestion] = useState(null);
 
-  const isQuestionLoading = useSelector(selectIsQuestionLoading)
+  const isQuestionLoading = useSelector(selectIsQuestionLoading);
   const dispatch = useDispatch();
 
   const getQuestion = async () => {
@@ -26,8 +28,8 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       };
 
       const response = await axios.get(`${GET_QUESTION_BY_ID_SVC_URI}/${questionId}`, config);
@@ -42,7 +44,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
     } finally {
       dispatch(setIsQuestionLoading(false));
     }
-  }
+  };
 
   useEffect(() => {
     if (questionId) {
@@ -68,16 +70,16 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
         >
           Description
         </Typography>
-          <SolidButton
-            variant="contained"
-            color="secondary"
-            size="small"
-            sx={{ ml: 'auto', fontSize: 12, textTransform: 'none' }}
-            onClick={fetchSessionQuestion}
-            disabled={isQuestionLoading}
-          >
-            Next Question
-          </SolidButton>
+        <SolidButton
+          variant="contained"
+          color="secondary"
+          size="small"
+          sx={{ ml: 'auto', fontSize: 12, textTransform: 'none' }}
+          onClick={fetchSessionQuestion}
+          disabled={isQuestionLoading}
+        >
+          Next Question
+        </SolidButton>
       </Toolbar>
       <Stack sx={{
         gap: 1, py: 1, px: 2, overflowY: 'scroll',
@@ -86,33 +88,30 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
         {isQuestionLoading
           ? <Skeleton variant="text" sx={{ fontSize: 20 }} />
           : question && (
-              <Typography sx={{ fontWeight: 600, fontSize: 20 }}>
-                {question.title}
-              </Typography>
-          )
-        }
+          <Typography sx={{ fontWeight: 600, fontSize: 20 }}>
+            {question.title}
+          </Typography>
+          )}
         <Box>
           {isQuestionLoading
             ? <Skeleton variant="rectangular" width={90} height={40} />
-            : question && <DifficultyChip difficulty={question.difficulty} />
-          }
+            : question && <DifficultyChip difficulty={question.difficulty} />}
         </Box>
         {isQuestionLoading
           ? <Skeleton variant="rectangular" width="100%" height={300} />
           : question && (
-              <Box sx={{
-                fontSize: 14,
-                wordBreak: 'break-word',
-                WebkitHyphens: 'auto',
-                MozHyphens: 'auto',
-                msHyphens: 'auto',
-                hyphens: 'auto',
-              }}
-              >
-                <div className="ck-content" dangerouslySetInnerHTML={{ __html: question.description }} />
-              </Box>
-          )
-        }
+          <Box sx={{
+            fontSize: 14,
+            wordBreak: 'break-word',
+            WebkitHyphens: 'auto',
+            MozHyphens: 'auto',
+            msHyphens: 'auto',
+            hyphens: 'auto',
+          }}
+          >
+            <div className="ck-content" dangerouslySetInnerHTML={{ __html: question.description }} />
+          </Box>
+          )}
         <Accordion
           disableGutters
           elevation={0}
@@ -133,8 +132,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
           <AccordionDetails sx={{ p: 0 }}>
             {isQuestionLoading
               ? <Skeleton variant="rectangular" width="100%" height={180} />
-              : question && <QuestionCategoryList categories={question.categories} />
-            }
+              : question && <QuestionCategoryList categories={question.categories} />}
           </AccordionDetails>
         </Accordion>
       </Stack>

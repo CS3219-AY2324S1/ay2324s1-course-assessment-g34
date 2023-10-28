@@ -20,7 +20,7 @@ const languageOptions = [
 ];
 
 export default function EditorPanel({
-  value, onChange, language, handleLanguageSelect, openConfirmationModal
+  value, onChange, language, handleLanguageSelect, openConfirmationModal,
 }) {
   return (
     <Box
