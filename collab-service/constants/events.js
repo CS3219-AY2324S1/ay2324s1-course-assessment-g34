@@ -1,5 +1,5 @@
 const SessionEvent = {
-  CREATE:'create-session',
+  CREATE: 'create-session',
   JOIN: 'join-session',
   ERROR: 'session-error',
   FETCH_QUESTION: 'fetch_question-session',

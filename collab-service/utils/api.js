@@ -4,25 +4,29 @@ const { emitSessionErrorEvent } = require('./eventEmitters');
 
 const getRandomQuestionId = async (difficulty, matchSocketId, matchData) => {
   const config = {
-    params: { difficulty }
+    params: { difficulty },
   };
+
+  let id;
 
   try {
     const response = await axios.get(GET_RANDOM_QUESTION_SVC_URI, config);
-    return response.data._id;
+    /* eslint-disable no-underscore-dangle */
+    id = response.data._id;
   } catch (err) {
-    if (err.response && err.response.status == 404) {
+    if (err.response && err.response.status === 404) {
       const message = `No questions found with the difficulty: ${difficulty}`;
       console.error(message);
       emitSessionErrorEvent(matchSocketId, matchData, message);
     } else {
       console.error(err);
-      const message = "Something went wrong when retrieving the question";
+      const message = 'Something went wrong when retrieving the question';
       emitSessionErrorEvent(matchSocketId, matchData, message);
     }
   }
-}
+  return id;
+};
 
 module.exports = {
-  getRandomQuestionId
+  getRandomQuestionId,
 };

@@ -71,13 +71,13 @@ export default function CollabPage() {
     } else {
       dispatch(setSession(sessionId));
     }
-  }, [sessionId]);
+  }, [sessionId, dispatch, router]);
 
   useEffect(() => {
     if (matchedUser) {
       dispatch(setMatchedUser(matchedUser));
     }
-  }, [matchedUser]);
+  }, [matchedUser, dispatch]);
 
   useEffect(() => {
     if (!sessionSocket) {

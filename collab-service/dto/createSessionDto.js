@@ -1,7 +1,10 @@
 class CreateSessionDto {
   user1;
+
   user2;
+
   sessionId;
+
   questionId;
 
   constructor(user1, user2, sessionId, questionId) {
