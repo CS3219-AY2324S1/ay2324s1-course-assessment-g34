@@ -6,9 +6,11 @@ const controller = require("../controllers/questionController");
 
 // Public routes
 router.get("/questions", controller.getAllQuestions);
+// // Need to put these routes before `/questions/:id or "random" and "filter" will
+// be counted as question ids and throw an ObjectId error
+router.get("/questions/random", controller.getRandomQuestion);
+router.get("/questions/filter", controller.filterQuestions);
 router.get("/questions/:id", controller.getQuestionById);
-router.get("/random", controller.getRandomQuestion);
-router.get("/filter", controller.filterQuestions);
 
 // Private routes
 router.post("/questions", isAdmin, controller.createQuestion);

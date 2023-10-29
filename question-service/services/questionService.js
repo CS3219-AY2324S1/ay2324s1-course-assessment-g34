@@ -9,7 +9,7 @@ exports.getQuestionByIdService = async (id) => {
   return Question.findById(id);
 };
 
-exports.filterQuestionsService = async (categories, difficulty) => {
+exports.filterQuestionsService = async (difficulty, categories) => {
   const filter = {};
   if (difficulty) {
     filter.difficulty = difficulty;

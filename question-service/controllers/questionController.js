@@ -31,7 +31,7 @@ exports.getRandomQuestion = async (req, res) => {
 
     if (filteredQuestions.length === 0) {
       return res
-        .status(200)
+        .status(404)
         .json({ message: "No questions found with the specified criteria" });
     }
     // Select a random question from the filtered list
@@ -43,12 +43,12 @@ exports.getRandomQuestion = async (req, res) => {
 };
 
 exports.filterQuestions = async (req, res) => {
-  const { categories, difficulty } = req.query;
+  const { difficulty, categories } = req.query;
 
   try {
     const filteredQuestions = await questionService.filterQuestionsService(
-      categories,
-      difficulty
+      difficulty,
+      categories
     );
 
     if (filteredQuestions.length === 0) {
