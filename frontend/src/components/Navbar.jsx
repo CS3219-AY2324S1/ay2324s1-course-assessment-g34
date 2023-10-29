@@ -72,42 +72,42 @@ export default function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Logo display={{ xs: 'none', md: 'flex' }} />
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]}>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{ display: { xs: 'block', md: 'none' } }}
+          <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
               >
-                {pages.map((page) => (
-                  <MenuItem key={page.label} onClick={handleCloseNavMenu}>
-                    <Typography sx={{ textAlign: 'center' }}>
-                      <Link href={page.path}>
-                        {page.label}
-                      </Link>
-                    </Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </ComponentGuard>
-          </Box>
+                <MenuIcon />
+              </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{ display: { xs: 'block', md: 'none' } }}
+                >
+                  {pages.map((page) => (
+                    <MenuItem key={page.label} onClick={handleCloseNavMenu}>
+                      <Typography sx={{ textAlign: 'center' }}>
+                        <Link href={page.path}>
+                          {page.label}
+                        </Link>
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+            </Box>
+          </ComponentGuard>
           <Logo display={{ xs: 'flex', md: 'none' }} flexGrow={1} />
           <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]}>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
