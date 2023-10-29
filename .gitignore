@@ -8,3 +8,5 @@ node_modules
 
 .pgdata
 .DS_Store
+
+deployment
