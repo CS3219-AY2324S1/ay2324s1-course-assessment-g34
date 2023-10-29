@@ -10,6 +10,7 @@ import { Role } from '@/utils/constants';
 import Logo from './Logo';
 import ComponentGuard from './ComponentGuard';
 import SolidButton from './SolidButton';
+import { stringAvatar } from '@/utils/utils';
 
 const pages = [
   {
@@ -47,11 +48,9 @@ function LoadingPlaceholder() {
 }
 
 export default function Navbar() {
-  // temporary avatar placeholder; to change later
-  const [image, setImage] = useState('http://localhost:3000/images/user-avatar.png');
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { logout } = useAuthContext();
+  const { logout, user } = useAuthContext();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -133,7 +132,7 @@ export default function Navbar() {
             >
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="User Avatar" src={image} />
+                  <Avatar {...stringAvatar(user)}></Avatar>
                 </IconButton>
               </Tooltip>
               <Menu

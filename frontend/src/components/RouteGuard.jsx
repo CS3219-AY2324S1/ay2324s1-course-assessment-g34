@@ -31,7 +31,7 @@ import { PropTypes } from 'prop-types';
  * export default MyProtectedPage;
  */
 export default function RouteGuard({ children, allowedRoles }) {
-  const path = useRouter().asPath;
+  const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const {
     user, isAuthenticated, isLoading, setRedirect,
@@ -45,12 +45,15 @@ export default function RouteGuard({ children, allowedRoles }) {
       }
 
       if (!isAuthenticated) {
-        setRedirect(path);
+        setRedirect(router.asPath);
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
       }
 
       setIsAuthorized(false);
     }
-  }, [isLoading, isAuthenticated, user, path, allowedRoles, setRedirect]);
+  }, [isLoading, isAuthenticated, user, router, allowedRoles, setRedirect]);
 
   if (isLoading) {
     return (
