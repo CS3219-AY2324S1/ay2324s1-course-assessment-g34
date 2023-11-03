@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Skeleton, Toolbar, Tooltip,
   Typography,
@@ -78,6 +78,30 @@ export default function Navbar() {
     setAnchorElUser(null);
   };
 
+  const fetchUserDetails = useCallback(async () => {
+    try {
+      const token = await getAccessToken();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(`${USER_SVC_URI}/${user.username}`, config);
+      /* eslint-disabled camelcase */
+      setDisplayName(response.data.profile.displayed_name);
+    } catch (err) {
+      logout();
+    }
+  }, [getAccessToken, logout, user]);
+
+  useEffect(() => {
+    if (user && !displayName) {
+      fetchUserDetails();
+    }
+  }, [user, displayName, fetchUserDetails]);
+
   return (
     <AppBar position="static" sx={{ minHeight: NAVBAR_HEIGHT_PX }}>
       <Container maxWidth="xl">
@@ -143,10 +167,10 @@ export default function Navbar() {
             >
               <Tooltip title="Open user menu">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {user
+                  {displayName
                     ? (
-                      <Avatar sx={{ bgcolor: stringToColor(user.username) }}>
-                        {stringToAvatar(user.username)}
+                      <Avatar sx={{ bgcolor: stringToColor(displayName) }}>
+                        {stringToAvatar(displayName)}
                       </Avatar>
                     )
                     : <Avatar alt="Avatar placeholder" src="http://localhost:3000/images/user-avatar.png" />}

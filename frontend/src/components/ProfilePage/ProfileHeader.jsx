@@ -9,10 +9,10 @@ export default function ProfileHeader({ username, displayName }) {
   return (
     <Box>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'center' }}>
-        { username
+        { username && displayName
           ? (
-            <Avatar sx={{ bgcolor: stringToColor(username), width: 80, height: 80 }}>
-              {stringToAvatar(username)}
+            <Avatar sx={{ bgcolor: stringToColor(displayName), width: 80, height: 80 }}>
+              {stringToAvatar(displayName)}
             </Avatar>
           )
           : <Avatar alt="Avatar placeholder" src="http://localhost:3000/images/user-avatar.png" />}
@@ -44,6 +44,6 @@ export default function ProfileHeader({ username, displayName }) {
 }
 
 ProfileHeader.propTypes = {
-  username: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
+  username: PropTypes.string,
+  displayName: PropTypes.string,
 };

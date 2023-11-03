@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import { useAuthContext } from '@/contexts/AuthContext';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { USER_SVC_URI } from '@/config/uris';
 import { validateDisplayName } from '@/utils/validation';
@@ -43,7 +43,7 @@ export default function ProfilePage() {
     setEditError(null);
   };
 
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = useCallback(async () => {
     try {
       const token = await getAccessToken();
       const config = {
@@ -76,7 +76,7 @@ export default function ProfilePage() {
         openSnackbar();
       }
     }
-  };
+  }, [getAccessToken, logout, path, setRedirect, user.username]);
 
   const handleDisplayNameChange = (e) => {
     const { value } = e.target;
@@ -139,7 +139,7 @@ export default function ProfilePage() {
   useEffect(() => {
     fetchUserDetails();
     setIsLoading(false);
-  }, []);
+  }, [fetchUserDetails]);
 
   if (isLoading) {
     return <LoadingPage />;

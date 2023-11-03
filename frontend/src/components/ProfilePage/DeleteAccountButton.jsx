@@ -64,6 +64,8 @@ export default function DeleteAccountButton({
         setSnackbarColor('error');
         openSnackbar();
       }
+    } finally {
+      closeModal();
     }
   };
 

@@ -66,7 +66,7 @@ export default function RouteGuard({ children, allowedRoles }) {
 
   if (!isAuthenticated) {
     return (
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         Please&nbsp;
         <Typography
           component="span"

@@ -1,7 +1,7 @@
 import {
   Accordion, AccordionDetails, AccordionSummary, Box, Paper, Skeleton, Stack, Toolbar, Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ExpandMore } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -23,7 +23,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
   const isQuestionLoading = useSelector(selectIsQuestionLoading);
   const dispatch = useDispatch();
 
-  const getQuestion = async () => {
+  const getQuestion = useCallback(async () => {
     try {
       const token = await getAccessToken();
 
@@ -45,14 +45,14 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
     } finally {
       dispatch(setIsQuestionLoading(false));
     }
-  };
+  }, [dispatch, getAccessToken, openSnackbar, questionId]);
 
   useEffect(() => {
     if (questionId) {
       dispatch(setQuestionId(questionId));
       getQuestion();
     }
-  }, [questionId]);
+  }, [questionId, dispatch, getQuestion]);
 
   return (
     <Box

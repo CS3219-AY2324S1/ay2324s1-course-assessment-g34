@@ -82,7 +82,7 @@ export default function useAuth() {
     const refreshToken = getRefreshToken();
     let newAccessToken;
     if (!refreshToken) {
-      return;
+      return null;
     }
 
     const body = { refresh: refreshToken };
