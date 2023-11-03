@@ -114,10 +114,36 @@ export const validatePassword = (password) => {
 export const validateUsername = (username) => {
   let errorMessage = null;
 
+  const isShorterOrEqualToMaxLength = username.length <= 30;
   const containsWhiteSpaces = /\s/.test(username);
 
   if (!username) {
     errorMessage = 'Username cannot be empty.';
+  } else if (isShorterOrEqualToMaxLength) {
+    errorMessage = 'Username must not exceed 30 characters.'
+  } else if (containsWhiteSpaces) {
+    errorMessage = 'Username must not contain white spaces.';
+  }
+
+  return errorMessage;
+};
+
+/**
+ * Validates a displayed name input.
+ *
+ * @param {string} displayName - The displayed name to be validated.
+ * @returns {string|null} An error message if validation fails, or null if validation passes.
+ */
+export const validateDisplayName = (displayName) => {
+  let errorMessage = null;
+
+  const isShorterOrEqualToMaxLength = displayName.length <= 30;
+  const containsWhiteSpaces = /\s/.test(displayName);
+
+  if (!displayName) {
+    errorMessage = 'Username cannot be empty.';
+  } else if (isShorterOrEqualToMaxLength) {
+    errorMessage = 'Username must not exceed 30 characters.'
   } else if (containsWhiteSpaces) {
     errorMessage = 'Username must not contain white spaces.';
   }

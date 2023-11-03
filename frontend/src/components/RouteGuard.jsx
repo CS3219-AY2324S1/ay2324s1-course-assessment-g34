@@ -47,13 +47,14 @@ export default function RouteGuard({ children, allowedRoles }) {
       if (!isAuthenticated) {
         setRedirect(router.asPath);
         setTimeout(() => {
-          router.push("/login");
+          router.push('/login');
         }, 3000);
       }
 
       setIsAuthorized(false);
     }
-  }, [isLoading, isAuthenticated, user, router, allowedRoles, setRedirect]);
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, [isLoading, isAuthenticated, user, allowedRoles, setRedirect]);
 
   if (isLoading) {
     return (

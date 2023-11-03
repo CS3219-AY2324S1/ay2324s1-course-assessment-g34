@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { useAuthContext } from '@/contexts/AuthContext';
 import axios from 'axios';
-import { UPDATE_QUESTION_SVC_URI } from '@/config/uris';
+import { QUESTION_SVC_URI } from '@/config/uris';
 import { useRouter } from 'next/router';
 import QuestionForm from './QuestionForm';
 
@@ -27,7 +27,7 @@ export default function EditQuestion({
         },
       };
 
-      const response = await axios.patch(`${UPDATE_QUESTION_SVC_URI}/${question._id}`, newQuestionData, config);
+      const response = await axios.patch(`${QUESTION_SVC_URI}/${question._id}`, newQuestionData, config);
 
       // update state in client
       updateQuestions(response.data);
@@ -42,7 +42,6 @@ export default function EditQuestion({
         router.push('/login');
       } else if (err.response && err.response.status === 403) {
         // valid token but not admin
-        console.error('Forbidden: ', err);
         setError('You do not have enough permissions to perform this action.');
       } else {
         console.error('An error occurred: ', err);

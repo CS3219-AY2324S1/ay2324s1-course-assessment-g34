@@ -1,5 +1,5 @@
 import SolidButton from '@/components/SolidButton';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box, Container, Grid, Paper, TextField, Typography,
 } from '@mui/material';
@@ -144,13 +144,12 @@ export default function LoginPage() {
                   error={passwordError != null}
                   helperText={passwordError}
                   onChange={() => setPasswordError(null)}
-                  autoComplete="password"
+                  autoComplete="current-password"
                 />
               </Grid>
               <Grid item xs={12}>
                 <SolidButton
                   fullWidth
-                  variant="contained"
                   size="medium"
                   color="secondary"
                   type="submit"
@@ -184,7 +183,7 @@ export default function LoginPage() {
             color="secondary"
             sx={{ fontWeight: 600, ':hover': { textDecoration: 'underline' } }}
           >
-            <Link href="/signup">Sign up</Link>
+            <Link href="/signup" onClick={resetAllErrors}>Sign up</Link>
           </Typography>
         </Box>
       </Box>

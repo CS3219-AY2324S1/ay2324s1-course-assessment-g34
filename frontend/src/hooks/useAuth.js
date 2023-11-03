@@ -61,9 +61,8 @@ export default function useAuth() {
       addRefreshToken(refresh);
       router.push(redirect);
     } catch (err) {
-      if (err.response && err.response.status === 401) {
-        console.error('Unauthorized: ', err.response.data);
-        setLoginError('The username or password you entered is incorrect');
+      if (err.response && (err.response.status === 401 || err.response.status === 404)) {
+        setLoginError('The username or password you entered is incorrect.');
       } else {
         console.error('An error occurred: ', err);
         setLoginError('An error occurred. Please try again later.');
@@ -75,7 +74,7 @@ export default function useAuth() {
     setUser(null);
     removeAccessToken();
     removeRefreshToken();
-    // TODO: redirect to '/', which redirects to /login if not auth
+    // TODO: redirect to '/', which needs to /login if not auth
     router.push('/login');
   };
 
@@ -96,7 +95,6 @@ export default function useAuth() {
       addAccessToken(access);
       addRefreshToken(refresh);
 
-      // KIV: not advisable to store user data in tokens, best to make another req to get user info
       const { username, user_role } = decode(refresh);
 
       setUser({
@@ -107,7 +105,6 @@ export default function useAuth() {
       if (error.response && error.response.status === 401) {
         console.error('Unauthorized: ', error);
       } else {
-        // TODO: redirect to error page
         console.error('An error occurred: ', error);
       }
     }
@@ -154,6 +151,7 @@ export default function useAuth() {
     };
 
     verifyAndRefreshAccessToken();
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, []);
 
   return {

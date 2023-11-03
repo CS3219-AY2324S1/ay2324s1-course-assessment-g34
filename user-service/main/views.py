@@ -73,8 +73,11 @@ class LoginViewSet(TokenObtainPairView):
         # If authentication is successful, generate a token
         username = request.data.get('username')
         password = request.data.get('password')
-
-        user = User.objects.get(username=username)
+        
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'detail': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
         if check_password(password, user.password):
             # Authentication successful

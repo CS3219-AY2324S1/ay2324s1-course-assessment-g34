@@ -1,4 +1,3 @@
-
 export const stringToColor = (string) => {
   let hash = 0;
 
@@ -19,16 +18,16 @@ export const stringToColor = (string) => {
   return color;
 };
 
-export const stringAvatar = (username) => {
-  if (!username) {
+export const stringToAvatar = (string) => {
+  if (!string) {
     return null;
   }
 
   const alphanumericRegex = /^[0-9a-zA-Z]+/;
-  const match = username.match(alphanumericRegex);
+  const match = string.match(alphanumericRegex);
 
   // Use the first two characters as initials by default
-  let initials = username.substr(0, 2).toUpperCase();
+  let initials = string.substr(0, 2).toUpperCase();
 
   // If there is a match with a single alphanumeric character, use that as the initial
   if (match && match[0].length === 1) {
@@ -36,4 +35,4 @@ export const stringAvatar = (username) => {
   }
 
   return initials;
-}
+};

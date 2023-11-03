@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Skeleton, Typography } from '@mui/material';
 import axios from 'axios';
 import Layout from '@/components/Layout';
 import QuestionTable from '@/components/QuestionPage/QuestionTable';
-import { GET_ALL_QUESTIONS_SVC_URI } from '@/config/uris';
+import { QUESTION_SVC_URI } from '@/config/uris';
 import AddQuestion from '@/components/QuestionPage/AddQuestion';
 import RouteGuard from '@/components/RouteGuard';
 import { Role } from '@/utils/constants';
@@ -38,7 +38,7 @@ export default function QuestionPage() {
     difficulty: 'Easy',
   });
 
-  const getAllQuestions = async () => {
+  const getAllQuestions = useCallback(async () => {
     setIsLoading(true);
     try {
       const token = await getAccessToken();
@@ -47,19 +47,18 @@ export default function QuestionPage() {
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(GET_ALL_QUESTIONS_SVC_URI, config);
+      const response = await axios.get(QUESTION_SVC_URI, config);
       setQuestions(response.data);
     } catch (err) {
-      console.error('An error occurred:', err);
       setError('An error occurred while retrieving the questions. Please try again later.');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [getAccessToken]);
 
   useEffect(() => {
     getAllQuestions();
-  }, []);
+  }, [getAllQuestions]);
 
   return (
     <RouteGuard allowedRoles={[Role.USER, Role.ADMIN]}>

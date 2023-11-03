@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Skeleton, Toolbar, Tooltip,
   Typography,
@@ -6,11 +6,13 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { Role } from '@/utils/constants';
+import { NAVBAR_HEIGHT_PX, Role } from '@/utils/constants';
+import { stringToAvatar, stringToColor } from '@/utils/utils';
+import axios from 'axios';
+import { USER_SVC_URI } from '@/config/uris';
 import Logo from './Logo';
 import ComponentGuard from './ComponentGuard';
 import SolidButton from './SolidButton';
-import { stringAvatar } from '@/utils/utils';
 
 const pages = [
   {
@@ -23,13 +25,21 @@ const pages = [
   },
 ];
 
-const settings = ['Profile', 'Account', 'Dashboard'];
+const menuPages = [
+  {
+    label: 'Profile',
+    path: '/profile',
+  },
+  {
+    label: 'Dashboard',
+    path: '/dashboard',
+  },
+];
 
 function LoginButton() {
   return (
     <Link href="/login">
       <SolidButton
-        variant="contained"
         size="medium"
         color="success"
         type="button"
@@ -50,7 +60,8 @@ function LoadingPlaceholder() {
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { logout, user } = useAuthContext();
+  const { getAccessToken, logout, user } = useAuthContext();
+  const [displayName, setDisplayName] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -68,9 +79,9 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ minHeight: NAVBAR_HEIGHT_PX }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ minHeight: NAVBAR_HEIGHT_PX }}>
           <Logo display={{ xs: 'none', md: 'flex' }} />
           <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]}>
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -83,29 +94,29 @@ export default function Navbar() {
               >
                 <MenuIcon />
               </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{ display: { xs: 'block', md: 'none' } }}
-                >
-                  {pages.map((page) => (
-                    <MenuItem key={page.label} onClick={handleCloseNavMenu}>
-                      <Typography sx={{ textAlign: 'center' }}>
-                        <Link href={page.path}>
-                          {page.label}
-                        </Link>
-                      </Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{ display: { xs: 'block', md: 'none' } }}
+              >
+                {pages.map((page) => (
+                  <MenuItem key={page.label} onClick={handleCloseNavMenu}>
+                    <Typography sx={{ textAlign: 'center' }}>
+                      <Link href={page.path}>
+                        {page.label}
+                      </Link>
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
             </Box>
           </ComponentGuard>
           <Logo display={{ xs: 'flex', md: 'none' }} flexGrow={1} />
@@ -130,9 +141,15 @@ export default function Navbar() {
               altComponent={<LoginButton />}
               loadingComponent={<LoadingPlaceholder />}
             >
-              <Tooltip title="Open settings">
+              <Tooltip title="Open user menu">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar {...stringAvatar(user)}></Avatar>
+                  {user
+                    ? (
+                      <Avatar sx={{ bgcolor: stringToColor(user.username) }}>
+                        {stringToAvatar(user.username)}
+                      </Avatar>
+                    )
+                    : <Avatar alt="Avatar placeholder" src="http://localhost:3000/images/user-avatar.png" />}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -145,9 +162,11 @@ export default function Navbar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {menuPages.map((page) => (
+                  <MenuItem key={page.label} onClick={handleCloseUserMenu}>
+                    <Link href={page.path}>
+                      {page.label}
+                    </Link>
                   </MenuItem>
                 ))}
                 <MenuItem onClick={logout}>
