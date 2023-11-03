@@ -1,4 +1,4 @@
-import { MatchEvent } from './constants';
+import { MatchEvent, SessionEvent } from './constants';
 import { formatMatchSocketData } from './socketUtils';
 
 export const findMatch = (socket, username, difficulty, proficiency) => {
@@ -10,6 +10,10 @@ export const cancelMatch = (socket) => {
   socket.emit(MatchEvent.CANCEL);
 };
 
-export const disconnectMatch = (socket) => {
-  socket.disconnect();
+export const joinSession = (socket, sessionId) => {
+  socket.emit(SessionEvent.JOIN, { sessionId });
+};
+
+export const fetchSessionQuestion = (socket, sessionId, difficulty) => {
+  socket.emit(SessionEvent.FETCH_QUESTION, { sessionId, difficulty });
 };
