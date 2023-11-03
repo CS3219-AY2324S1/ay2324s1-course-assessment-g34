@@ -1,0 +1,1 @@
+INSERT INTO submissions (question_id, runtime, username, outcome, lang, content) VALUES (42, 100, 'user12345', 'Success', 'Java', '0100100101');

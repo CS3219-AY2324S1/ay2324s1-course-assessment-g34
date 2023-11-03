@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  history-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: 'npm start'
+    ports:
+      - "5433:5433"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres-db
+
+
+  postgres-db:
+    image: postgres:latest
+    container_name: history-db
+    environment:
+      POSTGRES_DB: history-service
+      POSTGRES_USER: postgres-db
+      POSTGRES_PASSWORD: postgres-db
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "9000:5432"

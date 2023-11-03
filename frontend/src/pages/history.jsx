@@ -7,17 +7,20 @@ import { Role } from '@/utils/constants';
 import ComponentGuard from '@/components/ComponentGuard';
 import { useAuthContext } from '@/contexts/AuthContext';
 
+const submission_service_port = 5433;
+
 export default function SubmissionHistory() {
   const { user } = useAuthContext();
-  console.log(`User:`+user);
+  const username = user == null ? null : user.username;
+  console.log("Username: " + username);
 
   const [submissions, setSubmissions] = useState([]);
-  
+
   useEffect(() => {
     // Fetch the submission history when the component mounts
     const fetchSubmissionHistory = async () => {
       try {
-        const response = await fetch('http://localhost:3001/submission-history/12345');
+        const response = await fetch(`http://localhost:${submission_service_port}/username`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
