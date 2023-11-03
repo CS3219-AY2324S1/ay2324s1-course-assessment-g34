@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "mocha"
+    "test": "nyc mocha"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +22,7 @@
     "mocha": "^10.2.0",
     "mongodb-memory-server": "^9.0.1",
     "mongoose": "^7.6.4",
+    "nyc": "^15.1.0",
     "sinon": "^17.0.1"
   }
 }
