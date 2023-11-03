@@ -8,8 +8,8 @@ const sql_port = 5432;
 const app = express();
 const pool = new Pool({
     user: 'postgres-db',
-    host: 'postgres-db',
-    database: 'history-service',
+    host: 'postgres-db9000',
+    database: 'submission-db',
     password: 'postgres-db',
     port: `${sql_port}`,
 });
@@ -46,36 +46,4 @@ app.get('/:username', async (req, res) => {
 // Start the server
 app.listen(service_port, () => {
     console.log(`Server running on port ${service_port}`);
-});
-
-
-// testing code
-const readline = require('readline');
-const RL = readline.createInterface({
-    input: process.stdin
-});
-
-RL.on('line', (line) => {
-    const args = line.split(' ');
-    if (args.length != 6) {
-        console.log(`Need 6 args, got ${args.length}`);
-        return;
-    }
-    const questionId = parseInt(args[0]);
-    if (isNaN(questionId) || !Number.isInteger(questionId)) {
-        console.log(`"${questionId}" is not an integer.`);
-        return;
-    }
-    const runtime = parseInt(args[1]);
-    if (isNaN(runtime) || !Number.isInteger(runtime)) {
-        console.log(`"${runtime}" is not an integer.`);
-        return;
-    }
-    make_submission(questionId, runtime, args[2], args[3], args[4], args[5])
-        .then(submission => {
-            console.log('Submission successful:', submission);
-        })
-        .catch(error => {
-            console.error('Submission failed:', error);
-        });
 });

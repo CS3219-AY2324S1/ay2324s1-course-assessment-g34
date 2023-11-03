@@ -12,7 +12,6 @@ const submission_service_port = 5433;
 export default function SubmissionHistory() {
   const { user } = useAuthContext();
   const username = user == null ? null : user.username;
-  console.log("Username: " + username);
 
   const [submissions, setSubmissions] = useState([]);
 
@@ -20,7 +19,8 @@ export default function SubmissionHistory() {
     // Fetch the submission history when the component mounts
     const fetchSubmissionHistory = async () => {
       try {
-        const response = await fetch(`http://localhost:${submission_service_port}/username`);
+        console.log("Username: " + username);
+        const response = await fetch(`http://localhost:${submission_service_port}/${username}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -44,7 +44,7 @@ export default function SubmissionHistory() {
               <th style={{ border: '1px solid black' }}>Submission ID</th>
               <th style={{ border: '1px solid black' }}>Question ID</th>
               <th style={{ border: '1px solid black' }}>Time of Submission</th>
-              <th style={{ border: '1px solid black' }}>Status</th>
+              <th style={{ border: '1px solid black' }}>Outcome</th>
               <th style={{ border: '1px solid black' }}>Runtime</th>
               <th style={{ border: '1px solid black' }}>Language</th>
             </tr>
@@ -54,10 +54,10 @@ export default function SubmissionHistory() {
               <tr key={submission.submission_id}>
                 <td style={{ border: '1px solid black' }}>{submission.submission_id}</td>
                 <td style={{ border: '1px solid black' }}>{submission.question_id}</td>
-                <td style={{ border: '1px solid black' }}>{new Date(submission.time_of_submission).toLocaleString()}</td>
-                <td style={{ border: '1px solid black' }}>{submission.status}</td>
+                <td style={{ border: '1px solid black' }}>{submission.time_of_submission}</td>
+                <td style={{ border: '1px solid black' }}>{submission.outcome}</td>
                 <td style={{ border: '1px solid black' }}>{submission.runtime}</td>
-                <td style={{ border: '1px solid black' }}>{submission.language}</td>
+                <td style={{ border: '1px solid black' }}>{submission.lang}</td>
               </tr>
             ))}
           </tbody>

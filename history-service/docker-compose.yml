@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   history-service:
+    container_name: history-service
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,14 +12,14 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - postgres-db
+      - postgres-db9000
 
 
-  postgres-db:
+  postgres-db9000:
     image: postgres:latest
-    container_name: history-db
+    container_name: submission-db
     environment:
-      POSTGRES_DB: history-service
+      POSTGRES_DB: submission-db
       POSTGRES_USER: postgres-db
       POSTGRES_PASSWORD: postgres-db
     volumes:

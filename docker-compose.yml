@@ -124,6 +124,30 @@ services:
     networks:
       - backend
 
+  history-service:
+    container_name: history-service
+    build:
+      context: ./history-service
+      dockerfile: Dockerfile
+    command: 'npm start'
+    ports:
+      - "5433:5433"
+    depends_on:
+      - postgres-db9000
+
+
+  postgres-db9000:
+    image: postgres:latest
+    container_name: submission-db
+    environment:
+      POSTGRES_DB: submission-db
+      POSTGRES_USER: postgres-db
+      POSTGRES_PASSWORD: postgres-db
+    volumes:
+      - ./history-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "9000:5432"
+
 volumes:
   postgres-db:
   mongo-db:
