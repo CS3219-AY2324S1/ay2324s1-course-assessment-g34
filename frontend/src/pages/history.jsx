@@ -21,7 +21,7 @@ export default function SubmissionHistory() {
     const fetchSubmissionHistory = async () => {
       try {
         console.log("Username: " + user.username);
-        const response = await fetch(`http://localhost:${submission_service_port}/${user.username}`);
+        const response = await fetch(`http://localhost:${submission_service_port}/user/${user.username}`);
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -30,7 +30,7 @@ export default function SubmissionHistory() {
         console.error('Error fetching submission history:', error);
       }
     };
-    
+
     fetchSubmissionHistory();
   }, [user]);
 
@@ -41,7 +41,6 @@ export default function SubmissionHistory() {
         <table>
           <thead>
             <tr>
-              <th style={{ border: '1px solid black' }}>Submission ID</th>
               <th style={{ border: '1px solid black' }}>Question ID</th>
               <th style={{ border: '1px solid black' }}>Submission Time</th>
               <th style={{ border: '1px solid black' }}>Outcome</th>
@@ -52,7 +51,6 @@ export default function SubmissionHistory() {
           <tbody>
             {submissions.map((submission) => (
               <tr key={submission.submission_id}>
-                <td style={{ border: '1px solid black' }}>{submission.submission_id}</td>
                 <td style={{ border: '1px solid black' }}>{submission.question_id}</td>
                 <td style={{ border: '1px solid black' }}>{submission.submission_time}</td>
                 <td style={{ border: '1px solid black' }}>{submission.outcome}</td>

@@ -32,11 +32,12 @@ const make_submission = async (questionId, runtime, username, outcome, lang, con
     }
 };
 
-// Endpoint to get submission history for a user
-app.get('/:username', async (req, res) => {
+// Get submission history of a user
+app.get('/user/:username', async (req, res) => {
     try {
+        const text = 'SELECT submission_id, question_id, runtime, submission_time, outcome, lang FROM submissions WHERE username = $1';
         const { username } = req.params;
-        const result = await pool.query('SELECT * FROM submissions WHERE username = $1', [username]);
+        const result = await pool.query(text, [username]);
         res.status(200).json(result.rows);
     } catch (error) {
         res.status(500).send(error.message);
@@ -45,5 +46,5 @@ app.get('/:username', async (req, res) => {
 
 // Start the server
 app.listen(service_port, () => {
-    console.log(`Server running on port ${service_port}`);
+    console.log(`Submission service running on port ${service_port}`);
 });
