@@ -11,28 +11,28 @@ const submission_service_port = 5433;
 
 export default function SubmissionHistory() {
   const { user } = useAuthContext();
-  const username = user == null ? null : user.username;
 
   const [submissions, setSubmissions] = useState([]);
 
   useEffect(() => {
-    // Fetch the submission history when the component mounts
+    if (user == null)
+      return;
+
     const fetchSubmissionHistory = async () => {
       try {
-        console.log("Username: " + username);
-        const response = await fetch(`http://localhost:${submission_service_port}/${username}`);
-        if (!response.ok) {
+        console.log("Username: " + user.username);
+        const response = await fetch(`http://localhost:${submission_service_port}/${user.username}`);
+        if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
         const data = await response.json();
         setSubmissions(data);
       } catch (error) {
         console.error('Error fetching submission history:', error);
       }
     };
-
+    
     fetchSubmissionHistory();
-  }, []);
+  }, [user]);
 
   return (
     <RouteGuard allowedRoles={[Role.USER, Role.ADMIN]}>
@@ -43,7 +43,7 @@ export default function SubmissionHistory() {
             <tr>
               <th style={{ border: '1px solid black' }}>Submission ID</th>
               <th style={{ border: '1px solid black' }}>Question ID</th>
-              <th style={{ border: '1px solid black' }}>Time of Submission</th>
+              <th style={{ border: '1px solid black' }}>Submission Time</th>
               <th style={{ border: '1px solid black' }}>Outcome</th>
               <th style={{ border: '1px solid black' }}>Runtime</th>
               <th style={{ border: '1px solid black' }}>Language</th>
@@ -54,7 +54,7 @@ export default function SubmissionHistory() {
               <tr key={submission.submission_id}>
                 <td style={{ border: '1px solid black' }}>{submission.submission_id}</td>
                 <td style={{ border: '1px solid black' }}>{submission.question_id}</td>
-                <td style={{ border: '1px solid black' }}>{submission.time_of_submission}</td>
+                <td style={{ border: '1px solid black' }}>{submission.submission_time}</td>
                 <td style={{ border: '1px solid black' }}>{submission.outcome}</td>
                 <td style={{ border: '1px solid black' }}>{submission.runtime}</td>
                 <td style={{ border: '1px solid black' }}>{submission.lang}</td>
