@@ -18,20 +18,6 @@ const pool = new Pool({
 app.use(cors());
 app.use(express.json());
 
-// Function to insert a new submission
-/** @returns the newly inserted row.*/
-const make_submission = async (questionId, runtime, username, outcome, lang, code) => {
-    const text = 'INSERT INTO submissions (questionId, runtime, username, outcome, lang, code) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-    const values = [questionId, runtime, username, outcome, lang, code];
-
-    try {
-        const res = await pool.query(text, values);
-        return res.rows[0];
-    } catch (err) {
-        throw err;
-    }
-};
-
 // Get submission history of a user
 app.get('/user/:username', async (req, res) => {
     try {
@@ -50,9 +36,23 @@ app.get('/submission/:id', async (req, res) => {
         const text = 'SELECT question_id, runtime, submission_time, outcome, lang, code FROM submissions WHERE submission_id = $1';
         const { id } = req.params;
         const result = await pool.query(text, [id]);
+        // TODO explicit handle of empty result.rows
         res.status(200).json(result.rows[0]);
     } catch (error) {
         res.status(500).send(error.message);
+    }
+});
+
+// Insert a new submission
+app.post('/submission', async (req) => {
+    const queryJson = req.body;
+    console.log(`Received ${queryJson}`);
+    const text = 'INSERT INTO submissions (question_id, runtime, username, outcome, lang, code) VALUES ($1, $2, $3, $4, $5, $6)';
+    const values = [queryJson.question_id, queryJson.runtime, queryJson.username, queryJson.outcome, queryJson.lang, queryJson.code];
+    try {
+        await pool.query(text, values);
+    } catch (err) {
+        throw err;
     }
 });
 
