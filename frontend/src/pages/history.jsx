@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Skeleton, Typography } from '@mui/material';
-import axios from 'axios';
-import Layout from '@/components/Layout';
+import Link from 'next/link';
 import RouteGuard from '@/components/RouteGuard';
 import { Role } from '@/utils/constants';
-import ComponentGuard from '@/components/ComponentGuard';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 const submission_service_port = 5433;
@@ -17,7 +14,6 @@ export default function SubmissionHistory() {
   useEffect(() => {
     if (user == null)
       return;
-
     const fetchSubmissionHistory = async () => {
       try {
         console.log("Username: " + user.username);
@@ -30,7 +26,6 @@ export default function SubmissionHistory() {
         console.error('Error fetching submission history:', error);
       }
     };
-
     fetchSubmissionHistory();
   }, [user]);
 
@@ -53,7 +48,9 @@ export default function SubmissionHistory() {
               <tr key={submission.submission_id}>
                 <td style={{ border: '1px solid black' }}>{submission.question_id}</td>
                 <td style={{ border: '1px solid black' }}>{submission.submission_time}</td>
-                <td style={{ border: '1px solid black' }}>{submission.outcome}</td>
+                <td style={{ border: '1px solid black' }}>
+                  <Link href={`/submission/${submission.submission_id}`}>{submission.outcome}</Link>
+                </td>
                 <td style={{ border: '1px solid black' }}>{submission.runtime}</td>
                 <td style={{ border: '1px solid black' }}>{submission.lang}</td>
               </tr>

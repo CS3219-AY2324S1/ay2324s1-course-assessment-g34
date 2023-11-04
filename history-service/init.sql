@@ -6,7 +6,7 @@ CREATE TABLE submissions (
 	username TEXT,
 	outcome TEXT,
 	lang TEXT,
-	content TEXT
+	code TEXT
 );
 CREATE INDEX idx_submissions_user_id ON submissions (username);
 

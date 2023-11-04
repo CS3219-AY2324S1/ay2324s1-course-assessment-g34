@@ -20,9 +20,9 @@ app.use(express.json());
 
 // Function to insert a new submission
 /** @returns the newly inserted row.*/
-const make_submission = async (questionId, runtime, username, outcome, lang, content) => {
-    const text = 'INSERT INTO submissions (questionId, runtime, username, outcome, lang, content) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-    const values = [questionId, runtime, username, outcome, lang, content];
+const make_submission = async (questionId, runtime, username, outcome, lang, code) => {
+    const text = 'INSERT INTO submissions (questionId, runtime, username, outcome, lang, code) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+    const values = [questionId, runtime, username, outcome, lang, code];
 
     try {
         const res = await pool.query(text, values);
@@ -39,6 +39,18 @@ app.get('/user/:username', async (req, res) => {
         const { username } = req.params;
         const result = await pool.query(text, [username]);
         res.status(200).json(result.rows);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Get details of a specific submission
+app.get('/submission/:id', async (req, res) => {
+    try {
+        const text = 'SELECT question_id, runtime, submission_time, outcome, lang, code FROM submissions WHERE submission_id = $1';
+        const { id } = req.params;
+        const result = await pool.query(text, [id]);
+        res.status(200).json(result.rows[0]);
     } catch (error) {
         res.status(500).send(error.message);
     }
