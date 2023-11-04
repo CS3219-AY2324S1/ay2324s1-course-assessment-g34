@@ -1,21 +1,20 @@
-const axios = require('axios'); 
+const axios = require('axios');
 
 const submission_service_port = 5433;
-const addSubmission = (question_id, runtime, username, outcome, lang, code) => {
+const addSubmission = (question_id, username1, username2, lang, code) => {
     const queryJson = {
         question_id: question_id,
-        runtime: runtime,
-        username: username,
-        outcome: outcome,
+        username1: username1,
+        username2: username2,
         lang: lang,
         code: code
     };
     axios.post(`http://localhost:${submission_service_port}/submission`, queryJson)
-    .catch((error)=>{
-        console.log(error);
-    });
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
 console.log("Add submissions");
-addSubmission(3,5,"Meggy_Spletzer","WA","R","I am Groot");
-addSubmission(7,10,"Meggy_Spletzer","Correct","C","Woomy");
+addSubmission(3, "Ben_Leong", "Meggy_Spletzer", "R", "print(\"I am Groot\")");
+addSubmission(7, "Meggy_Spletzer", "Technoblade", "C", "printf(\"Woomy\");");

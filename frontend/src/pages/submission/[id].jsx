@@ -30,11 +30,10 @@ export default function SubmissionPage() {
   return (
     <Paper elevation={0} style={{ padding: '20px' }}>
       <Typography variant="h5" component="h3" style={{ marginBottom: '20px' }}>
-        Status: {submission.outcome}
+        Submission Details
       </Typography>
       <Typography variant="body1"><strong>Question ID:</strong> {submission.question_id}</Typography>
       <Typography variant="body1"><strong>Submission Time:</strong> {submission.submission_time}</Typography>
-      <Typography variant="body1"><strong>Runtime:</strong> {submission.runtime}ms</Typography>
       <Typography variant="body1"><strong>Language:</strong> {submission.lang}</Typography>
       <Typography variant="body1"><strong>Code:</strong></Typography>
       <TextField

@@ -21,7 +21,7 @@ app.use(express.json());
 // Get submission history of a user
 app.get('/user/:username', async (req, res) => {
     try {
-        const text = 'SELECT submission_id, question_id, runtime, submission_time, outcome, lang FROM submissions WHERE username = $1';
+        const text = 'SELECT submission_id, question_id, submission_time, lang FROM submissions WHERE username1 = $1 OR username2 = $1';
         const { username } = req.params;
         const result = await pool.query(text, [username]);
         res.status(200).json(result.rows);
@@ -33,7 +33,7 @@ app.get('/user/:username', async (req, res) => {
 // Get details of a specific submission
 app.get('/submission/:id', async (req, res) => {
     try {
-        const text = 'SELECT question_id, runtime, submission_time, outcome, lang, code FROM submissions WHERE submission_id = $1';
+        const text = 'SELECT question_id, submission_time, lang, code FROM submissions WHERE submission_id = $1';
         const { id } = req.params;
         const result = await pool.query(text, [id]);
         // TODO explicit handle of empty result.rows
@@ -47,8 +47,8 @@ app.get('/submission/:id', async (req, res) => {
 app.post('/submission', async (req) => {
     const queryJson = req.body;
     console.log(`Received ${queryJson}`);
-    const text = 'INSERT INTO submissions (question_id, runtime, username, outcome, lang, code) VALUES ($1, $2, $3, $4, $5, $6)';
-    const values = [queryJson.question_id, queryJson.runtime, queryJson.username, queryJson.outcome, queryJson.lang, queryJson.code];
+    const text = 'INSERT INTO submissions (question_id, username1, username2, lang, code) VALUES ($1, $2, $3, $4, $5)';
+    const values = [queryJson.question_id, queryJson.username1, queryJson.username2, queryJson.lang, queryJson.code];
     try {
         await pool.query(text, values);
     } catch (err) {

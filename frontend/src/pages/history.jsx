@@ -38,8 +38,6 @@ export default function SubmissionHistory() {
             <tr>
               <th style={{ border: '1px solid black' }}>Question ID</th>
               <th style={{ border: '1px solid black' }}>Submission Time</th>
-              <th style={{ border: '1px solid black' }}>Outcome</th>
-              <th style={{ border: '1px solid black' }}>Runtime</th>
               <th style={{ border: '1px solid black' }}>Language</th>
             </tr>
           </thead>
@@ -47,11 +45,9 @@ export default function SubmissionHistory() {
             {submissions.map((submission) => (
               <tr key={submission.submission_id}>
                 <td style={{ border: '1px solid black' }}>{submission.question_id}</td>
-                <td style={{ border: '1px solid black' }}>{submission.submission_time}</td>
                 <td style={{ border: '1px solid black' }}>
-                  <Link href={`/submission/${submission.submission_id}`}>{submission.outcome}</Link>
+                  <Link href={`/submission/${submission.submission_id}`}>{submission.submission_time}</Link>
                 </td>
-                <td style={{ border: '1px solid black' }}>{submission.runtime}</td>
                 <td style={{ border: '1px solid black' }}>{submission.lang}</td>
               </tr>
             ))}
