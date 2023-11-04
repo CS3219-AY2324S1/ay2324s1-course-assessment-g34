@@ -28,5 +28,5 @@ jobs:
       run: |
         gcloud auth configure-docker asia-southeast1-docker.pkg.dev
 
-        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT_ID/peer-prep/frontend:latest ./frontend
-        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT_ID/peer-prep/frontend:latest
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest ./frontend
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest
