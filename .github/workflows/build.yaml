@@ -30,3 +30,15 @@ jobs:
 
         docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest ./frontend
         docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/gateway:latest ./gateway
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/gateway:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/matching-service:latest ./matching-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/matching-service:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/question-service:latest ./question-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/question-service:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/user-service:latest ./user-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/user-service:latest
