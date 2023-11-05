@@ -98,7 +98,6 @@ spec:
   selector:
     matchLabels:
       app: user-service
-  strategy: {}
   template:
     metadata:
       labels:
