@@ -4,7 +4,7 @@
 // const USER_SVC_URL = process.env.NEXT_PUBLIC_USER_SVC_URI || 'http://localhost:8000';
 
 
-const GATEWAY_BASE_URL = 'http://api-gateway:3001';
+const GATEWAY_BASE_URL = 'http://34.87.4.219:3001/';
 
 const QUESTION_SVC_PREFIX = '/api/question-service';
 
