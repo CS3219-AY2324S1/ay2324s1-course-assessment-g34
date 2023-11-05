@@ -28,7 +28,7 @@ spec:
               value: http://localhost:5000
             - name: NEXT_PUBLIC_USER_SVC_URI
               value: http://localhost:8000
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend:latest
           name: frontend
           ports:
             - containerPort: 3000
@@ -66,7 +66,7 @@ spec:
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
             - name: USER_BASE_URL
               value: http://user-service:8000
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/gateway
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/gateway:latest
           name: api-gateway
           ports:
             - containerPort: 3001
@@ -153,7 +153,7 @@ spec:
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em&8-(f8c++
             - name: SECRET_KEY
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service:latest
           name: user-service
           ports:
             - containerPort: 8000
