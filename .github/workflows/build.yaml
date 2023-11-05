@@ -18,7 +18,6 @@ jobs:
       uses: 'google-github-actions/auth@v1'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-        install_components: 'gke-gcloud-auth-plugin'
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v1'
@@ -46,6 +45,7 @@ jobs:
 
     - name: deploy to gke
       run: |
+        gcloud components install gke-gcloud-auth-plugin
         gcloud container clusters get-credentials autopilot-cluster-1 --region asia-southeast1
         kubectl apply -f .deployment/frontend-service.yaml
         kubectl apply -f .deployment/frontend-deployment.yaml
