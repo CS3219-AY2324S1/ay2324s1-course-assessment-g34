@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend:latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend
           env:
             - name: NEXT_PUBLIC_MATCHING_SVC_URI
               value: http://localhost:8001
@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway:latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway
           env:
             - name: MATCHING_BASE_URL
               value: http://matching-service:8001
@@ -108,7 +108,7 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service:latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service
           env:
             - name: DATABASE_HOST
               value: postgres-db
