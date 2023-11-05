@@ -14,7 +14,7 @@ const isAuthenticated = require('./authMiddleware');
 
 // Configure CORS for requests from anywhere
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: '*', // TODO: Update accordingly
   credentials: true
 };
 
