@@ -24,7 +24,13 @@ spec:
               value: http://localhost:8000
           ports:
             - containerPort: 3000
-          resources: {}
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
 
 ---
 apiVersion: apps/v1
@@ -55,7 +61,13 @@ spec:
               value: http://user-service:8000 
           ports:
             - containerPort: 3001
-          resources: {}
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
 
 ---
 apiVersion: apps/v1
@@ -86,7 +98,13 @@ spec:
               value: postgres
           ports:
             - containerPort: 5432
-          resources: {}
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
 
 ---
 apiVersion: apps/v1
@@ -125,6 +143,12 @@ spec:
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
           ports:
             - containerPort: 8000
-          resources: {}
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
 
 ---
