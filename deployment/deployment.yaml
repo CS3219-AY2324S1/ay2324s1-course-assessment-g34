@@ -24,7 +24,6 @@ spec:
               value: http://localhost:8000
           ports:
             - containerPort: 3000
-          resources: {}
 
 ---
 apiVersion: apps/v1
