@@ -25,7 +25,6 @@ spec:
           ports:
             - containerPort: 3000
           resources: {}
-          imagePullPolicy: Never
 
 ---
 apiVersion: apps/v1
@@ -57,7 +56,6 @@ spec:
           ports:
             - containerPort: 3001
           resources: {}
-          imagePullPolicy: Never
 
 ---
 apiVersion: apps/v1
@@ -89,7 +87,6 @@ spec:
           ports:
             - containerPort: 5432
           resources: {}
-          imagePullPolicy: Never
 
 ---
 apiVersion: apps/v1
@@ -129,6 +126,5 @@ spec:
           ports:
             - containerPort: 8000
           resources: {}
-          imagePullPolicy: Never
 
 ---
