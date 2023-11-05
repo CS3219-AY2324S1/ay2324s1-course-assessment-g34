@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 const io = require("socket.io")(http, {
   path: "/api/matching-service/socket.io",
   cors: {
-    origin: "http://localhost:3000"
+    origin: "*" //TODO
   }
 });
 const { MatchEvent } = require("./constants/events");
