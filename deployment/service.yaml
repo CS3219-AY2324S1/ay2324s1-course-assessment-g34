@@ -64,3 +64,19 @@ spec:
     app: user-service
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-db
+  labels:
+    app: mongo-db
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+      protocol: TCP
+      name: mongo-db
+  selector:
+    app: mongo-db
+
+---

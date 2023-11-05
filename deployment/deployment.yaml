@@ -124,7 +124,6 @@ spec:
       containers:
         - name: user-service
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service:latest
-          imagePullPolicy: IfNotPresent
           env:
             - name: DATABASE_HOST
               value: postgres-db
@@ -144,6 +143,34 @@ spec:
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
           ports:
             - containerPort: 8000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-db
+  template:
+    metadata:
+      labels:
+        app: mongo-db
+    spec:
+      containers:
+        - image: mongo:latest
+          name: mongo-db
+          ports:
+            - containerPort: 27017
           resources:
             limits:
               memory: 512Mi
