@@ -5,7 +5,7 @@
 
 
 const GATEWAY_BASE_URL = 'http://34.118.226.26:3001';
-
+ 
 const QUESTION_SVC_PREFIX = '/api/question-service';
 
 const ADD_QUESTION = '/questions';
