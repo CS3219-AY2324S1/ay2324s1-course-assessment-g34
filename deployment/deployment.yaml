@@ -1,0 +1,164 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: frontend
+  name: frontend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - args:
+            - npm
+            - run
+            - dev
+          env:
+            - name: NEXT_PUBLIC_MATCHING_SVC_URI
+              value: http://localhost:8001
+            - name: NEXT_PUBLIC_QUESTION_SVC_URI
+              value: http://localhost:5000
+            - name: NEXT_PUBLIC_USER_SVC_URI
+              value: http://localhost:8000
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend
+          name: frontend
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api-gateway
+  name: api-gateway
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - env:
+            - name: MATCHING_BASE_URL
+              value: http://matching-service:8001
+            - name: QUESTION_BASE_URL
+              value: http://question-service:5000
+            - name: SECRET_KEY
+              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
+            - name: USER_BASE_URL
+              value: http://user-service:8000
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/gateway
+          name: api-gateway
+          ports:
+            - containerPort: 3001
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: postgres-db
+  name: postgres-db
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres-db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: user_service
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres:15.4
+          name: postgres-db
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user-service
+  name: user-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - args:
+            - python
+            - manage.py
+            - runserver
+            - 0.0.0.0:8000
+          env:
+            - name: DATABASE_HOST
+              value: postgres-db
+            - name: DATABASE_NAME
+              value: user_service
+            - name: DATABASE_PASSWORD
+              value: postgres
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_USER
+              value: postgres
+            - name: DJANGO_DEBUG
+              value: "True"
+            - name: DJANGO_SECRET_KEY
+              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em&8-(f8c++
+            - name: SECRET_KEY
+              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service
+          name: user-service
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+
+---
