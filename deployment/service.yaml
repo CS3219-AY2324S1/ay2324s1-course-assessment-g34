@@ -16,13 +16,13 @@ spec:
 
 ---
 apiVersion: v1
-kind: NodePort
+kind: Service
 metadata:
   name: api-gateway
   labels:
     app: api-gateway
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - port: 3001
       targetPort: 3001
