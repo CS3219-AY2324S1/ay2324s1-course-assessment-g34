@@ -89,6 +89,7 @@ spec:
       containers:
         - name: postgres-db
           image: postgres:15.4
+          imagePullPolicy: IfNotPresent
           env:
             - name: POSTGRES_DB
               value: user_service
@@ -169,8 +170,42 @@ spec:
       containers:
         - image: mongo:latest
           name: mongo-db
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 27017
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: question-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: question-service
+  template:
+    metadata:
+      labels:
+        app: question-service
+    spec:
+      containers:
+        - env:
+            - name: DATABASE_URL
+              value: mongodb://mongo-db:27017/questions
+            - name: SECRET_KEY
+              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/question-service:latest
+          name: question-service
+          ports:
+            - containerPort: 5000
           resources:
             limits:
               memory: 512Mi

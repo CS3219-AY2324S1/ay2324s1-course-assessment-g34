@@ -80,3 +80,19 @@ spec:
     app: mongo-db
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: question-service
+  labels:
+    app: question-service
+spec:
+  ports:
+    - port: 5000
+      targetPort: 5000
+      protocol: TCP
+      name: question-service
+  selector:
+    app: question-service
+
+---
