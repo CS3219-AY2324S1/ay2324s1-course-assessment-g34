@@ -28,29 +28,20 @@ jobs:
       run: |
         gcloud auth configure-docker asia-southeast1-docker.pkg.dev
 
-        # Generate a unique timestamp
-        TIMESTAMP=$(date +%s)
-
-        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest \
-                    --build-arg TIMESTAMP=$TIMESTAMP ./frontend
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest ./frontend
         docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest
 
-        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/gateway:latest \
-                    --build-arg TIMESTAMP=$TIMESTAMP ./gateway
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/gateway:latest ./gateway
         docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/gateway:latest
 
-        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/matching-service:latest \
-                    --build-arg TIMESTAMP=$TIMESTAMP ./matching-service
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/matching-service:latest ./matching-service
         docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/matching-service:latest
 
-        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/question-service:latest \
-                    --build-arg TIMESTAMP=$TIMESTAMP ./question-service
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/question-service:latest ./question-service
         docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/question-service:latest
 
-        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/user-service:latest \
-                    --build-arg TIMESTAMP=$TIMESTAMP ./user-service
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/user-service:latest ./user-service
         docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/user-service:latest
-
 
     - name: deploy to gke
       run: |
