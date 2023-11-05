@@ -47,3 +47,5 @@ jobs:
       run: |
         gcloud components install gke-gcloud-auth-plugin
         gcloud container clusters get-credentials autopilot-cluster-1 --region=asia-southeast1
+        kubectl apply -f deployment/service.yaml
+        kubectl apply -f deployment/deployment.yaml
