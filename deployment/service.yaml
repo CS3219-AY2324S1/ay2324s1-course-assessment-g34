@@ -96,3 +96,19 @@ spec:
     app: question-service
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matching-service
+  labels:
+    app: matching-service
+spec:
+  ports:
+    - port: 8001
+      targetPort: 8001
+      protocol: TCP
+      name: matching-service
+  selector:
+    app: matching-service
+
+---

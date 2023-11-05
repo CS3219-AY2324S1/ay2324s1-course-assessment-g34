@@ -137,7 +137,7 @@ spec:
             - name: DATABASE_USER
               value: postgres
             - name: DJANGO_DEBUG
-              value: "True"
+              value: "False"
             - name: DJANGO_SECRET_KEY
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em&8-(f8c++
             - name: SECRET_KEY
@@ -206,6 +206,37 @@ spec:
           name: question-service
           ports:
             - containerPort: 5000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matching-service
+  template:
+    metadata:
+      labels:
+        app: matching-service
+    spec:
+      containers:
+        - env:
+            - name: PORT
+              value: "8001"
+          image: matching-service
+          name: matching-service
+          ports:
+            - containerPort: 8001
           resources:
             limits:
               memory: 512Mi
