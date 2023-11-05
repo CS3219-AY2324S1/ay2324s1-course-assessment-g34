@@ -1,10 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: frontend
   name: frontend
-  namespace: default
 spec:
   replicas: 1
   selector:
@@ -32,19 +29,14 @@ spec:
           name: frontend
           ports:
             - containerPort: 3000
-              protocol: TCP
           resources: {}
       restartPolicy: Always
-status: {}
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: api-gateway
   name: api-gateway
-  namespace: default
 spec:
   replicas: 1
   selector:
@@ -70,19 +62,14 @@ spec:
           name: api-gateway
           ports:
             - containerPort: 3001
-              protocol: TCP
           resources: {}
       restartPolicy: Always
-status: {}
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: postgres-db
   name: postgres-db
-  namespace: default
 spec:
   replicas: 1
   selector:
@@ -107,7 +94,6 @@ spec:
           name: postgres-db
           ports:
             - containerPort: 5432
-              protocol: TCP
           resources: {}
       restartPolicy: Always
 
@@ -115,10 +101,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: user-service
   name: user-service
-  namespace: default
 spec:
   replicas: 1
   selector:
@@ -157,7 +140,6 @@ spec:
           name: user-service
           ports:
             - containerPort: 8000
-              protocol: TCP
           resources: {}
       restartPolicy: Always
 
