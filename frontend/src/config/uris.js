@@ -1,4 +1,4 @@
-const GATEWAY_BASE_URL = process.env.PUBLIC_GATEWAY_SVC_URI || 'http://localhost:3001';
+const GATEWAY_BASE_URL = 'http://34.87.4.219:3001';
 
 // User Service
 const USER_SVC_PREFIX = '/api/user-service';
