@@ -49,7 +49,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway:latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway
           env:
             - name: MATCHING_BASE_URL
               value: http://matching-service:8001
@@ -79,8 +79,6 @@ spec:
   selector:
     matchLabels:
       app: postgres-db
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
@@ -139,7 +137,7 @@ spec:
             - name: DJANGO_DEBUG
               value: "False"
             - name: DJANGO_SECRET_KEY
-              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em&8-(f8c++
+              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
             - name: SECRET_KEY
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
           ports:
