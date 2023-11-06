@@ -17,7 +17,7 @@ spec:
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend:latest
           env:
             - name: IS_PROD
-              value: True
+              value: "True"
           ports:
             - containerPort: 3000
           resources:
