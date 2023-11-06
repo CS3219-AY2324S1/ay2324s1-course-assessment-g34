@@ -27,7 +27,7 @@ spec:
             requests:
               memory: 256Mi
               cpu: '400m'
-          command: ["npm", "run", "start"]
+          command: ["npm", "run", "dev"]
 
 ---
 apiVersion: apps/v1
