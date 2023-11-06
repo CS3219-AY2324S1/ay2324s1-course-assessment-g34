@@ -30,9 +30,7 @@ services:
     networks:
       - frontend
     environment:
-      NEXT_PUBLIC_USER_SVC_URI: http://localhost:8000
-      NEXT_PUBLIC_QUESTION_SVC_URI: http://localhost:5000
-      NEXT_PUBLIC_MATCHING_SVC_URI: http://localhost:8001
+      NEXT_PUBLIC_COLLAB_SVC_URI: ws://localhost:8080
     depends_on:
       - user-service
       - question-service
