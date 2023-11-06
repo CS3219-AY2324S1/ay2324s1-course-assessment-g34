@@ -14,10 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend:latest
-          env:
-            - name: PUBLIC_GATEWAY_SVC_URI
-              value: "http://34.87.4.219:3001"
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend
           ports:
             - containerPort: 3000
           command: ["npm", "run", "dev"]
