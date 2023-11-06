@@ -1,4 +1,5 @@
 import { Button, styled } from '@mui/material';
+import React from 'react';
 
 /**
  * A customized MUI Button component with a solid background color.
@@ -19,7 +20,9 @@ import { Button, styled } from '@mui/material';
  * // Usage of SolidButton component with the default 'primary' color:
  * <SolidButton>Click Me</SolidButton>
  */
-const SolidButton = styled(Button)(({ theme, color = 'primary' }) => ({
+const SolidButton = styled(({ ...otherProps }) => (
+  <Button variant="contained" {...otherProps} />
+))(({ theme, color = 'primary' }) => ({
   '&.MuiButton-contained': {
     backgroundColor: theme.palette[color].main,
   },

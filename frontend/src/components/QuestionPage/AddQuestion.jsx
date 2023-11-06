@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { AddBox } from '@mui/icons-material';
 import axios from 'axios';
-import { ADD_QUESTION_SVC_URI } from '@/config/uris';
+import { QUESTION_SVC_URI } from '@/config/uris';
 import { PropTypes } from 'prop-types';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/router';
@@ -10,10 +10,10 @@ import QuestionForm from './QuestionForm';
 
 // TODO: use dynamic importing for question form model
 export default function AddQuestion({ setQuestions }) {
-  const router = useRouter();
+  const path = useRouter().asPath;
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
-  const { getAccessToken, setRedirect } = useAuthContext();
+  const { getAccessToken, logout, setRedirect } = useAuthContext();
 
   // TODO: consider using a reducer to handle question list instead
   const updateQuestions = (question) => {
@@ -30,7 +30,7 @@ export default function AddQuestion({ setQuestions }) {
         },
       };
 
-      const response = await axios.post(ADD_QUESTION_SVC_URI, newQuestionData, config);
+      const response = await axios.post(QUESTION_SVC_URI, newQuestionData, config);
 
       // add new question on client side
       updateQuestions(response.data);
@@ -41,8 +41,8 @@ export default function AddQuestion({ setQuestions }) {
       } else if (err.response && err.response.status === 401) {
         // invalid token/token not provided; redirect to login page
         console.error('Unauthenticated: ', err);
-        setRedirect(router.asPath);
-        router.push('/login');
+        setRedirect(path);
+        logout();
       } else if (err.response && err.response.status === 403) {
         // valid token but not admin
         console.error('Forbidden: ', err);
