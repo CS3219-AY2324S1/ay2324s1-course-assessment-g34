@@ -9,7 +9,7 @@ import { PropTypes } from 'prop-types';
 import { Role } from '@/utils/constants';
 import { useAuthContext } from '@/contexts/AuthContext';
 import axios from 'axios';
-import { DELETE_QUESTION_SVC_URI } from '@/config/uris';
+import { QUESTION_SVC_URI } from '@/config/uris';
 import { useRouter } from 'next/router';
 import ComponentGuard from '../ComponentGuard';
 import DeleteQuestionDialog from './DeleteQuestionDialog';
@@ -36,7 +36,7 @@ export default function QuestionRow({
         },
       };
 
-      await axios.delete(`${DELETE_QUESTION_SVC_URI}/${question._id}`, config);
+      await axios.delete(`${QUESTION_SVC_URI}/${question._id}`, config);
       updateDeletedQuestions();
     } catch (err) {
       if (err.response && err.response.status === 400) {
@@ -60,7 +60,6 @@ export default function QuestionRow({
   };
 
   const openEditModal = () => {
-    console.log(question);
     setSelectedQuestion(question);
     setIsEditModalOpen(true);
   };

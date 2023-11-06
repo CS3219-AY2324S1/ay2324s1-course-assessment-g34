@@ -253,7 +253,6 @@ export default function QuestionForm({
               Cancel
             </Button>
             <SolidButton
-              variant="contained"
               size="medium"
               color="success"
               type="submit"

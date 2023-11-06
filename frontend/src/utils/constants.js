@@ -1,3 +1,5 @@
+export const NAVBAR_HEIGHT_PX = 64;
+
 export const Role = {
   ADMIN: 'admin',
   USER: 'normal user',

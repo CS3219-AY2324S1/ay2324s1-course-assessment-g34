@@ -4,6 +4,7 @@ import {
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { ExitToApp } from '@mui/icons-material';
+import PropTypes from 'prop-types';
 import SolidButton from '../SolidButton';
 
 const Editor = dynamic(() => import('./CollabEditor'), {
@@ -49,7 +50,6 @@ export default function EditorPanel({
           ))}
         </Select>
         <SolidButton
-          variant="contained"
           color="error"
           size="small"
           sx={{
@@ -69,3 +69,11 @@ export default function EditorPanel({
     </Box>
   );
 }
+
+EditorPanel.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
+  handleLanguageSelect: PropTypes.func.isRequired,
+  openConfirmationModal: PropTypes.func.isRequired,
+};

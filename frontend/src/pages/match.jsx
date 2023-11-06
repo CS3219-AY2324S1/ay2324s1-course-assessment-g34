@@ -59,11 +59,7 @@ export default function MatchPage() {
       path: '/api/matching-service/socket.io',
     });
 
-    console.log(socket);
-    console.log(socket.connected);
-
     socket.on(MatchEvent.TIMEOUT, () => {
-      console.log(`User ${user.username} has timed out from matching`);
       socket.disconnect();
       setMatchSocket(null);
     });
@@ -73,12 +69,10 @@ export default function MatchPage() {
       setIsFinding(false);
       dispatch(setMatchedUser(match));
       setIsMatchFound(true);
-      console.log('session id: ', getSessionId(msg));
       dispatch(setSession(getSessionId(msg)));
       dispatch(setDifficulty(matchCriteria.difficulty));
       dispatch(setIsOnGoing(true));
       dispatch(setQuestionId(getQuestionId(msg)));
-      console.log(`Match found with user: ${match}`);
     });
 
     return socket;
@@ -121,9 +115,9 @@ export default function MatchPage() {
 
   useEffect(() => {
     if (sessionId && isCollabOngoing) {
-      console.log('Redirecting to collab page, Session id: ', sessionId);
       setTimeout(() => router.push('/collab'), 2000);
     }
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, [sessionId, isCollabOngoing]);
 
   return (
@@ -200,7 +194,6 @@ export default function MatchPage() {
                 {isFinding
                   ? (
                     <SolidButton
-                      variant="contained"
                       size="medium"
                       color="secondary"
                       type="button"
@@ -213,7 +206,6 @@ export default function MatchPage() {
                   )
                   : (
                     <SolidButton
-                      variant="contained"
                       size="medium"
                       color="secondary"
                       type="submit"

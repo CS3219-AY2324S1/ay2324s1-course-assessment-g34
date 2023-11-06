@@ -2,7 +2,7 @@ import SolidButton from '@/components/SolidButton';
 import {
   Box, Container, Grid, Paper, TextField, Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bree_Serif } from 'next/font/google';
 import Link from 'next/link';
 import { validateConfirmPassword, validatePassword, validateUsername } from '@/utils/validation';
@@ -39,6 +39,7 @@ export default function SignUpPage() {
     setConfirmPasswordError(null);
   };
 
+  // TODO: clear errors upon typing into any field
   const handleSignup = async (event) => {
     event.preventDefault();
     resetAllErrors();
@@ -73,22 +74,17 @@ export default function SignUpPage() {
     }
 
     try {
-      // TODO: handle duplicate usernames more elegantly
       const newUserData = {
         username,
         password,
       };
 
       await axios.post(REGISTER_SVC_URI, newUserData);
-
       router.push('/login');
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        console.error('Bad Request: ', error.response.data);
-        // duplicate user name
-        setUsernameError(error.response.data.username);
+        setUsernameError('This username already exists.');
       } else {
-        console.error('An error occurred: ', error);
         setGeneralError('Registration failed. Please try again later.');
       }
     }
@@ -174,7 +170,7 @@ export default function SignUpPage() {
                   error={passwordError != null}
                   helperText={passwordError}
                   onChange={() => setPasswordError(null)}
-                  autoComplete="password"
+                  autoComplete="new-password"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -191,12 +187,13 @@ export default function SignUpPage() {
                   error={confirmPasswordError != null}
                   helperText={confirmPasswordError}
                   onChange={() => setConfirmPasswordError(null)}
+                  autoComplete="new-password"
+
                 />
               </Grid>
               <Grid item xs={12}>
                 <SolidButton
                   fullWidth
-                  variant="contained"
                   size="medium"
                   color="secondary"
                   type="submit"
@@ -230,7 +227,7 @@ export default function SignUpPage() {
             color="secondary"
             sx={{ fontWeight: 600, ':hover': { textDecoration: 'underline' } }}
           >
-            <Link href="/login">Log in</Link>
+            <Link href="/login" onClick={resetAllErrors}>Log in</Link>
           </Typography>
         </Box>
       </Box>
