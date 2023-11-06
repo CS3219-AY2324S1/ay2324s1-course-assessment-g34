@@ -15,6 +15,7 @@ spec:
       containers:
         - name: frontend
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend:latest
+          imagePullPolicy: Always
           env:
             - name: IS_PROD
               value: "True"
@@ -45,7 +46,8 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway:latest
+          imagePullPolicy: Always
           env:
             - name: MATCHING_BASE_URL
               value: http://matching-service:8001
@@ -117,8 +119,14 @@ spec:
         app: user-service
     spec:
       containers:
+        - args:
+            - python
+            - manage.py
+            - runserver
+            - 0.0.0.0:8000
         - name: user-service
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service:latest
+          imagePullPolicy: Always
           env:
             - name: DATABASE_HOST
               value: postgres-db
@@ -193,10 +201,11 @@ spec:
       containers:
         - env:
             - name: DATABASE_URL
-              value: mongodb://mongo-db:27017/questions
+              value: mongodb://mongo-db:27017/questions:latest
             - name: SECRET_KEY
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/question-service
+          imagePullPolicy: Always
           name: question-service
           ports:
             - containerPort: 5000
@@ -228,6 +237,7 @@ spec:
             - name: PORT
               value: "8001"
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/matching-service:latest
+          imagePullPolicy: Always
           name: matching-service
           ports:
             - containerPort: 8001

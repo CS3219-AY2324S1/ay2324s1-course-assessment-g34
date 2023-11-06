@@ -35,7 +35,7 @@ app.use('/api/user-service', (req, res) => {
 
 app.use(matchingProxy);
 
-// app.use(isAuthenticated)
+app.use(isAuthenticated)
 
 // allows only authorized user to access these endpoints
 app.use('/api/question-service', (req, res) => {
