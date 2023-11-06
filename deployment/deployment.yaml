@@ -49,9 +49,9 @@ spec:
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
             - name: USER_BASE_URL
               value: http://user-service:8000 
-            - COLLAB_BASE_IO_URL:
+            - name: COLLAB_BASE_IO_URL
               value: http://collab-service:8080
-            - COLLAB_BASE_WS_URL: 
+            - name: COLLAB_BASE_WS_URL
               value: ws://collab-service:8080
           ports:
             - containerPort: 3001
