@@ -29,8 +29,6 @@ services:
       - 3000:3000
     networks:
       - frontend
-    environment:
-      NEXT_PUBLIC_COLLAB_SVC_URI: ws://localhost:8080
     depends_on:
       - user-service
       - question-service
@@ -54,6 +52,8 @@ services:
       USER_BASE_URL: http://user-service:8000
       QUESTION_BASE_URL: http://question-service:5000
       MATCHING_BASE_URL: http://matching-service:8001
+      COLLAB_BASE_IO_URL: http://collab-service:8080
+      COLLAB_BASE_WS_URL: ws://collab-service:8080
       SECRET_KEY: ${SECRET_KEY}
 
   user-service:

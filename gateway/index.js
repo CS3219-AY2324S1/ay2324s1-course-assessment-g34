@@ -5,7 +5,9 @@ const cors = require("cors");
 const {
     userProxy,
     questionProxy,
-    matchingProxy
+    matchingProxy,
+    collabProxyIO,
+    collabProxyWS
 } = require('./proxy');
 
 const app = express();
@@ -34,6 +36,10 @@ app.use('/api/user-service', (req, res) => {
 });
 
 app.use(matchingProxy);
+
+app.use(collabProxyIO);
+
+app.use(collabProxyWS);
 
 app.use(isAuthenticated)
 

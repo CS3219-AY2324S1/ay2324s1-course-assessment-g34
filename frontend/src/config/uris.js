@@ -1,5 +1,3 @@
-export const COLLAB_SVC_URI = process.env.NEXT_PUBLIC_COLLAB_SVC_URI || 'ws://localhost:8080';
-
 const GATEWAY_BASE_URL = process.env.PUBLIC_GATEWAY_SVC_URI || 'http://localhost:3001';
 
 // User Service
@@ -28,3 +26,7 @@ export const USER_SVC_URI = GATEWAY_BASE_URL + USER_SVC_PREFIX + USER_RESOURCE;
 export const QUESTION_SVC_URI = GATEWAY_BASE_URL + QUESTION_SVC_PREFIX + QUESTION_RESOURCE;
 
 export const MATCHING_SVC_URI = GATEWAY_BASE_URL;
+
+export const COLLAB_SVC_IO_URI = GATEWAY_BASE_URL;
+
+export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^http/, 'ws');

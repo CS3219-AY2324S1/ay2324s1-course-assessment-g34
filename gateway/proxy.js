@@ -10,6 +10,8 @@ const proxy = httpProxy.createProxyServer();
 const USER_BASE_URL = process.env.USER_BASE_URL;
 const QUESTION_BASE_URL = process.env.QUESTION_BASE_URL;
 const MATCHING_BASE_URL = process.env.MATCHING_BASE_URL;
+const COLLAB_BASE_IO_URL = process.env.COLLAB_BASE_IO_URL;
+const COLLAB_BASE_WS_URL = process.env.COLLAB_BASE_WS_URL;
 
 const userProxy = createProxyMiddleware({
   target: USER_BASE_URL,
@@ -29,8 +31,27 @@ const matchingProxy = createProxyMiddleware(
   }
 );
 
+const collabProxyIO = createProxyMiddleware(
+  '/api/collab-service/socket.io', {
+    target: COLLAB_BASE_IO_URL,
+    changeOrigin: true,
+    ws: true
+  }
+);
+
+const collabProxyWS = createProxyMiddleware(
+  '/api/collab-service/ws', {
+    target: COLLAB_BASE_WS_URL,
+    changeOrigin: true,
+    ws: true
+  }
+);
+
+
 module.exports = {
   userProxy,
   questionProxy,
   matchingProxy,
+  collabProxyIO,
+  collabProxyWS
 };
