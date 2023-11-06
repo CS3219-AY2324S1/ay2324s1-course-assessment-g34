@@ -23,7 +23,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
   const isQuestionLoading = useSelector(selectIsQuestionLoading);
   const dispatch = useDispatch();
 
-  const getQuestion = useCallback(async () => {
+  const getQuestion = async () => {
     try {
       const token = await getAccessToken();
 
@@ -45,14 +45,14 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
     } finally {
       dispatch(setIsQuestionLoading(false));
     }
-  }, [dispatch, getAccessToken, openSnackbar, questionId]);
+  };
 
   useEffect(() => {
     if (questionId) {
       dispatch(setQuestionId(questionId));
       getQuestion();
     }
-  }, [questionId, dispatch, getQuestion]);
+  }, [questionId]);
 
   return (
     <Box
