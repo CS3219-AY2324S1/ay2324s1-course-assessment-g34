@@ -112,3 +112,19 @@ spec:
     app: matching-service
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: collab-service
+  labels:
+    app: collab-service
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: collab-service
+  selector:
+    app: collab-service
+
+---

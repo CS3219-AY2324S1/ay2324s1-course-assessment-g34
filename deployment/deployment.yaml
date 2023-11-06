@@ -20,13 +20,6 @@ spec:
               value: "http://34.87.4.219:3001"
           ports:
             - containerPort: 3000
-          resources:
-            limits:
-              memory: 512Mi
-              cpu: '400m'
-            requests:
-              memory: 256Mi
-              cpu: '400m'
           command: ["npm", "run", "dev"]
 
 ---
@@ -56,6 +49,10 @@ spec:
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
             - name: USER_BASE_URL
               value: http://user-service:8000 
+            - COLLAB_BASE_IO_URL:
+              value: http://collab-service:8080
+            - COLLAB_BASE_WS_URL: 
+              value: ws://collab-service:8080
           ports:
             - containerPort: 3001
           resources:
@@ -233,6 +230,39 @@ spec:
           name: matching-service
           ports:
             - containerPort: 8001
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collab-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: collab-service
+  template:
+    metadata:
+      labels:
+        app: collab-service
+    spec:
+      containers:
+        - env:
+          - name: QUESTION_SVC_URI
+            value: http://question-service:5000
+          - name: DATABASE_URL
+            value: mongodb://mongo-db:27017/collab-docs
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/collab-service:latest
+          name: collab-service
+          ports:
+            - containerPort: 8080
           resources:
             limits:
               memory: 512Mi
