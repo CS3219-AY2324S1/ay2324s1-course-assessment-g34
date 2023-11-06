@@ -1,4 +1,9 @@
 export const COLLAB_SVC_URI = process.env.NEXT_PUBLIC_COLLAB_SVC_URI || 'ws://localhost:8080';
+export const VIDEO_SVC_PORT = process.env.NEXT_PUBLIC_VIDEO_SVC_PORT || 3002;
+export const VIDEO_SVC_HOST = process.env.NEXT_PUBLIC_VIDEO_SVC_HOST || 'localhost';
+export const VIDEO_SVC_URI =
+  process.env.NEXT_PUBLIC_VIDEO_SVC_URI || `http://${VIDEO_SVC_HOST}:${VIDEO_SVC_PORT}`;
+
 // export const MATCHING_SVC_URI = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001';
 
 const GATEWAY_BASE_URL = 'http://localhost:3001';

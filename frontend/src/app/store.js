@@ -8,6 +8,7 @@ import {
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import sessionReducer from '../features/session/sessionSlice';
 import matchReducer from '../features/match/matchSlice';
+import videoReducer from '../features/video/videoSlice';
 
 const createNoopStorage = () => ({
   getItem(_key) {
@@ -32,6 +33,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   match: matchReducer,
   session: sessionReducer,
+  video: videoReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

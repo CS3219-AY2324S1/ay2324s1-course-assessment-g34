@@ -4,6 +4,7 @@ export const matchSlice = createSlice({
   name: 'match',
   initialState: {
     sessionId: null,
+    username: null,
   },
   reducers: {
     setMatchedUser: (state, action) => {

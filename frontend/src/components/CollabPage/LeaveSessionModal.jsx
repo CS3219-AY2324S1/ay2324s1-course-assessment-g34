@@ -28,7 +28,6 @@ export default function LeaveSessionModal({ handleEndSession }) {
         <DialogContentText>
           <Typography component="span" color="secondary" sx={{ fontWeight: 600 }}>{matchedUser}</Typography>
           {' '}
-          {' '}
           has left the room.
         </DialogContentText>
       </DialogContent>
