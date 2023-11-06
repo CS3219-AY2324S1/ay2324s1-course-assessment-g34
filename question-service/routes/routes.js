@@ -101,7 +101,7 @@ router.get("/filter", async (req, res) => {
 //Private route accessible by only the admins
 
 //Post Method
-router.post("/questions", isAdmin, async (req, res) => {
+router.post("/questions", async (req, res) => {
 
     const { title, categories, difficulty, link, description } = req.body;
 
