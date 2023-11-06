@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import React, { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import SolidButton from '../SolidButton';
 
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
@@ -35,7 +36,6 @@ export default function LeaveSessionModal({ handleEndSession }) {
       <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
         <SolidButton
           onClick={handleEndSession}
-          variant="contained"
           size="medium"
           color="error"
           type="button"
@@ -47,3 +47,7 @@ export default function LeaveSessionModal({ handleEndSession }) {
     </Dialog>
   );
 }
+
+LeaveSessionModal.propTypes = {
+  handleEndSession: PropTypes.func.isRequired,
+};

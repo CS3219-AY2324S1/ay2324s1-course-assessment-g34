@@ -55,7 +55,7 @@ export default function DeleteQuestionDialog({ handleDelete, title }) {
           <Button onClick={handleClose} variant="outlined">
             Cancel
           </Button>
-          <SolidButton onClick={handleDeleteAndClose} variant="contained" color="error">
+          <SolidButton onClick={handleDeleteAndClose} color="error">
             Delete
           </SolidButton>
         </DialogActions>

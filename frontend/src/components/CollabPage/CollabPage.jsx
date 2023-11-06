@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Snackbar } from '@mui/material';
+import { Alert, Box, Snackbar } from '@mui/material';
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { COLLAB_SVC_URI } from '@/config/uris';
@@ -142,6 +142,7 @@ export default function CollabPage() {
         });
       };
     }
+    return null;
   }, [sessionId]);
 
   const handleInputChange = (value, e) => {
@@ -196,10 +197,13 @@ export default function CollabPage() {
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={isSnackbarOpen}
-        onClose={closeSnackbar}
-        message="No questions found."
         key="topcenter"
-      />
+        autoHideDuration={5000}
+      >
+        <Alert severity="error" variant="filled" elevation={6} onClose={closeSnackbar}>
+          No questions found.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
