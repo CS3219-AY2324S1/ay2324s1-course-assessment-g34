@@ -1,4 +1,12 @@
-const GATEWAY_BASE_URL = 'http://34.87.4.219:3001';
+const isProduction = process.env.IS_PROD || true;
+
+let GATEWAY_BASE_URL;
+
+if (isProduction) {
+    GATEWAY_BASE_URL = 'http://34.87.4.219:3001';
+} else {
+    GATEWAY_BASE_URL = 'http://localhost:3001';
+}
 
 // User Service
 const USER_SVC_PREFIX = '/api/user-service';

@@ -34,6 +34,8 @@ services:
       - question-service
       - matching-service
       - collab-service
+    environment:
+      IS_PROD: False
   
   api-gateway:
     container_name: api-gateway
