@@ -99,12 +99,14 @@ export default function CollabPage() {
     dispatch(setIsOnGoing(isOnGoing));
   }, [isOnGoing]);
 
-  useEffect(() => () => {
-    dispatch(setIsOnGoing(false));
-    dispatch(resetMatchedUser());
-    dispatch(resetSession());
-    dispatch(setDifficulty(''));
-    dispatch(setQuestionId(null));
+  useEffect(() => {
+    return () => {
+      dispatch(setIsOnGoing(false));
+      dispatch(resetMatchedUser());
+      dispatch(resetSession());
+      dispatch(setDifficulty(''));
+      dispatch(setQuestionId(null));
+    }
   }, []);
 
   useEffect(() => {
@@ -143,7 +145,7 @@ export default function CollabPage() {
         });
       };
     }
-    return null;
+    return () => {};
   }, [sessionId]);
 
   const handleInputChange = (value, e) => {
