@@ -1,7 +1,7 @@
-const axios = require('axios');
+import axios from 'axios';
 
 const submission_service_port = 5433;
-const addSubmission = (question_id, username1, username2, lang, code) => {
+export default function addSubmission(question_id, username1, username2, lang, code) {
     const queryJson = {
         question_id: question_id,
         username1: username1,
@@ -14,7 +14,3 @@ const addSubmission = (question_id, username1, username2, lang, code) => {
             console.log(error);
         });
 }
-
-console.log("Add submissions");
-addSubmission(3, "Ben_Leong", "Meggy_Spletzer", "R", "print(\"I am Groot\")");
-addSubmission(7, "Meggy_Spletzer", "Technoblade", "C", "printf(\"Woomy\");");

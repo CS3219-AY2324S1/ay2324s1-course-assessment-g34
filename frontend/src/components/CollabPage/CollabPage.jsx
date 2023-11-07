@@ -14,12 +14,13 @@ import {
 } from '@/features/match/matchSlice';
 import { useRouter } from 'next/router';
 import {
-  selectQuestionId, selectDifficulty, selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId,
+  selectDifficulty, selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId,
 } from '@/features/session/sessionSlice';
 import { handleSessionEvents } from '@/utils/eventHandlers';
 import { fetchSessionQuestion, joinSession } from '@/utils/eventEmitters';
 import LeaveSessionModal from '@/components/CollabPage/LeaveSessionModal';
 import ConfirmEndModal from '@/components/CollabPage/ConfirmEndModal';
+import addSubmission from '@/utils/addSubmission';
 
 const connectShareDBSocket = () => {
   const shareDBSocket = new ReconnectingWebSocket(COLLAB_SVC_URI);
@@ -63,6 +64,12 @@ export default function CollabPage() {
     dispatch(setQuestionId(null));
     router.push('/');
   };
+
+  const addSubmissionAndHandleEndSession = () => {
+    const { content, language } = collabDoc.data;
+    addSubmission(questionId, username, matchedUser, language, content);
+    handleEndSession();
+  }
 
   const openSnackbar = () => {
     setIsSnackbarOpen(true);
@@ -168,7 +175,7 @@ export default function CollabPage() {
 
   const handleFetchQuestion = () => {
     const { content, language } = collabDoc.data;
-    console.log(questionId, username, matchedUser, language, content);
+    addSubmission(questionId, username, matchedUser, language, content);
     fetchSessionQuestion(sessionSocket, sessionId, difficulty);
   };
 
@@ -204,7 +211,7 @@ export default function CollabPage() {
       <ConfirmEndModal
         isOpen={isConfirmationModalOpen}
         setIsOpen={setIsConfirmationModalOpen}
-        handleEndSession={handleEndSession}
+        handleEndSession={addSubmissionAndHandleEndSession}
       />
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

@@ -1,6 +1,6 @@
 CREATE TABLE submissions (
 	submission_id SERIAL PRIMARY KEY,
-	question_id INT NOT NULL,
+	question_id CHAR(24),
 	submission_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	username1 TEXT,
 	username2 TEXT,
