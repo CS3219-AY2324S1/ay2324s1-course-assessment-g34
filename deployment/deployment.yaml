@@ -256,7 +256,7 @@ spec:
             value: http://question-service:5000
           - name: DATABASE_URL
             value: mongodb://mongo-db:27017/collab-docs
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/collab-service
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/collab-service:latest
           name: collab-service
           ports:
             - containerPort: 8080
