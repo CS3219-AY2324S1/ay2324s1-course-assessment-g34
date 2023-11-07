@@ -7,13 +7,14 @@ import QuestionPanel from '@/components/CollabPage/QuestionPanel';
 import EditorPanel from '@/components/CollabPage/EditorPanel';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAuthContext } from '@/contexts/AuthContext';
 import {
   resetMatchedUser, resetSession, selectMatchedUsername, selectSessionId, setMatchedUser,
   setSession,
 } from '@/features/match/matchSlice';
 import { useRouter } from 'next/router';
 import {
-  selectDifficulty, selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId,
+  selectQuestionId, selectDifficulty, selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId,
 } from '@/features/session/sessionSlice';
 import { handleSessionEvents } from '@/utils/eventHandlers';
 import { fetchSessionQuestion, joinSession } from '@/utils/eventEmitters';
@@ -35,8 +36,14 @@ const connectSessionSocket = () => {
 };
 
 export default function CollabPage() {
+  const { user } = useAuthContext();
+  const username = user == null ? null : user.username;
+  let questionId = null;
+  const collabPageGetQid = (qid) => { questionId = qid };
+
   const router = useRouter();
   const sessionId = useSelector(selectSessionId);
+
   const matchedUser = useSelector(selectMatchedUsername);
   const difficulty = useSelector(selectDifficulty);
   const isOnGoing = useSelector(selectIsOngoing);
@@ -144,7 +151,7 @@ export default function CollabPage() {
         });
       };
     }
-    return () => {};
+    return () => { };
   }, [sessionId]);
 
   const handleInputChange = (value, e) => {
@@ -160,6 +167,8 @@ export default function CollabPage() {
   };
 
   const handleFetchQuestion = () => {
+    const { content, language } = collabDoc.data;
+    console.log(questionId, username, matchedUser, language, content);
     fetchSessionQuestion(sessionSocket, sessionId, difficulty);
   };
 
@@ -180,6 +189,7 @@ export default function CollabPage() {
           <QuestionPanel
             fetchSessionQuestion={handleFetchQuestion}
             openSnackbar={openSnackbar}
+            collabPageGetQid={collabPageGetQid}
           />
         </Box>
         <EditorPanel
