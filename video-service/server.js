@@ -42,6 +42,7 @@ io.on("connection", (socket) => {
     // });
   });
 
+  // CAN IGNORE MOST OF THESE; NOT IN USE FOR NOW
   socket.on(VideoEvent.REQUEST, (data) => {
     const { sessionId, username } = data;
     socket.to(sessionId).emit(VideoEvent.REQUEST, { userId: socket.id, username: username });

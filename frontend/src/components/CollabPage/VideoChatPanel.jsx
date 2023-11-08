@@ -400,13 +400,13 @@ export default function VideoChatPanel({ user, matchedUser, videoSocket }) {
           peer.on("call", call => {
             console.log("call received:", call);
             call.answer(stream);
-            call.on("stream", userVideoStream => { // When we recieve their stream
+            call.on("stream", userVideoStream => {
               peerVideo.current.srcObject = userVideoStream;
               peerVideo.current.play();
             });
           });
           console.log("listening for calls...")
-          
+
           videoSocket.on(VideoEvent.JOIN, (data) => {
             console.log("received join event: ", data);
             const call2 = peer.call(data.username, stream);
