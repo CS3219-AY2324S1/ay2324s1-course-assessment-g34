@@ -192,7 +192,7 @@ spec:
               value: mongodb://mongo-db:27017/questions:latest
             - name: SECRET_KEY
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/question-service
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/question-service:latest
           name: question-service
           ports:
             - containerPort: 5000
@@ -223,7 +223,7 @@ spec:
         - env:
             - name: PORT
               value: "8001"
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/matching-service:latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/matching-service
           name: matching-service
           ports:
             - containerPort: 8001
@@ -256,7 +256,7 @@ spec:
             value: http://question-service:5000
           - name: DATABASE_URL
             value: mongodb://mongo-db:27017/collab-docs
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/collab-service:latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/collab-service
           name: collab-service
           ports:
             - containerPort: 8080
