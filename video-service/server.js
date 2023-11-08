@@ -9,7 +9,7 @@ const io = require("socket.io")(server, {
     origin: '*'
   }
 });
-// const { ExpressPeerServer } = require("peer");
+const { ExpressPeerServer } = require("peer");
 const { VideoEvent } = require("./constants/events");
 const opinions = {
   debug: true,
@@ -17,7 +17,7 @@ const opinions = {
 
 const PORT = process.env.PORT || 3002;
 
-// app.use("/peerjs", ExpressPeerServer(server, opinions));
+app.use("/peerjs", ExpressPeerServer(server, opinions));
 // app.use(express.static("public"));
 
 app.get("/", (req, res) => {
@@ -34,9 +34,9 @@ io.on("connection", (socket) => {
     const { sessionId, username } = data;
     socket.join(sessionId);
     console.log(`${socket.id} (${username}) join room ${sessionId}`);
-    // setTimeout(()=>{
-    //   socket.to(roomId).emit("user-connected", userId);
-    // }, 1000)
+    setTimeout(()=>{
+      socket.to(sessionId).emit(VideoEvent.JOIN, {id: socket.id, username: username });
+    }, 1000)
     // socket.on("message", (message) => {
     //   io.to(roomId).emit("createMessage", message, userName);
     // });

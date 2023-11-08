@@ -47,7 +47,7 @@ const connectVideoSocket = () => {
 
 export default function CollabPage() {
   const router = useRouter();
-  const [activeCall, setActiveCall] = useState(null);
+  // const [activeCall, setActiveCall] = useState(null);
   const sessionId = useSelector(selectSessionId);
   const matchedUser = useSelector(selectMatchedUsername);
   const difficulty = useSelector(selectDifficulty);
@@ -64,10 +64,10 @@ export default function CollabPage() {
   const { user } = useAuthContext();
 
   const handleEndSession = () => {
-    if (activeCall) {
-      activeCall.close();
-      endCall(videoSocket, sessionId);
-    }
+    // if (activeCall) {
+    //   activeCall.close();
+    //   endCall(videoSocket, sessionId);
+    // }
     videoSocket.disconnect();
     sessionSocket.disconnect();
     dispatch(setIsOnGoing(false));
@@ -117,7 +117,6 @@ export default function CollabPage() {
       const socket = connectVideoSocket();
       setVideoSocket(socket);
       handleVideoEvents(socket, dispatch);
-      joinVideoRoom(socket, sessionId, user.username);
       
       return () => {
         socket.disconnect();
@@ -143,10 +142,10 @@ export default function CollabPage() {
       dispatch(resetSession());
       dispatch(setDifficulty(''));
       dispatch(setQuestionId(null));
-      if (activeCall) {
-        activeCall.close();
-        endCall(videoSocket, sessionId);
-      }
+      // if (activeCall) {
+      //   activeCall.close();
+      //   endCall(videoSocket, sessionId);
+      // }
     }
   }, []);
 
@@ -237,8 +236,8 @@ export default function CollabPage() {
           user={user}
           matchedUser={matchedUser}
           videoSocket={videoSocket}
-          activeCall={activeCall}
-          setActiveCall={setActiveCall}
+          // activeCall={activeCall}
+          // setActiveCall={setActiveCall}
         />
       </Box>
       <LeaveSessionModal handleEndSession={handleEndSession} />
