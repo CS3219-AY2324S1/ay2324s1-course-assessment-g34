@@ -1,4 +1,4 @@
-name: Test questionservice
+name: Test question-service
 
 on:
   push:
