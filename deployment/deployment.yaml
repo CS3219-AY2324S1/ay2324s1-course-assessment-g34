@@ -39,19 +39,9 @@ spec:
         - name: api-gateway
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway:latest
           imagePullPolicy: Always
-          env:
-            - name: MATCHING_BASE_URL
-              value: http://matching-service:8001
-            - name: QUESTION_BASE_URL
-              value: http://question-service:5000
-            - name: SECRET_KEY
-              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
-            - name: USER_BASE_URL
-              value: http://user-service:8000 
-            - name: COLLAB_BASE_IO_URL
-              value: http://collab-service:8080
-            - name: COLLAB_BASE_WS_URL
-              value: ws://collab-service:8080
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
           ports:
             - containerPort: 3001
           resources:
@@ -81,13 +71,9 @@ spec:
         - name: postgres-db
           image: postgres:15.4
           imagePullPolicy: IfNotPresent
-          env:
-            - name: POSTGRES_DB
-              value: user_service
-            - name: POSTGRES_PASSWORD
-              value: postgres
-            - name: POSTGRES_USER
-              value: postgres
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
           ports:
             - containerPort: 5432
           resources:
@@ -117,23 +103,9 @@ spec:
         - name: user-service
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service:latest
           imagePullPolicy: Always
-          env:
-            - name: DATABASE_HOST
-              value: postgres-db
-            - name: DATABASE_NAME
-              value: user_service
-            - name: DATABASE_PASSWORD
-              value: postgres
-            - name: DATABASE_PORT
-              value: "5432"
-            - name: DATABASE_USER
-              value: postgres
-            - name: DJANGO_DEBUG
-              value: "False"
-            - name: DJANGO_SECRET_KEY
-              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
-            - name: SECRET_KEY
-              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
           ports:
             - containerPort: 8000
           resources:
@@ -190,11 +162,9 @@ spec:
         app: question-service
     spec:
       containers:
-        - env:
-            - name: DATABASE_URL
-              value: mongodb://mongo-db:27017/questions:latest
-            - name: SECRET_KEY
-              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
+        - envFrom:
+            - configMapRef:
+                name: peerprep-config
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/question-service:latest
           imagePullPolicy: Always
           name: question-service

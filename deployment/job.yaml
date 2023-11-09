@@ -10,22 +10,8 @@ spec:
           image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service:latest
           command: ["/bin/sh","-c"]
           args: ["python manage.py makemigrations && python manage.py migrate"]
-          env:
-            - name: DATABASE_HOST
-              value: postgres-db
-            - name: DATABASE_NAME
-              value: user_service
-            - name: DATABASE_PASSWORD
-              value: postgres
-            - name: DATABASE_PORT
-              value: "5432"
-            - name: DATABASE_USER
-              value: postgres
-            - name: DJANGO_DEBUG
-              value: "False"
-            - name: DJANGO_SECRET_KEY
-              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
-            - name: SECRET_KEY
-              value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
       restartPolicy: Never
   backoffLimit: 5
