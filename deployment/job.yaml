@@ -28,4 +28,4 @@ spec:
             - name: SECRET_KEY
               value: django-insecure-6&0xj1vstd4^_sgd#9vbn42bs4em$glhvkm5ba&8-(f8c$aa++
       restartPolicy: Never
-  backoffLimit: 5
+  backoffLimit: 2
