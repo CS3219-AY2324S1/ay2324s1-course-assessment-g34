@@ -3,11 +3,11 @@ name: Deploy to GCP artifact
 on:
   push:
     branches:
-    - 'main'
+    - 'master'
     - 'CI-CD'
   pull_request:
     branches:
-      - 'main'
+      - 'master'
 
 jobs:
   deploy:
