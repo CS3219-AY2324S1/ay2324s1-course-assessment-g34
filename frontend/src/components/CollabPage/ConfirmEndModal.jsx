@@ -1,10 +1,10 @@
 import {
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
 } from '@mui/material';
-import React, { forwardRef } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import SolidButton from '../SolidButton';
-
-const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+import { SlideTransition } from '../commons/transitions';
 
 export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession }) {
   const handleClose = () => {
@@ -14,7 +14,7 @@ export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession })
   return (
     <Dialog
       open={isOpen}
-      TransitionComponent={Transition}
+      TransitionComponent={SlideTransition('up')}
       fullWidth
       maxWidth="sm"
       keepMounted
@@ -29,7 +29,6 @@ export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession })
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
         <SolidButton
-          variant="contained"
           size="medium"
           color="error"
           type="button"
@@ -39,7 +38,6 @@ export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession })
           End Session
         </SolidButton>
         <SolidButton
-          variant="contained"
           size="medium"
           color="primary"
           type="button"
@@ -52,3 +50,9 @@ export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession })
     </Dialog>
   );
 }
+
+ConfirmEndModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  handleEndSession: PropTypes.func.isRequired,
+};

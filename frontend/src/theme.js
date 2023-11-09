@@ -16,6 +16,7 @@ export const theme = createTheme({
     success: createColor('#62FBD7'),
     warning: createColor('#FBBC1C'),
     error: createColor('#FB1C52'),
+    grey: createColor('#E0E0E0'),
   },
   typography: {
     fontFamily: '"Open Sans", sans-serif',

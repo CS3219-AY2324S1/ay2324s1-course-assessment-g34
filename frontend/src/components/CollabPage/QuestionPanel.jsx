@@ -1,15 +1,16 @@
 import {
   Accordion, AccordionDetails, AccordionSummary, Box, Paper, Skeleton, Stack, Toolbar, Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ExpandMore } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectIsQuestionLoading, selectQuestionId, setIsQuestionLoading, setQuestionId,
 } from '@/features/session/sessionSlice';
 import axios from 'axios';
-import { GET_QUESTION_BY_ID_SVC_URI } from '@/config/uris';
+import { QUESTION_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
+import PropTypes from 'prop-types';
 import QuestionCategoryList from '../QuestionPage/QuestionCategoryList';
 import DifficultyChip from '../DifficultyChip';
 import SolidButton from '../SolidButton';
@@ -32,7 +33,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
         },
       };
 
-      const response = await axios.get(`${GET_QUESTION_BY_ID_SVC_URI}/${questionId}`, config);
+      const response = await axios.get(`${QUESTION_SVC_URI}/${questionId}`, config);
       setQuestion(response.data);
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -71,7 +72,6 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
           Description
         </Typography>
         <SolidButton
-          variant="contained"
           color="secondary"
           size="small"
           sx={{ ml: 'auto', fontSize: 12, textTransform: 'none' }}
@@ -139,3 +139,8 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
     </Box>
   );
 }
+
+QuestionPanel.propTypes = {
+  fetchSessionQuestion: PropTypes.func.isRequired,
+  openSnackbar: PropTypes.func.isRequired,
+};

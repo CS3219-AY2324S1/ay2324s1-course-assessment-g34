@@ -1,6 +1,7 @@
 import React from 'react';
 import Editor from '@monaco-editor/react';
 import { Skeleton } from '@mui/material';
+import PropTypes from 'prop-types';
 
 export default function CollabEditor({ value, onChange, language }) {
   const options = {
@@ -28,3 +29,9 @@ export default function CollabEditor({ value, onChange, language }) {
     />
   );
 }
+
+CollabEditor.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
+};
