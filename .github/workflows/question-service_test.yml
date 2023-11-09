@@ -3,13 +3,13 @@ name: Test questionservice
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
 
     steps:
