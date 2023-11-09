@@ -71,7 +71,7 @@ export default function DeleteAccountButton({
 
   return (
     <>
-      <SolidButton color="error" sx={{ textTransform: 'none' }} onClick={openModal}>
+      <SolidButton variant="contained" color="error" sx={{ textTransform: 'none' }} onClick={openModal}>
         Delete Account
       </SolidButton>
       <Dialog
@@ -91,6 +91,7 @@ export default function DeleteAccountButton({
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
           <SolidButton
+            variant="contained"
             size="medium"
             color="error"
             type="button"
@@ -100,6 +101,7 @@ export default function DeleteAccountButton({
             Delete Account
           </SolidButton>
           <SolidButton
+            variant="contained"
             size="medium"
             color="primary"
             type="button"

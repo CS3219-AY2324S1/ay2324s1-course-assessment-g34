@@ -130,29 +130,38 @@ export default function useAuth() {
   };
 
   const getAccessToken = async () => {
+    setIsLoading(true);
+    let token;
+
     const isValid = accessToken && await verifyAccessToken();
 
     if (isValid) {
-      return accessToken;
+      token = accessToken;
+    } else {
+      token = refreshAccessToken();
     }
 
-    return refreshAccessToken();
+    setIsLoading(false);
+    return token;
   };
 
   // resolve user
   useEffect(() => {
-    const verifyAndRefreshAccessToken = async () => {
-      const isValid = accessToken && await verifyAccessToken();
+    if (!user) {
+      setIsLoading(true);
+      const verifyAndRefreshAccessToken = async () => {
+        const isValid = accessToken && await verifyAccessToken();
 
-      if (!isValid) {
-        await refreshAccessToken();
-      }
+        if (!isValid) {
+          await refreshAccessToken();
+        }
+      };
+
+      verifyAndRefreshAccessToken();
       setIsLoading(false);
-    };
-
-    verifyAndRefreshAccessToken();
+    }
     /* eslint-disable react-hooks/exhaustive-deps */
-  }, []);
+  }, [user]);
 
   return {
     user,

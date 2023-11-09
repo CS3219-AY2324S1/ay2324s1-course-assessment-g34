@@ -34,6 +34,7 @@ export default function LeaveSessionModal({ handleEndSession }) {
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
         <SolidButton
+          variant="contained"
           onClick={handleEndSession}
           size="medium"
           color="error"

@@ -73,6 +73,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isMi
           Description
         </Typography>
         <SolidButton
+          variant="contained"
           color="secondary"
           size="small"
           sx={{ ml: 'auto', fontSize: 12, textTransform: 'none' }}

@@ -1,10 +1,8 @@
 const VideoEvent = {
   JOIN: 'join-room',
-  REQUEST: 'request-call',
-  CANCEL: 'cancel-call',
-  ACCEPT: 'accept-call',
-  DECLINE: 'decline-call',
   LEAVE: 'leave-call',
+  TOGGLE_MIC: 'toggle-mic',
+  TOGGLE_CAM: 'toggle-video',
   DISCONNECTING: 'disconnecting'
 };
 

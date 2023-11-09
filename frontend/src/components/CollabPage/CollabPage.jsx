@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Box, Snackbar, Stack } from '@mui/material';
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { COLLAB_SVC_URI, VIDEO_SVC_URI } from '@/config/uris';
+import { COLLAB_SVC_URI } from '@/config/uris';
 import QuestionPanel from '@/components/CollabPage/QuestionPanel';
 import EditorPanel from '@/components/CollabPage/EditorPanel';
 import { io } from 'socket.io-client';
@@ -15,13 +15,12 @@ import { useRouter } from 'next/router';
 import {
   selectDifficulty, selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId,
 } from '@/features/session/sessionSlice';
-import { handleSessionEvents, handleVideoEvents } from '@/utils/eventHandlers';
-import { endCall, fetchSessionQuestion, joinSession, joinVideoRoom } from '@/utils/eventEmitters';
+import { handleSessionEvents } from '@/utils/eventHandlers';
+import { fetchSessionQuestion, joinSession } from '@/utils/eventEmitters';
 import LeaveSessionModal from '@/components/CollabPage/LeaveSessionModal';
 import ConfirmEndModal from '@/components/CollabPage/ConfirmEndModal';
 import VideoChatPanel from './VideoChatPanel';
 import ConsolePanel from './ConsolePanel';
-import { useAuthContext } from '@/contexts/AuthContext';
 
 const connectShareDBSocket = () => {
   const shareDBSocket = new ReconnectingWebSocket(COLLAB_SVC_URI);
@@ -37,17 +36,8 @@ const connectSessionSocket = () => {
   return socket;
 };
 
-const connectVideoSocket = () => {
-  const socket = io(VIDEO_SVC_URI, {
-    path: '/api/video-service/socket.io'
-  });
-
-  return socket;
-};
-
 export default function CollabPage() {
   const router = useRouter();
-  // const [activeCall, setActiveCall] = useState(null);
   const sessionId = useSelector(selectSessionId);
   const matchedUser = useSelector(selectMatchedUsername);
   const difficulty = useSelector(selectDifficulty);
@@ -56,20 +46,12 @@ export default function CollabPage() {
   const [content, setContent] = useState('');
   const [collabDoc, setCollabDoc] = useState(null);
   const [sessionSocket, setSessionSocket] = useState(null);
-  const [videoSocket, setVideoSocket] = useState(null);
   const [language, setLanguage] = useState('javascript');
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [isConsoleMinimized, setIsConsoleMinimized] = useState(false);
-  const { user } = useAuthContext();
 
   const handleEndSession = () => {
-    // if (activeCall) {
-    //   activeCall.close();
-    //   endCall(videoSocket, sessionId);
-    // }
-    videoSocket.disconnect();
-    sessionSocket.disconnect();
     dispatch(setIsOnGoing(false));
     dispatch(resetMatchedUser());
     dispatch(resetSession());
@@ -113,19 +95,6 @@ export default function CollabPage() {
   }, []);
 
   useEffect(() => {
-    if (!videoSocket) {
-      const socket = connectVideoSocket();
-      setVideoSocket(socket);
-      handleVideoEvents(socket, dispatch);
-      
-      return () => {
-        socket.disconnect();
-        setVideoSocket(null)
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     if (difficulty) {
       dispatch(setDifficulty(difficulty));
     }
@@ -142,10 +111,6 @@ export default function CollabPage() {
       dispatch(resetSession());
       dispatch(setDifficulty(''));
       dispatch(setQuestionId(null));
-      // if (activeCall) {
-      //   activeCall.close();
-      //   endCall(videoSocket, sessionId);
-      // }
     }
   }, []);
 
@@ -204,9 +169,10 @@ export default function CollabPage() {
     fetchSessionQuestion(sessionSocket, sessionId, difficulty);
   };
 
-  // 4 main components: *question, *editor, program output, video chat
-  // all components should be resizable
-  // video window should be draggable
+  if (!sessionId && !matchedUser && !isOnGoing) {
+    return null;
+  }
+
   return (
     <Box
       sx={{
@@ -232,13 +198,7 @@ export default function CollabPage() {
           handleLanguageSelect={handleLanguageSelect}
           openConfirmationModal={() => setIsConfirmationModalOpen(true)}
         />
-        <VideoChatPanel
-          user={user}
-          matchedUser={matchedUser}
-          videoSocket={videoSocket}
-          // activeCall={activeCall}
-          // setActiveCall={setActiveCall}
-        />
+        <VideoChatPanel />
       </Box>
       <LeaveSessionModal handleEndSession={handleEndSession} />
       <ConfirmEndModal

@@ -5,7 +5,6 @@ import { Call, CallEnd } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { selectHasCallRequest, selectIsRequestingCall } from "@/features/video/videoSlice";
 
-// IGNORE THIS FILE: NOT IN USE
 const CallRequestPanel = ({matchedUser, handleCallRequest, handleCancelCallRequest}) => {
   const isRequestingCall = useSelector(selectIsRequestingCall)
   return (
@@ -21,8 +20,8 @@ const CallRequestPanel = ({matchedUser, handleCallRequest, handleCancelCallReque
       {isRequestingCall
         ? <Tooltip title="Cancel call">
             <SolidButton
-              size="small"
               variant="contained"
+              size="small"
               color="error"
               type="button"
               sx={{ borderRadius: 10 }}
@@ -33,8 +32,8 @@ const CallRequestPanel = ({matchedUser, handleCallRequest, handleCancelCallReque
           </Tooltip>
         : <Tooltip title="Start call">
             <SolidButton
-              size="small"
               variant="contained"
+              size="small"
               color="success"
               sx={{ borderRadius: 10 }}
               type="button"
@@ -60,8 +59,8 @@ const IncomingCallRequestPanel = ({matchedUser, handleAccept, handleDecline}) =>
       <Stack direction="row" sx={{ justifyContent: 'center', gap: 2 }}>
         <Tooltip title="Decline call">
           <SolidButton
-            size="small"
             variant="contained"
+            size="small"
             color="error"
             type="button"
             sx={{ borderRadius: 10 }}
@@ -72,8 +71,8 @@ const IncomingCallRequestPanel = ({matchedUser, handleAccept, handleDecline}) =>
         </Tooltip>
         <Tooltip title="Accept call">
           <SolidButton
-            size="small"
             variant="contained"
+            size="small"
             color="success"
             sx={{ borderRadius: 10 }}
             type="button"
@@ -88,10 +87,15 @@ const IncomingCallRequestPanel = ({matchedUser, handleAccept, handleDecline}) =>
 };
 
 const VideoFeed = ({videoRefs}) => {
+  const { myVideoRef, peerVideoRef } = videoRefs;
+  const handleCanPlay = (ref) => {
+    ref.current.play();
+  };
+
   return (
     <>
-      <Box component="video" maxWidth={300} ref={videoRefs.myVideoRef}></Box>
-      <Box component="video" maxWidth={300} ref={videoRefs.peerVideoRef}></Box>
+      <Box component="video" maxWidth={200} ref={myVideoRef} onCanPlay={() => handleCanPlay(myVideoRef)}></Box>
+      <Box component="video" maxWidth={200} ref={peerVideoRef} onCanPlay={() => handleCanPlay(peerVideoRef)}></Box>
     </>
   );
 };

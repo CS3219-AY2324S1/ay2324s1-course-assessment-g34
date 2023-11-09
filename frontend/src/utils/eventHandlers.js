@@ -1,6 +1,5 @@
 import { setIsOnGoing, setIsQuestionLoading, setQuestionId } from '@/features/session/sessionSlice';
 import { SessionEvent, VideoEvent } from './constants';
-import { setIsRequestingCall, setHasCallRequest } from '@/features/video/videoSlice';
 
 export const handleMatchEvents = (socket, dispatch) => {
 
@@ -25,17 +24,16 @@ export const handleSessionEvents = (socket, dispatch) => {
   });
 };
 
-export const handleVideoEvents = (socket, dispatch) => {
-  socket.on(VideoEvent.REQUEST, (data) => {
-    console.log(`${socket.id}: Received call request from ${data.userId}`)
-    dispatch(setHasCallRequest(true));
+export const handleVideoEvents = (socket, dispatchers) => {
+  const { setIsPeerMicOn, setIsPeerVideoOn } = dispatchers;
+
+  socket.on(VideoEvent.TOGGLE_MIC, (data) => {
+    const { isMicOn } = data;
+    setIsPeerMicOn(isMicOn);
   });
 
-  socket.on(VideoEvent.DECLINE, () => {
-    dispatch(setIsRequestingCall(false));
-  });
-
-  socket.on(VideoEvent.CANCEL, () => {
-    dispatch(setHasCallRequest(false));
+  socket.on(VideoEvent.TOGGLE_CAM, (data) => {
+    const { isVideoOn } = data;
+    setIsPeerVideoOn(isVideoOn);
   });
 };

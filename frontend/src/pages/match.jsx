@@ -194,6 +194,7 @@ export default function MatchPage() {
                 {isFinding
                   ? (
                     <SolidButton
+                      variant="contained"
                       size="medium"
                       color="secondary"
                       type="button"
@@ -206,6 +207,7 @@ export default function MatchPage() {
                   )
                   : (
                     <SolidButton
+                      variant="contained"
                       size="medium"
                       color="secondary"
                       type="submit"
