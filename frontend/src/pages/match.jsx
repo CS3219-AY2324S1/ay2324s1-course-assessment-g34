@@ -7,13 +7,21 @@ import SolidButton from '@/components/SolidButton';
 import { MATCHING_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { MatchEvent, Role } from '@/utils/constants';
-import { cancelMatch, disconnectMatch, findMatch } from '@/utils/eventEmitters';
-import { getUsername } from '@/utils/socketUtils';
+import { cancelMatch, findMatch } from '@/utils/eventEmitters';
+import { getQuestionId, getSessionId, getUsername } from '@/utils/socketUtils';
 import {
   Box, Container, MenuItem, TextField, Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectMatchedUsername, selectSessionId, setMatchedUser, setSession,
+} from '@/features/match/matchSlice';
+import { useRouter } from 'next/router';
+import {
+  selectIsOngoing, setDifficulty, setIsOnGoing, setQuestionId,
+} from '@/features/session/sessionSlice';
 
 const proficiencies = [
   {
@@ -31,10 +39,14 @@ const proficiencies = [
 ];
 
 export default function MatchPage() {
+  const router = useRouter();
+  const sessionId = useSelector(selectSessionId);
+  const isCollabOngoing = useSelector(selectIsOngoing);
+  const dispatch = useDispatch();
   const [isFinding, setIsFinding] = useState(false);
   const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
   const [isMatchFound, setIsMatchFound] = useState(false);
-  const [matchedUser, setMatchedUser] = useState(null);
+  const matchedUser = useSelector(selectMatchedUsername);
   const [matchSocket, setMatchSocket] = useState(null);
   const [matchCriteria, setMatchCriteria] = useState({
     difficulty: 'Easy',
@@ -43,18 +55,11 @@ export default function MatchPage() {
   const { user } = useAuthContext();
 
   const connect = () => {
-    const socket = io(MATCHING_SVC_URI, { 
-      path: "/api/matching-service/socket.io" 
+    const socket = io(MATCHING_SVC_URI, {
+      path: '/api/matching-service/socket.io',
     });
 
     socket.on(MatchEvent.TIMEOUT, () => {
-      console.log(`User ${user.username} has timed out from matching`);
-      socket.disconnect();
-      setMatchSocket(null);
-    });
-
-    socket.on(MatchEvent.CANCELLED, () => {
-      console.log(`User ${user.username} cancelled match finding`);
       socket.disconnect();
       setMatchSocket(null);
     });
@@ -62,9 +67,12 @@ export default function MatchPage() {
     socket.on(MatchEvent.FOUND, (msg) => {
       const match = getUsername(msg);
       setIsFinding(false);
-      setMatchedUser(match);
+      dispatch(setMatchedUser(match));
       setIsMatchFound(true);
-      console.log(`Match found with user: ${match}`);
+      dispatch(setSession(getSessionId(msg)));
+      dispatch(setDifficulty(matchCriteria.difficulty));
+      dispatch(setIsOnGoing(true));
+      dispatch(setQuestionId(getQuestionId(msg)));
     });
 
     return socket;
@@ -93,22 +101,7 @@ export default function MatchPage() {
     e.preventDefault();
     cancelMatch(matchSocket);
     setIsFinding(false);
-  };
-
-  // this does not cancel the timeout
-  const handleDecline = () => {
-    setMatchedUser(null);
-    setIsMatchFound(false);
-    disconnectMatch(matchSocket);
-    setMatchSocket(null);
-  };
-
-  // this does not cancel the timeout
-  const handleAccept = () => {
-    // TODO: to handle creating of collab session here
-    setMatchedUser(null);
-    setIsMatchFound(false);
-    disconnectMatch(matchSocket);
+    matchSocket.disconnect();
     setMatchSocket(null);
   };
 
@@ -119,6 +112,13 @@ export default function MatchPage() {
       [e.target.name]: value,
     });
   };
+
+  useEffect(() => {
+    if (sessionId && isCollabOngoing) {
+      setTimeout(() => router.push('/collab'), 2000);
+    }
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, [sessionId, isCollabOngoing]);
 
   return (
     <RouteGuard allowedRoles={[Role.USER, Role.ADMIN]}>
@@ -194,7 +194,6 @@ export default function MatchPage() {
                 {isFinding
                   ? (
                     <SolidButton
-                      variant="contained"
                       size="medium"
                       color="secondary"
                       type="button"
@@ -207,7 +206,6 @@ export default function MatchPage() {
                   )
                   : (
                     <SolidButton
-                      variant="contained"
                       size="medium"
                       color="secondary"
                       type="submit"
@@ -221,8 +219,6 @@ export default function MatchPage() {
           </Box>
           <MatchModal
             isOpen={isMatchFound}
-            handleDecline={handleDecline}
-            handleAccept={handleAccept}
             matchedUser={matchedUser}
           />
         </Container>

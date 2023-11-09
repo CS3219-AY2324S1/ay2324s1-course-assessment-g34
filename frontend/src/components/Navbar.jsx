@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Skeleton, Toolbar, Tooltip,
   Typography,
@@ -6,7 +6,10 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { Role } from '@/utils/constants';
+import { NAVBAR_HEIGHT_PX, Role } from '@/utils/constants';
+import { stringToAvatar, stringToColor } from '@/utils/utils';
+import axios from 'axios';
+import { USER_SVC_URI } from '@/config/uris';
 import Logo from './Logo';
 import ComponentGuard from './ComponentGuard';
 import SolidButton from './SolidButton';
@@ -22,13 +25,21 @@ const pages = [
   },
 ];
 
-const settings = ['Profile', 'Account', 'Dashboard'];
+const menuPages = [
+  {
+    label: 'Profile',
+    path: '/profile',
+  },
+  {
+    label: 'Dashboard',
+    path: '/dashboard',
+  },
+];
 
 function LoginButton() {
   return (
     <Link href="/login">
       <SolidButton
-        variant="contained"
         size="medium"
         color="success"
         type="button"
@@ -47,11 +58,10 @@ function LoadingPlaceholder() {
 }
 
 export default function Navbar() {
-  // temporary avatar placeholder; to change later
-  const [image, setImage] = useState('http://localhost:3000/images/user-avatar.png');
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { logout } = useAuthContext();
+  const { getAccessToken, logout, user } = useAuthContext();
+  const [displayName, setDisplayName] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -68,22 +78,46 @@ export default function Navbar() {
     setAnchorElUser(null);
   };
 
+  const fetchUserDetails = useCallback(async () => {
+    try {
+      const token = await getAccessToken();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(`${USER_SVC_URI}/${user.username}`, config);
+      /* eslint-disabled camelcase */
+      setDisplayName(response.data.profile.displayed_name);
+    } catch (err) {
+      logout();
+    }
+  }, [getAccessToken, logout, user]);
+
+  useEffect(() => {
+    if (user && !displayName) {
+      fetchUserDetails();
+    }
+  }, [user, displayName, fetchUserDetails]);
+
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ minHeight: NAVBAR_HEIGHT_PX }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ minHeight: NAVBAR_HEIGHT_PX }}>
           <Logo display={{ xs: 'none', md: 'flex' }} />
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]}>
+          <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorElNav}
@@ -107,8 +141,8 @@ export default function Navbar() {
                   </MenuItem>
                 ))}
               </Menu>
-            </ComponentGuard>
-          </Box>
+            </Box>
+          </ComponentGuard>
           <Logo display={{ xs: 'flex', md: 'none' }} flexGrow={1} />
           <ComponentGuard allowedRoles={[Role.USER, Role.ADMIN]}>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -131,9 +165,15 @@ export default function Navbar() {
               altComponent={<LoginButton />}
               loadingComponent={<LoadingPlaceholder />}
             >
-              <Tooltip title="Open settings">
+              <Tooltip title="Open user menu">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="User Avatar" src={image} />
+                  {displayName
+                    ? (
+                      <Avatar sx={{ bgcolor: stringToColor(displayName) }}>
+                        {stringToAvatar(displayName)}
+                      </Avatar>
+                    )
+                    : <Avatar alt="Avatar placeholder" src="http://localhost:3000/images/user-avatar.png" />}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -146,9 +186,11 @@ export default function Navbar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {menuPages.map((page) => (
+                  <MenuItem key={page.label} onClick={handleCloseUserMenu}>
+                    <Link href={page.path}>
+                      {page.label}
+                    </Link>
                   </MenuItem>
                 ))}
                 <MenuItem onClick={logout}>

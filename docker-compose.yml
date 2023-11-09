@@ -5,6 +5,21 @@ networks:
   backend:
 
 services:
+  collab-service:
+    container_name: collab-service
+    build:
+      context: ./collab-service
+    environment:
+      QUESTION_SVC_URI: http://question-service:5000
+      DATABASE_URL: mongodb://mongo-db:27017/collab-docs
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+    depends_on:
+      - mongo-db
+      - question-service
+
   frontend:
     container_name: frontend
     build:
@@ -15,13 +30,12 @@ services:
     networks:
       - frontend
     environment:
-      NEXT_PUBLIC_USER_SVC_URI: http://localhost:8000
-      NEXT_PUBLIC_QUESTION_SVC_URI: http://localhost:5000
-      NEXT_PUBLIC_MATCHING_SVC_URI: http://localhost:8001
+      NEXT_PUBLIC_COLLAB_SVC_URI: ws://localhost:8080
     depends_on:
       - user-service
       - question-service
       - matching-service
+      - collab-service
   
   api-gateway:
     container_name: api-gateway
@@ -35,6 +49,7 @@ services:
     depends_on:
       - user-service
       - question-service
+      - matching-service
     environment:
       USER_BASE_URL: http://user-service:8000
       QUESTION_BASE_URL: http://question-service:5000
@@ -68,7 +83,7 @@ services:
       - backend
     depends_on:
       - mongo-db
-
+    
   matching-service:
     container_name: matching-service
     build:
@@ -76,10 +91,13 @@ services:
     networks:
       - backend
     environment:
+      COLLAB_SVC_URI: ws://collab-service:8080
       PORT: 8001
     ports: 
       - 8001:8001
-  
+    depends_on:
+      - collab-service
+
   postgres-db:
     container_name: ${DATABASE_HOST}
     image: postgres:15.4
