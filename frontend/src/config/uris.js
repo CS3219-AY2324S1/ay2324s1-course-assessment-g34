@@ -1,8 +1,6 @@
 const isProduction = process.env.IS_PROD || true;
 export const VIDEO_SVC_PORT = process.env.NEXT_PUBLIC_VIDEO_SVC_PORT || 3002;
 export const VIDEO_SVC_HOST = process.env.NEXT_PUBLIC_VIDEO_SVC_HOST || 'localhost';
-export const VIDEO_SVC_URI =
-  process.env.NEXT_PUBLIC_VIDEO_SVC_URI || `http://${VIDEO_SVC_HOST}:${VIDEO_SVC_PORT}`;
 
 // export const MATCHING_SVC_URI = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001';
 
@@ -44,3 +42,5 @@ export const MATCHING_SVC_URI = GATEWAY_BASE_URL;
 export const COLLAB_SVC_IO_URI = GATEWAY_BASE_URL;
 
 export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^http/, 'ws');
+
+export const VIDEO_SVC_URI = GATEWAY_BASE_URL;

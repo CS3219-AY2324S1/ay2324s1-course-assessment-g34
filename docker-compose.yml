@@ -29,8 +29,6 @@ services:
       - 3000:3000
     networks:
       - frontend
-    environment:
-      NEXT_PUBLIC_VIDEO_SVC_URI: http://localhost:3002
     depends_on:
       - user-service
       - question-service
@@ -57,6 +55,7 @@ services:
       MATCHING_BASE_URL: http://matching-service:8001
       COLLAB_BASE_IO_URL: http://collab-service:8080
       COLLAB_BASE_WS_URL: ws://collab-service:8080
+      VIDEO_BASE_URL: http://video-service:3002
       SECRET_KEY: ${SECRET_KEY}
 
   user-service:

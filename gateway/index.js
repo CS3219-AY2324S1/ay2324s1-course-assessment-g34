@@ -7,7 +7,8 @@ const {
     questionProxy,
     matchingProxy,
     collabProxyIO,
-    collabProxyWS
+    collabProxyWS,
+    videoProxy
 } = require('./proxy');
 
 const app = express();
@@ -40,6 +41,8 @@ app.use(matchingProxy);
 app.use(collabProxyIO);
 
 app.use(collabProxyWS);
+
+app.use(videoProxy);
 
 app.use(isAuthenticated)
 
