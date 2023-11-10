@@ -128,3 +128,20 @@ spec:
     app: collab-service
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-service
+  labels:
+    app: video-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3002
+      targetPort: 3002
+      protocol: TCP
+      name: video-service
+  selector:
+    app: video-service
+
+---

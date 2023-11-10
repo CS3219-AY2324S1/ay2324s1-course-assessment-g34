@@ -247,3 +247,35 @@ spec:
               cpu: '400m'
 
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-service
+  template:
+    metadata:
+      labels:
+        app: video-service
+    spec:
+      containers:
+        - name: video-service
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/video-service:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
+          ports:
+            - containerPort: 3002
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
