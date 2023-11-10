@@ -199,6 +199,7 @@ export default function ProfilePage() {
                             />
                             <Stack direction="row" columnGap={1}>
                               <SolidButton
+                                variant="contained"
                                 size="small"
                                 color="success"
                                 type="submit"
@@ -208,6 +209,7 @@ export default function ProfilePage() {
                                 Save
                               </SolidButton>
                               <SolidButton
+                                variant="contained"
                                 size="small"
                                 color="grey"
                                 type="button"

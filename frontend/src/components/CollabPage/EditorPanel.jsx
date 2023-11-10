@@ -50,6 +50,7 @@ export default function EditorPanel({
           ))}
         </Select>
         <SolidButton
+          variant="contained"
           color="error"
           size="small"
           sx={{

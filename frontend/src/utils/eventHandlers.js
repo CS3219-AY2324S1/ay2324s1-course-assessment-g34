@@ -1,5 +1,5 @@
 import { setIsOnGoing, setIsQuestionLoading, setQuestionId } from '@/features/session/sessionSlice';
-import { SessionEvent } from './constants';
+import { SessionEvent, VideoEvent } from './constants';
 
 export const handleMatchEvents = (socket, dispatch) => {
 
@@ -21,5 +21,19 @@ export const handleSessionEvents = (socket, dispatch) => {
 
   socket.on(SessionEvent.ERROR, (data) => {
     console.error(data.error);
+  });
+};
+
+export const handleVideoEvents = (socket, dispatchers) => {
+  const { setIsPeerMicOn, setIsPeerVideoOn } = dispatchers;
+
+  socket.on(VideoEvent.TOGGLE_MIC, (data) => {
+    const { isMicOn } = data;
+    setIsPeerMicOn(isMicOn);
+  });
+
+  socket.on(VideoEvent.TOGGLE_CAM, (data) => {
+    const { isVideoOn } = data;
+    setIsPeerVideoOn(isVideoOn);
   });
 };
