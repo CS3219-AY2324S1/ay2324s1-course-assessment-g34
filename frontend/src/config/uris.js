@@ -43,4 +43,4 @@ export const COLLAB_SVC_IO_URI = GATEWAY_BASE_URL;
 
 export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^http/, 'ws');
 
-export const VIDEO_SVC_URI = 'http://34.87.4.219:3002';
+export const VIDEO_SVC_URI = 'http://35.247.162.247:3002';
