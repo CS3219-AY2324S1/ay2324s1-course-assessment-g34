@@ -1,4 +1,4 @@
-import SolidButton from '@/components/SolidButton';
+import SolidButton from '@/components/commons/SolidButton';
 import {
   Box, Container, Grid, Paper, TextField, Typography,
 } from '@mui/material';

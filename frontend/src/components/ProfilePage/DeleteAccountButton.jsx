@@ -8,7 +8,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { SlideTransition } from '../commons/transitions';
-import SolidButton from '../SolidButton';
+import SolidButton from '../commons/SolidButton';
 
 export default function DeleteAccountButton({
   user, openSnackbar, setSnackbarColor, setMessage,

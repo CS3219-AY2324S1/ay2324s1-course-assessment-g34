@@ -3,7 +3,7 @@ import MatchModal from '@/components/MatchPage/MatchModal';
 import MatchingTimer from '@/components/MatchPage/MatchingTimer';
 import DifficultySelector from '@/components/QuestionPage/DifficultySelector';
 import RouteGuard from '@/components/RouteGuard';
-import SolidButton from '@/components/SolidButton';
+import SolidButton from '@/components/commons/SolidButton';
 import { MATCHING_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { MatchEvent, Role } from '@/utils/constants';

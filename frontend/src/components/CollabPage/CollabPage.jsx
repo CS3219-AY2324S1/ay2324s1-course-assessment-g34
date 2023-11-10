@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Box, Snackbar } from '@mui/material';
+import { Alert, Box, Snackbar, Stack } from '@mui/material';
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { COLLAB_SVC_URI } from '@/config/uris';
@@ -19,6 +19,7 @@ import { handleSessionEvents } from '@/utils/eventHandlers';
 import { fetchSessionQuestion, joinSession } from '@/utils/eventEmitters';
 import LeaveSessionModal from '@/components/CollabPage/LeaveSessionModal';
 import ConfirmEndModal from '@/components/CollabPage/ConfirmEndModal';
+import ConsolePanel from './ConsolePanel';
 
 const connectShareDBSocket = () => {
   const shareDBSocket = new ReconnectingWebSocket(COLLAB_SVC_URI);
@@ -47,6 +48,7 @@ export default function CollabPage() {
   const [language, setLanguage] = useState('javascript');
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [isConsoleMinimized, setIsConsoleMinimized] = useState(false);
 
   const handleEndSession = () => {
     sessionSocket.disconnect();
@@ -67,7 +69,7 @@ export default function CollabPage() {
 
   useEffect(() => {
     if (!sessionId) {
-      setTimeout(() => router.push('/'), 1000);
+      // setTimeout(() => router.push('/'), 1000);
     } else {
       dispatch(setSession(sessionId));
     }
@@ -176,12 +178,14 @@ export default function CollabPage() {
         display: 'flex', flexDirection: 'row', width: '100%', height: '100%', p: 1, gap: 1,
       }}
       >
-        <Box sx={{ minWidth: 290, width: 750 }}>
+        <Stack rowGap={1} sx={{ minWidth: 290, width: 750 }}>
           <QuestionPanel
             fetchSessionQuestion={handleFetchQuestion}
             openSnackbar={openSnackbar}
+            isConsoleMinimized={isConsoleMinimized}
           />
-        </Box>
+          <ConsolePanel isMinimized={isConsoleMinimized} setIsMinimized={setIsConsoleMinimized} />
+        </Stack>
         <EditorPanel
           value={content}
           onChange={handleInputChange}

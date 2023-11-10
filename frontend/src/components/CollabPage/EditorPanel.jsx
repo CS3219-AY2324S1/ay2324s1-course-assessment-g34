@@ -5,7 +5,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { ExitToApp } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import SolidButton from '../SolidButton';
+import SolidButton from '../commons/SolidButton';
 
 const Editor = dynamic(() => import('./CollabEditor'), {
   ssr: false,
@@ -27,7 +27,7 @@ export default function EditorPanel({
     <Box
       component={Paper}
       sx={{
-        display: 'flex', flexDirection: 'column', height: '100%', width: '100%', overflowY: 'hidden', minWidth: 120, bgcolor: (theme) => theme.palette.primary.main,
+        display: 'flex', flexDirection: 'column', height: '100%', width: '100%', overflowY: 'hidden', minWidth: 120, bgcolor: (theme) => theme.palette.primary.light,
       }}
     >
       <Toolbar disableGutters variant="dense" sx={{ width: '100%', minWidth: 180, px: 2 }}>

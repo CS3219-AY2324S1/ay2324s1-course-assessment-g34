@@ -4,7 +4,7 @@ import {
   Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import SolidButton from '../SolidButton';
+import SolidButton from '../commons/SolidButton';
 
 export default function DeleteQuestionDialog({ handleDelete, title }) {
   const [isOpen, setIsOpen] = useState(false);

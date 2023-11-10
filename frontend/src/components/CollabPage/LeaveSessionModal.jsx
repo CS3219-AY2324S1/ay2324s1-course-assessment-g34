@@ -6,7 +6,7 @@ import {
 import React, { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import SolidButton from '../SolidButton';
+import SolidButton from '../commons/SolidButton';
 
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 

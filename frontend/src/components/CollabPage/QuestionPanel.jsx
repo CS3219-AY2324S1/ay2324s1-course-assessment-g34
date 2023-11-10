@@ -12,10 +12,10 @@ import { QUESTION_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
 import PropTypes from 'prop-types';
 import QuestionCategoryList from '../QuestionPage/QuestionCategoryList';
-import DifficultyChip from '../DifficultyChip';
-import SolidButton from '../SolidButton';
+import DifficultyChip from '../commons/DifficultyChip';
+import SolidButton from '../commons/SolidButton';
 
-export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
+export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isConsoleMinimized }) {
   const { getAccessToken } = useAuthContext();
   const questionId = useSelector(selectQuestionId);
   const [question, setQuestion] = useState(null);
@@ -55,13 +55,17 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
   }, [questionId]);
 
   return (
-    <Box
-      component={Paper}
+    <Paper
       sx={{
-        display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'hidden',
+        flexGrow: isConsoleMinimized && 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'hidden',
+        height: isConsoleMinimized ? '100%' : '60%',
+        bgcolor: (theme) => theme.palette.primary.light
       }}
     >
-      <Toolbar variant="dense" disableGutters sx={{ px: 2, bgcolor: (theme) => theme.palette.primary.main }}>
+      <Toolbar variant="dense" disableGutters sx={{ px: 2 }}>
         <Typography
           sx={{
             fontWeight: 600,
@@ -82,7 +86,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
         </SolidButton>
       </Toolbar>
       <Stack sx={{
-        gap: 1, py: 1, px: 2, overflowY: 'scroll',
+        gap: 1, py: 1, px: 2, overflowY: 'scroll', bgcolor: 'white', height: '100%'
       }}
       >
         {isQuestionLoading
@@ -136,7 +140,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar }) {
           </AccordionDetails>
         </Accordion>
       </Stack>
-    </Box>
+    </Paper>
   );
 }
 

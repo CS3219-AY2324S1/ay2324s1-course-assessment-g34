@@ -12,7 +12,7 @@ import axios from 'axios';
 import { USER_SVC_URI } from '@/config/uris';
 import Logo from './Logo';
 import ComponentGuard from './ComponentGuard';
-import SolidButton from './SolidButton';
+import SolidButton from './commons/SolidButton';
 
 const pages = [
   {

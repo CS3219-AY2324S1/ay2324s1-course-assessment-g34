@@ -13,7 +13,7 @@ import {
 import { PropTypes } from 'prop-types';
 import DifficultySelector from './DifficultySelector';
 import CategoriesInput from './CategoriesInput';
-import SolidButton from '../SolidButton';
+import SolidButton from '../commons/SolidButton';
 
 const Editor = dynamic(() => import('./QuestionDescriptionEditor'), {
   ssr: false,

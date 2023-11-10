@@ -10,7 +10,7 @@ import { USER_SVC_URI } from '@/config/uris';
 import { validateDisplayName } from '@/utils/validation';
 import { useRouter } from 'next/router';
 import LoadingPage from '@/pages/loading';
-import SolidButton from '../SolidButton';
+import SolidButton from '../commons/SolidButton';
 import DeleteAccountButton from './DeleteAccountButton';
 import ProfileHeader from './ProfileHeader';
 import Layout from '../Layout';

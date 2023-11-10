@@ -12,7 +12,6 @@ export default function CollabEditor({ value, onChange, language }) {
       top: 8,
       bottom: 8,
     },
-
   };
 
   return (
