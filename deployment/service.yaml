@@ -9,7 +9,7 @@ spec:
   ports:
   - port: 3000
     targetPort: 3000
-    protocol: TLS
+    protocol: TCP
     name: frontend
   selector:
     app: frontend

@@ -29,7 +29,7 @@ export default function useAuth() {
   const [redirect, setRedirect] = useState('/');
 
   const addRefreshToken = (refreshToken) => {
-    Cookies.set('refresh', refreshToken, { secure: true });
+    Cookies.set('refresh', refreshToken, { secure: false });
   };
 
   const removeRefreshToken = () => {
