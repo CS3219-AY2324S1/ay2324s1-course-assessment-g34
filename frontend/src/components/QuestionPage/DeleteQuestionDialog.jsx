@@ -48,14 +48,14 @@ export default function DeleteQuestionDialog({ handleDelete, title }) {
         <DialogContent dividers>
           Are you sure you want to delete the question titled:
           {' '}
-          <strong>{title}</strong>
+          <Typography component="span" sx={{ fontWeight: 600 }}>{title}</Typography>
           ?
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant="outlined">
             Cancel
           </Button>
-          <SolidButton onClick={handleDeleteAndClose} color="error">
+          <SolidButton variant="contained" onClick={handleDeleteAndClose} color="error">
             Delete
           </SolidButton>
         </DialogActions>

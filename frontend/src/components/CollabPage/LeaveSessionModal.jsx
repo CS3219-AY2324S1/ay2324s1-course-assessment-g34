@@ -29,12 +29,12 @@ export default function LeaveSessionModal({ handleEndSession }) {
         <DialogContentText>
           <Typography component="span" color="secondary" sx={{ fontWeight: 600 }}>{matchedUser}</Typography>
           {' '}
-          {' '}
           has left the room.
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
         <SolidButton
+          variant="contained"
           onClick={handleEndSession}
           size="medium"
           color="error"

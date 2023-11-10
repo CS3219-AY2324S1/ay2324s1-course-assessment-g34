@@ -14,15 +14,13 @@ import React from 'react';
  *
  * @example
  * // Usage of SolidButton component with a custom color:
- * <SolidButton color="secondary">Click Me</SolidButton>
+ * <SolidButton variant="contained" color="secondary">Click Me</SolidButton>
  *
  * @example
  * // Usage of SolidButton component with the default 'primary' color:
- * <SolidButton>Click Me</SolidButton>
+ * <SolidButton variant="contained">Click Me</SolidButton>
  */
-const SolidButton = styled(({ ...otherProps }) => (
-  <Button variant="contained" {...otherProps} />
-))(({ theme, color = 'primary' }) => ({
+const SolidButton = styled(Button)(({ theme, color = 'primary' }) =>  ({
   '&.MuiButton-contained': {
     backgroundColor: theme.palette[color].main,
   },
