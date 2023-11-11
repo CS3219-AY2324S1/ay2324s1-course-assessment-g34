@@ -6,7 +6,8 @@ metadata:
     networking.gke.io/managed-certificates: managed-cert
 spec:
   rules:
-    - http:
+    - host: peerpreparing.com
+      http:
         paths:
           - path: /*
             pathType: ImplementationSpecific
