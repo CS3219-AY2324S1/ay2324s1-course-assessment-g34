@@ -5,3 +5,5 @@ metadata:
 spec:
   domains:
     - peerpreparing.com
+    - api.peerpreparing.com
+    - video.peerpreparing.com
