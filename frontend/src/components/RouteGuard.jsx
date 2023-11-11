@@ -44,13 +44,6 @@ export default function RouteGuard({ children, allowedRoles }) {
         return;
       }
 
-      if (!isAuthenticated) {
-        setRedirect(router.asPath);
-        setTimeout(() => {
-          router.push('/login');
-        }, 3000);
-      }
-
       setIsAuthorized(false);
     }
     /* eslint-disable react-hooks/exhaustive-deps */
@@ -66,7 +59,7 @@ export default function RouteGuard({ children, allowedRoles }) {
 
   if (!isAuthenticated) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
         Please&nbsp;
         <Typography
           component="span"

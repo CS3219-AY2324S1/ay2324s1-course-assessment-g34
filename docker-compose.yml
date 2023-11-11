@@ -42,12 +42,14 @@ services:
       - frontend
     environment:
       NEXT_PUBLIC_COLLAB_SVC_URI: ws://localhost:8080
+      NEXT_PUBLIC_VIDEO_SVC_URI: http://localhost:3002
     depends_on:
       - user-service
       - question-service
       - matching-service
       - collab-service
       - code-execution-service
+      - video-service
   
   api-gateway:
     container_name: api-gateway
@@ -111,6 +113,17 @@ services:
       - 8001:8001
     depends_on:
       - collab-service
+  
+  video-service:
+    container_name: video-service
+    build:
+      context: ./video-service
+    networks:
+      - backend
+    environment:
+      PORT: 3002
+    ports:
+      - 3002:3002
 
   postgres-db:
     container_name: ${DATABASE_HOST}

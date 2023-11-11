@@ -29,6 +29,7 @@ export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession })
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
         <SolidButton
+          variant="contained"
           size="medium"
           color="error"
           type="button"
@@ -38,6 +39,7 @@ export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession })
           End Session
         </SolidButton>
         <SolidButton
+          variant="contained"
           size="medium"
           color="primary"
           type="button"

@@ -8,7 +8,6 @@ export default function CollabEditor({ value, onChange, language }) {
   const options = {
     fontSize: 14,
     minimap: { enabled: false },
-    scrollBeyondLastLine: 'false',
     padding: {
       top: 8,
       bottom: 8,

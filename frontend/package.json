@@ -24,6 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "monaco-editor": "^0.44.0",
     "next": "13.4.19",
+    "peerjs": "^1.5.1",
     "postcss": "8.4.29",
     "prop-types": "^15.8.1",
     "react": "18.2.0",

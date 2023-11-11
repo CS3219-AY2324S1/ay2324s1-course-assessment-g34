@@ -1,7 +1,7 @@
 import {
   Accordion, AccordionDetails, AccordionSummary, Box, Paper, Skeleton, Stack, Toolbar, Typography,
 } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ExpandMore } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -76,6 +76,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isCo
           Description
         </Typography>
         <SolidButton
+          variant="contained"
           color="secondary"
           size="small"
           sx={{ ml: 'auto', fontSize: 12, textTransform: 'none' }}

@@ -30,4 +30,11 @@ export const Language = {
   CPP: 'C++',
   JAVA: 'Java',
   TYPESCRIPT: 'TypeScript',
+}
+
+export const VideoEvent = {
+  JOIN: 'join-room',
+  LEAVE: 'leave-call',
+  TOGGLE_MIC: 'toggle-mic',
+  TOGGLE_CAM: 'toggle-video'
 };

@@ -40,6 +40,7 @@ function LoginButton() {
   return (
     <Link href="/login">
       <SolidButton
+        variant="contained"
         size="medium"
         color="success"
         type="button"

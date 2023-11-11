@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { EXECUTE_CODE_SVC_URI } from '@/config/uris';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import stripAnsi from 'strip-ansi';
 import { Language } from '@/utils/constants';
@@ -12,13 +12,13 @@ import SolidButton from '../commons/SolidButton';
 
 const executableLanguages = [Language.PYTHON, Language.JAVASCRIPT].map((lang) => lang.toLowerCase());
 
-function OutputContent({ header, content, isError }) {
+function OutputContent({ header, language, content, isError }) {
   const getColor = () => (theme) => (isError ? theme.palette.error.main : theme.palette.primary.contrastText);
 
   return (
     <>
       <Typography sx={{ fontWeight: 600, color: getColor() }}>
-        {header}
+        {`${header} (${Language[language.toUpperCase()]})`}
       </Typography>
       <Paper
         elevation={0}
@@ -38,7 +38,7 @@ function OutputContent({ header, content, isError }) {
 }
 
 function ConsoleOutput({
-  result, error, isExecuting, isExecutableLanguage,
+  result, error, isExecuting, isExecutableLanguage, executedLanguage
 }) {
   const isIdle = !(result || error || isExecuting);
 
@@ -90,8 +90,8 @@ function ConsoleOutput({
             : 'Code execution for this language is not supported'}
         </Stack>
       )}
-      { result && <OutputContent header="Result" content={result} /> }
-      {error && <OutputContent header="Error" content={error} isError /> }
+      { result && <OutputContent header="Result" language={executedLanguage} content={result} /> }
+      { error && <OutputContent header="Error" language={executedLanguage} content={error} isError /> }
     </Stack>
   );
 }
@@ -102,6 +102,7 @@ export default function ConsolePanel({
   const [isExecuting, setIsExecuting] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [executedLanguage, setExecutedLanguage] = useState(language);
   const { getAccessToken } = useAuthContext();
   const isExecutableLanguage = executableLanguages.includes(language);
 
@@ -110,6 +111,7 @@ export default function ConsolePanel({
   };
 
   const handleExecuteCode = async () => {
+    setExecutedLanguage(language);
     setIsMinimized(false);
     setIsExecuting(true);
     setError(null);
@@ -142,13 +144,6 @@ export default function ConsolePanel({
       setError(err.error || err.message);
     }
   };
-
-  useEffect(() => {
-    if (!isExecuting) {
-      setError(null);
-      setResult(null);
-    }
-  }, [language]);
 
   return (
     <Paper
@@ -196,6 +191,7 @@ export default function ConsolePanel({
           error={error}
           isExecuting={isExecuting}
           isExecutableLanguage={isExecutableLanguage}
+          executedLanguage={executedLanguage}
         />
         )}
     </Paper>

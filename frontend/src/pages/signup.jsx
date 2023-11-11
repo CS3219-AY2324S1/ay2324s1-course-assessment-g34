@@ -2,7 +2,7 @@ import SolidButton from '@/components/commons/SolidButton';
 import {
   Box, Container, Grid, Paper, TextField, Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Bree_Serif } from 'next/font/google';
 import Link from 'next/link';
 import { validateConfirmPassword, validatePassword, validateUsername } from '@/utils/validation';
@@ -194,6 +194,7 @@ export default function SignUpPage() {
               <Grid item xs={12}>
                 <SolidButton
                   fullWidth
+                  variant="contained"
                   size="medium"
                   color="secondary"
                   type="submit"
