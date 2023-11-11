@@ -270,12 +270,5 @@ spec:
                 name: peerprep-config
           ports:
             - containerPort: 3002
-          resources:
-            limits:
-              memory: 512Mi
-              cpu: '400m'
-            requests:
-              memory: 256Mi
-              cpu: '400m'
 
 ---
