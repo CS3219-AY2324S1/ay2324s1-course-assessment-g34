@@ -1,13 +1,13 @@
 const isProduction = process.env.IS_PROD || true;
 export const VIDEO_SVC_PORT = process.env.NEXT_PUBLIC_VIDEO_SVC_PORT || 3002;
-export const VIDEO_SVC_HOST = process.env.NEXT_PUBLIC_VIDEO_SVC_HOST || '35.247.162.247';
+export const VIDEO_SVC_HOST = process.env.NEXT_PUBLIC_VIDEO_SVC_HOST || '34.36.220.34';
 
 // export const MATCHING_SVC_URI = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001';
 
 let GATEWAY_BASE_URL;
 
 if (isProduction) {
-    GATEWAY_BASE_URL = 'https://34.87.4.219:3001';
+    GATEWAY_BASE_URL = 'https://api.peerpreparing.com';
 } else {
     GATEWAY_BASE_URL = 'http://localhost:3001';
 }
@@ -43,4 +43,4 @@ export const COLLAB_SVC_IO_URI = GATEWAY_BASE_URL;
 
 export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'ws');
 
-export const VIDEO_SVC_URI = 'https://35.247.162.247:3002';
+export const VIDEO_SVC_URI = 'https://video.peerpreparing.com';
