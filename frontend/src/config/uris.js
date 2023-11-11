@@ -7,7 +7,7 @@ export const VIDEO_SVC_HOST = process.env.NEXT_PUBLIC_VIDEO_SVC_HOST || '35.247.
 let GATEWAY_BASE_URL;
 
 if (isProduction) {
-    GATEWAY_BASE_URL = 'http://34.87.4.219:3001';
+    GATEWAY_BASE_URL = 'https://34.87.4.219:3001';
 } else {
     GATEWAY_BASE_URL = 'http://localhost:3001';
 }
@@ -41,6 +41,6 @@ export const MATCHING_SVC_URI = GATEWAY_BASE_URL;
 
 export const COLLAB_SVC_IO_URI = GATEWAY_BASE_URL;
 
-export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^http/, 'ws');
+export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'ws');
 
-export const VIDEO_SVC_URI = 'http://35.247.162.247:3002';
+export const VIDEO_SVC_URI = 'https://35.247.162.247:3002';
