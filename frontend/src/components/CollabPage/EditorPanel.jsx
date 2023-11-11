@@ -6,19 +6,14 @@ import dynamic from 'next/dynamic';
 import { ExitToApp } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import SolidButton from '../commons/SolidButton';
+import { Language } from '@/utils/constants';
 
 const Editor = dynamic(() => import('./CollabEditor'), {
   ssr: false,
   loading: () => <Skeleton variant="rectangular" height="100vh" />,
 });
 
-const languageOptions = [
-  { label: 'C++', value: 'cpp' },
-  { label: 'Python', value: 'python' },
-  { label: 'Java', value: 'java' },
-  { label: 'JavaScript', value: 'javascript' },
-  { label: 'TypeScript', value: 'typescript' },
-];
+const languageOptions = Object.values(Language);
 
 export default function EditorPanel({
   value, onChange, language, handleLanguageSelect, openConfirmationModal,
@@ -46,7 +41,7 @@ export default function EditorPanel({
           }}
         >
           {languageOptions.map((lang) => (
-            <MenuItem key={lang.value} value={lang.value}>{lang.label}</MenuItem>
+            <MenuItem key={lang} value={lang.toLowerCase()}>{lang}</MenuItem>
           ))}
         </Select>
         <SolidButton

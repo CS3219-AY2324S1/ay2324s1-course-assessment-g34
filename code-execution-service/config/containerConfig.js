@@ -12,7 +12,6 @@ const containerTypes = {
     cmdFlag: "-e",
     ext: "js",
   },
-  
 };
 
 const secureProfiles = {
@@ -47,4 +46,4 @@ const secureProfiles = {
   },
 };
 
-module.exports = containerTypes, secureProfiles;
+module.exports = { containerTypes, secureProfiles };

@@ -4,11 +4,13 @@
   "description": "Execute code in Docker container",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "node-docker-api": "^1.1.22"
   }

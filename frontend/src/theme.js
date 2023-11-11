@@ -4,7 +4,7 @@ import {
 
 const createColor = (color) => ({
   main: color,
-  light: lighten(color, 0.05),
+  light: lighten(color, 0.1),
   dark: darken(color, 0.3),
   contrastText: getContrastRatio(color, '#fff') > 4.5 ? '#fff' : '#111',
 });

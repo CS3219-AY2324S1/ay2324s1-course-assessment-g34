@@ -2,6 +2,7 @@ import React from 'react';
 import Editor from '@monaco-editor/react';
 import { Skeleton } from '@mui/material';
 import PropTypes from 'prop-types';
+import { Language } from '@/utils/constants';
 
 export default function CollabEditor({ value, onChange, language }) {
   const options = {
@@ -18,13 +19,14 @@ export default function CollabEditor({ value, onChange, language }) {
     <Editor
       width="100%"
       height="100%"
-      defaultLanguage="javascript"
+      defaultLanguage={Language.JAVASCRIPT.toLowerCase()}
       defaultValue="// Type your code here..."
       value={value}
       onChange={onChange}
       language={language}
       loading={<Skeleton variant="rectangular" height="100%" />}
       options={options}
+      theme="vs-dark"
     />
   );
 }

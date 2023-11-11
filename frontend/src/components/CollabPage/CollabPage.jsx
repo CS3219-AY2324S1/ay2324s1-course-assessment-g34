@@ -69,7 +69,7 @@ export default function CollabPage() {
 
   useEffect(() => {
     if (!sessionId) {
-      // setTimeout(() => router.push('/'), 1000);
+      setTimeout(() => router.push('/'), 1000);
     } else {
       dispatch(setSession(sessionId));
     }
@@ -184,7 +184,12 @@ export default function CollabPage() {
             openSnackbar={openSnackbar}
             isConsoleMinimized={isConsoleMinimized}
           />
-          <ConsolePanel isMinimized={isConsoleMinimized} setIsMinimized={setIsConsoleMinimized} />
+          <ConsolePanel
+            code={content}
+            language={language}
+            isMinimized={isConsoleMinimized}
+            setIsMinimized={setIsConsoleMinimized}
+          />
         </Stack>
         <EditorPanel
           value={content}

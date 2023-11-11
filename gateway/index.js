@@ -5,7 +5,8 @@ const cors = require("cors");
 const {
     userProxy,
     questionProxy,
-    matchingProxy
+    matchingProxy,
+    executionProxy
 } = require('./proxy');
 
 const app = express();
@@ -35,11 +36,15 @@ app.use('/api/user-service', (req, res) => {
 
 app.use(matchingProxy);
 
-app.use(isAuthenticated)
+app.use(isAuthenticated);
 
 // allows only authorized user to access these endpoints
 app.use('/api/question-service', (req, res) => {
   questionProxy(req, res);
+})
+
+app.use('/api/code-execution-service', (req, res) => {
+  executionProxy(req, res);
 })
 
 app.listen(3001, () => {

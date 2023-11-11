@@ -23,3 +23,11 @@ export const SessionEvent = {
   ENDED: 'session-ended',
   QUESTION_FETCHED: 'session-question_fetched',
 };
+
+export const Language = {
+  PYTHON: 'Python',
+  JAVASCRIPT: 'JavaScript',
+  CPP: 'C++',
+  JAVA: 'Java',
+  TYPESCRIPT: 'TypeScript',
+};
