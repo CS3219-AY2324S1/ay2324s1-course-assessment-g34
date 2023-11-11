@@ -15,6 +15,13 @@ const opinions = {
 
 const PORT = process.env.PORT || 3002;
 
+// Test route
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    message: 'Hello',
+  });
+});
+
 app.use("/peerjs", ExpressPeerServer(server, opinions));
 
 io.on("connection", (socket) => {
