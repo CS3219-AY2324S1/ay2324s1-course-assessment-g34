@@ -1,19 +1,19 @@
-import { ExpandLess, ExpandMore, PlayArrowRounded } from "@mui/icons-material";
-import {  IconButton, Paper, Skeleton, Stack, Toolbar, Typography } from "@mui/material";
-import SolidButton from "../commons/SolidButton";
-import axios from "axios";
-import { EXECUTE_CODE_SVC_URI } from "@/config/uris";
-import { useEffect, useState } from "react";
-import { useAuthContext } from "@/contexts/AuthContext";
+import { ExpandLess, ExpandMore, PlayArrowRounded } from '@mui/icons-material';
+import {
+  IconButton, Paper, Skeleton, Stack, Toolbar, Typography,
+} from '@mui/material';
+import axios from 'axios';
+import { EXECUTE_CODE_SVC_URI } from '@/config/uris';
+import { useEffect, useState } from 'react';
+import { useAuthContext } from '@/contexts/AuthContext';
 import stripAnsi from 'strip-ansi';
-import { Language } from "@/utils/constants";
+import { Language } from '@/utils/constants';
+import SolidButton from '../commons/SolidButton';
 
-const executableLanguages = [Language.PYTHON, Language.JAVASCRIPT].map(lang => lang.toLowerCase());
+const executableLanguages = [Language.PYTHON, Language.JAVASCRIPT].map((lang) => lang.toLowerCase());
 
-const OutputContent = ({ header, content, isError }) => {
-  const getColor = () => {
-    return (theme) => isError ? theme.palette.error.main : theme.palette.primary.contrastText;
-  }
+function OutputContent({ header, content, isError }) {
+  const getColor = () => (theme) => (isError ? theme.palette.error.main : theme.palette.primary.contrastText);
 
   return (
     <>
@@ -24,24 +24,26 @@ const OutputContent = ({ header, content, isError }) => {
         elevation={0}
         sx={{
           p: 1,
-          width:'100%',
+          width: '100%',
           overflowY: 'scroll',
           bgcolor: (theme) => theme.palette.primary.light,
           color: getColor(),
-          whiteSpace: 'pre-line'
+          whiteSpace: 'pre-line',
         }}
       >
         {content}
       </Paper>
     </>
   );
-};
+}
 
-const ConsoleOutput = ({ result, error, isExecuting, isExecutableLanguage }) => {
+function ConsoleOutput({
+  result, error, isExecuting, isExecutableLanguage,
+}) {
   const isIdle = !(result || error || isExecuting);
 
   return (
-    <Stack 
+    <Stack
       sx={{
         gap: 2,
         py: 1,
@@ -50,7 +52,7 @@ const ConsoleOutput = ({ result, error, isExecuting, isExecutableLanguage }) => 
         height: '100%',
         fontSize: 13,
         color: (theme) => theme.palette.primary.contrastText,
-        bgcolor: (theme) => theme.palette.primary.main
+        bgcolor: (theme) => theme.palette.primary.main,
       }}
     >
       {isExecuting && (
@@ -61,14 +63,14 @@ const ConsoleOutput = ({ result, error, isExecuting, isExecutableLanguage }) => 
               borderRadius: 1,
               fontSize: 25,
               width: 150,
-              bgcolor: (theme) => theme.palette.primary.light
+              bgcolor: (theme) => theme.palette.primary.light,
             }}
           />
           <Skeleton
             variant="rectangle"
-            height='100%'
-            width='100%'
-            sx={{ borderRadius: 1, bgcolor: (theme) => theme.palette.primary.light}}
+            height="100%"
+            width="100%"
+            sx={{ borderRadius: 1, bgcolor: (theme) => theme.palette.primary.light }}
           />
         </>
       )}
@@ -77,25 +79,26 @@ const ConsoleOutput = ({ result, error, isExecuting, isExecutableLanguage }) => 
           sx={{
             p: 1,
             height: '100%',
-            width:'100%',
+            width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            color: (theme) => theme.palette.primary.contrastText
+            color: (theme) => theme.palette.primary.contrastText,
           }}
         >
           {isExecutableLanguage
-            ? "You must run your code first"
-            : "Code execution for this language is not supported"
-          }
+            ? 'You must run your code first'
+            : 'Code execution for this language is not supported'}
         </Stack>
       )}
       { result && <OutputContent header="Result" content={result} /> }
-      {error && <OutputContent header="Error" content={error} isError={true} /> }
+      {error && <OutputContent header="Error" content={error} isError /> }
     </Stack>
   );
-};
+}
 
-export default function ConsolePanel({ code, language, isMinimized, setIsMinimized }) {
+export default function ConsolePanel({
+  code, language, isMinimized, setIsMinimized,
+}) {
   const [isExecuting, setIsExecuting] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -117,7 +120,7 @@ export default function ConsolePanel({ code, language, isMinimized, setIsMinimiz
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       };
 
       const codeData = { code, language };
@@ -133,7 +136,6 @@ export default function ConsolePanel({ code, language, isMinimized, setIsMinimiz
       } else if (exitCode === 1) {
         setError(strippedOutput);
       }
-
     } catch (err) {
       setIsExecuting(false);
       console.error(err);
@@ -143,8 +145,8 @@ export default function ConsolePanel({ code, language, isMinimized, setIsMinimiz
 
   useEffect(() => {
     if (!isExecuting) {
-      setError(null)
-      setResult(null)
+      setError(null);
+      setResult(null);
     }
   }, [language]);
 
@@ -155,7 +157,7 @@ export default function ConsolePanel({ code, language, isMinimized, setIsMinimiz
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'hidden',
-        bgcolor: (theme) => theme.palette.primary.light
+        bgcolor: (theme) => theme.palette.primary.light,
       }}
     >
       <Toolbar variant="dense" disableGutters sx={{ px: 2 }}>
@@ -187,14 +189,15 @@ export default function ConsolePanel({ code, language, isMinimized, setIsMinimiz
           Run
         </SolidButton>
       </Toolbar>
-      {!isMinimized &&
+      {!isMinimized
+        && (
         <ConsoleOutput
           result={result}
           error={error}
           isExecuting={isExecuting}
           isExecutableLanguage={isExecutableLanguage}
         />
-      }
+        )}
     </Paper>
-  )
-};
+  );
+}

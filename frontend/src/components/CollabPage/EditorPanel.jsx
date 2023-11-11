@@ -5,8 +5,8 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { ExitToApp } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import SolidButton from '../commons/SolidButton';
 import { Language } from '@/utils/constants';
+import SolidButton from '../commons/SolidButton';
 
 const Editor = dynamic(() => import('./CollabEditor'), {
   ssr: false,

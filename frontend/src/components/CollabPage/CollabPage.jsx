@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Box, Snackbar, Stack } from '@mui/material';
+import {
+  Alert, Box, Snackbar, Stack,
+} from '@mui/material';
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { COLLAB_SVC_URI } from '@/config/uris';
@@ -100,14 +102,12 @@ export default function CollabPage() {
     dispatch(setIsOnGoing(isOnGoing));
   }, [isOnGoing]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(setIsOnGoing(false));
-      dispatch(resetMatchedUser());
-      dispatch(resetSession());
-      dispatch(setDifficulty(''));
-      dispatch(setQuestionId(null));
-    }
+  useEffect(() => () => {
+    dispatch(setIsOnGoing(false));
+    dispatch(resetMatchedUser());
+    dispatch(resetSession());
+    dispatch(setDifficulty(''));
+    dispatch(setQuestionId(null));
   }, []);
 
   useEffect(() => {

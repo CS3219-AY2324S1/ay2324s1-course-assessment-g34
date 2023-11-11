@@ -62,7 +62,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isCo
         flexDirection: 'column',
         overflowY: 'hidden',
         height: isConsoleMinimized ? '100%' : '60%',
-        bgcolor: (theme) => theme.palette.primary.light
+        bgcolor: (theme) => theme.palette.primary.light,
       }}
     >
       <Toolbar variant="dense" disableGutters sx={{ px: 2 }}>
@@ -86,7 +86,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isCo
         </SolidButton>
       </Toolbar>
       <Stack sx={{
-        gap: 1, py: 1, px: 2, overflowY: 'scroll', bgcolor: 'white', height: '100%'
+        gap: 1, py: 1, px: 2, overflowY: 'scroll', bgcolor: 'white', height: '100%',
       }}
       >
         {isQuestionLoading
