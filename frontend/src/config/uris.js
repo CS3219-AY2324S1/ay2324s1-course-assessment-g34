@@ -41,6 +41,6 @@ export const MATCHING_SVC_URI = GATEWAY_BASE_URL;
 
 export const COLLAB_SVC_IO_URI = GATEWAY_BASE_URL;
 
-export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'ws');
+export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'wss');
 
 export const VIDEO_SVC_URI = 'https://video.peerpreparing.com';
