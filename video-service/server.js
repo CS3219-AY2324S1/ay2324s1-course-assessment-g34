@@ -11,6 +11,7 @@ const { ExpressPeerServer } = require("peer");
 const { VideoEvent } = require("./constants/events");
 const opinions = {
   debug: true,
+  proxied: true,
 }
 
 const PORT = process.env.PORT || 3002;

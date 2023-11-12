@@ -56,6 +56,14 @@ const videoProxy = createProxyMiddleware(
   }
 );
 
+const peerJSProxy = createProxyMiddleware(
+  '/peerjs', {
+    target: VIDEO_BASE_URL,
+    changeOrigin: true,
+    ws: true
+  }
+);
+
 
 module.exports = {
   userProxy,
@@ -63,5 +71,6 @@ module.exports = {
   matchingProxy,
   collabProxyIO,
   collabProxyWS,
-  videoProxy
+  videoProxy,
+  peerJSProxy
 };

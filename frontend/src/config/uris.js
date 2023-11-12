@@ -1,6 +1,6 @@
 const isProduction = process.env.IS_PROD || true;
-export const VIDEO_SVC_PORT = process.env.NEXT_PUBLIC_VIDEO_SVC_PORT || 3002;
-export const VIDEO_SVC_HOST = process.env.NEXT_PUBLIC_VIDEO_SVC_HOST || '0.peerjs.com';
+export const VIDEO_SVC_PORT = process.env.NEXT_PUBLIC_VIDEO_SVC_PORT || 3001;
+export const VIDEO_SVC_HOST = process.env.NEXT_PUBLIC_VIDEO_SVC_HOST || 'api.peerpreparing.com';
 
 // export const MATCHING_SVC_URI = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001';
 
@@ -43,4 +43,4 @@ export const COLLAB_SVC_IO_URI = GATEWAY_BASE_URL;
 
 export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'wss');
 
-export const VIDEO_SVC_URI = 'https://video.peerpreparing.com';
+export const VIDEO_SVC_URI = GATEWAY_BASE_URL;

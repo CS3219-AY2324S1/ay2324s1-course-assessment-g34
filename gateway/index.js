@@ -8,7 +8,8 @@ const {
     matchingProxy,
     collabProxyIO,
     collabProxyWS,
-    videoProxy
+    videoProxy,
+    peerJSProxy
 } = require('./proxy');
 
 const app = express();
@@ -44,7 +45,9 @@ app.use(collabProxyWS);
 
 app.use(videoProxy);
 
-app.use(isAuthenticated)
+app.use(peerJSProxy);
+
+app.use(isAuthenticated);
 
 // allows only authorized user to access these endpoints
 app.use('/api/question-service', (req, res) => {
