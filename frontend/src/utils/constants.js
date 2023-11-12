@@ -23,3 +23,10 @@ export const SessionEvent = {
   ENDED: 'session-ended',
   QUESTION_FETCHED: 'session-question_fetched',
 };
+
+export const VideoEvent = {
+  JOIN: 'join-room',
+  LEAVE: 'leave-call',
+  TOGGLE_MIC: 'toggle-mic',
+  TOGGLE_CAM: 'toggle-video'
+};

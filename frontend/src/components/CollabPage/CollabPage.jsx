@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Box, Snackbar } from '@mui/material';
+import { Alert, Box, Snackbar, Stack } from '@mui/material';
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { COLLAB_SVC_URI } from '@/config/uris';
@@ -21,6 +21,8 @@ import { fetchSessionQuestion, joinSession } from '@/utils/eventEmitters';
 import LeaveSessionModal from '@/components/CollabPage/LeaveSessionModal';
 import ConfirmEndModal from '@/components/CollabPage/ConfirmEndModal';
 import addSubmission from '@/utils/addSubmission';
+import VideoChatPanel from './VideoChatPanel';
+import ConsolePanel from './ConsolePanel';
 
 const connectShareDBSocket = () => {
   const shareDBSocket = new ReconnectingWebSocket(COLLAB_SVC_URI);
@@ -55,9 +57,9 @@ export default function CollabPage() {
   const [language, setLanguage] = useState('javascript');
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [isConsoleMinimized, setIsConsoleMinimized] = useState(false);
 
   const handleEndSession = () => {
-    sessionSocket.disconnect();
     dispatch(setIsOnGoing(false));
     dispatch(resetMatchedUser());
     dispatch(resetSession());
@@ -99,6 +101,10 @@ export default function CollabPage() {
       setSessionSocket(socket);
       handleSessionEvents(socket, dispatch);
       joinSession(socket, sessionId);
+      return () => {
+        socket.disconnect();
+        setSessionSocket(null)
+      }
     }
   }, []);
 
@@ -179,9 +185,10 @@ export default function CollabPage() {
     fetchSessionQuestion(sessionSocket, sessionId, difficulty);
   };
 
-  // 4 main components: *question, *editor, program output, video chat
-  // all components should be resizable
-  // video window should be draggable
+  if (!sessionId && !matchedUser && !isOnGoing) {
+    return null;
+  }
+
   return (
     <Box
       sx={{
@@ -189,16 +196,18 @@ export default function CollabPage() {
       }}
     >
       <Box sx={{
-        display: 'flex', flexDirection: 'row', width: '100%', height: '100%', p: 1, gap: 1,
+        position: 'relative', display: 'flex', flexDirection: 'row', width: '100%', height: '100%', p: 1, gap: 1,
       }}
       >
-        <Box sx={{ minWidth: 290, width: 750 }}>
+        <Stack rowGap={1} sx={{ minWidth: 290, width: 750 }}>
           <QuestionPanel
             fetchSessionQuestion={handleFetchQuestion}
             openSnackbar={openSnackbar}
             collabPageGetQid={collabPageGetQid}
+            isMinimized={isConsoleMinimized}
           />
-        </Box>
+          <ConsolePanel isMinimized={isConsoleMinimized} setIsMinimized={setIsConsoleMinimized} />
+        </Stack>
         <EditorPanel
           value={content}
           onChange={handleInputChange}
@@ -206,6 +215,7 @@ export default function CollabPage() {
           handleLanguageSelect={handleLanguageSelect}
           openConfirmationModal={() => setIsConfirmationModalOpen(true)}
         />
+        <VideoChatPanel />
       </Box>
       <LeaveSessionModal handleEndSession={handleEndSession} />
       <ConfirmEndModal

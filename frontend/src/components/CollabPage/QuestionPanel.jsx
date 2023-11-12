@@ -15,7 +15,7 @@ import QuestionCategoryList from '../QuestionPage/QuestionCategoryList';
 import DifficultyChip from '../DifficultyChip';
 import SolidButton from '../SolidButton';
 
-export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, collabPageGetQid }) {
+export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, collabPageGetQid, isMinimized }) {
   const { getAccessToken } = useAuthContext();
   const questionId = useSelector(selectQuestionId);
   collabPageGetQid(questionId);
@@ -58,8 +58,9 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, coll
   return (
     <Box
       component={Paper}
+      flexGrow={isMinimized && 1}
       sx={{
-        display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'hidden',
+        display: 'flex', flexDirection: 'column', overflowY: 'hidden', height: '60%'
       }}
     >
       <Toolbar variant="dense" disableGutters sx={{ px: 2, bgcolor: (theme) => theme.palette.primary.main }}>
@@ -73,6 +74,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, coll
           Description
         </Typography>
         <SolidButton
+          variant="contained"
           color="secondary"
           size="small"
           sx={{ ml: 'auto', fontSize: 12, textTransform: 'none' }}

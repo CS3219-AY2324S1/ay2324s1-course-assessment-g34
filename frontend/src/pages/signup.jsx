@@ -194,6 +194,7 @@ export default function SignUpPage() {
               <Grid item xs={12}>
                 <SolidButton
                   fullWidth
+                  variant="contained"
                   size="medium"
                   color="secondary"
                   type="submit"
