@@ -148,4 +148,5 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isCo
 QuestionPanel.propTypes = {
   fetchSessionQuestion: PropTypes.func.isRequired,
   openSnackbar: PropTypes.func.isRequired,
+  isConsoleMinimized: PropTypes.bool.isRequired,
 };

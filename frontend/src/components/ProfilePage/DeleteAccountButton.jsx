@@ -36,7 +36,6 @@ export default function DeleteAccountButton({
       };
 
       await axios.delete(`${USER_SVC_URI}/${user.username}`, config);
-      console.log('User deleted: ', user.username);
 
       setMessage('Your account has successfully been deleted.');
       setSnackbarColor('success');
@@ -59,7 +58,6 @@ export default function DeleteAccountButton({
         openSnackbar();
       } else {
         // server errors
-        console.log(err);
         setMessage('An error occurred. Please try again later.');
         setSnackbarColor('error');
         openSnackbar();

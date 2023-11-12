@@ -130,7 +130,6 @@ export default function ProfilePage() {
       } else if (err.response && err.response.status === 404) {
         setEditError('The account you are trying to delete does not exist.');
       } else {
-        console.error(err);
         setEditError('An error occurred. Please try again later.');
       }
     }

@@ -91,9 +91,10 @@ export default function CollabPage() {
       joinSession(socket, sessionId);
       return () => {
         socket.disconnect();
-        setSessionSocket(null)
-      }
+        setSessionSocket(null);
+      };
     }
+    return () => {};
   }, []);
 
   useEffect(() => {
@@ -121,10 +122,8 @@ export default function CollabPage() {
 
       doc.subscribe((err) => {
         if (err) {
-          console.log('Error on subscribe');
           console.error(err);
         } else {
-          console.log('doc type: ', doc.type);
           if (!doc.type) {
             doc.create({ content: '', language: 'javascript' });
           }

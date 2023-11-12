@@ -4,16 +4,22 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { EXECUTE_CODE_SVC_URI } from '@/config/uris';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import stripAnsi from 'strip-ansi';
 import { Language } from '@/utils/constants';
+import { PropTypes } from 'prop-types';
 import SolidButton from '../commons/SolidButton';
 
-const executableLanguages = [Language.PYTHON, Language.JAVASCRIPT].map((lang) => lang.toLowerCase());
+const executableLanguages = [Language.PYTHON, Language.JAVASCRIPT]
+  .map((lang) => lang.toLowerCase());
 
-function OutputContent({ header, language, content, isError }) {
-  const getColor = () => (theme) => (isError ? theme.palette.error.main : theme.palette.primary.contrastText);
+function OutputContent({
+  header, language, content, isError,
+}) {
+  const getColor = () => (theme) => (
+    isError ? theme.palette.error.main : theme.palette.primary.contrastText
+  );
 
   return (
     <>
@@ -38,7 +44,7 @@ function OutputContent({ header, language, content, isError }) {
 }
 
 function ConsoleOutput({
-  result, error, isExecuting, isExecutableLanguage, executedLanguage
+  result, error, isExecuting, isExecutableLanguage, executedLanguage,
 }) {
   const isIdle = !(result || error || isExecuting);
 
@@ -140,7 +146,6 @@ export default function ConsolePanel({
       }
     } catch (err) {
       setIsExecuting(false);
-      console.error(err);
       setError(err.error || err.message);
     }
   };
@@ -197,3 +202,25 @@ export default function ConsolePanel({
     </Paper>
   );
 }
+
+OutputContent.propTypes = {
+  header: PropTypes.string.isRequired,
+  language: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  isError: PropTypes.bool.isRequired,
+};
+
+ConsoleOutput.propTypes = {
+  result: PropTypes.string,
+  error: PropTypes.string,
+  isExecuting: PropTypes.bool.isRequired,
+  isExecutableLanguage: PropTypes.bool.isRequired,
+  executedLanguage: PropTypes.string.isRequired,
+};
+
+ConsolePanel.propTypes = {
+  code: PropTypes.string.isRequired,
+  language: PropTypes.string.isRequired,
+  isMinimized: PropTypes.bool.isRequired,
+  setIsMinimized: PropTypes.func.isRequired,
+};

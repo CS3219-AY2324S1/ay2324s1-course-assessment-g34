@@ -64,15 +64,15 @@ export default function MatchPage() {
       setMatchSocket(null);
     });
 
-    socket.on(MatchEvent.FOUND, (msg) => {
-      const match = getUsername(msg);
+    socket.on(MatchEvent.FOUND, (data) => {
+      const { username, sessionId, questionId } = data;
       setIsFinding(false);
-      dispatch(setMatchedUser(match));
+      dispatch(setMatchedUser(username));
       setIsMatchFound(true);
-      dispatch(setSession(getSessionId(msg)));
+      dispatch(setSession(sessionId));
       dispatch(setDifficulty(matchCriteria.difficulty));
       dispatch(setIsOnGoing(true));
-      dispatch(setQuestionId(getQuestionId(msg)));
+      dispatch(setQuestionId(questionId));
     });
 
     return socket;
@@ -219,10 +219,7 @@ export default function MatchPage() {
               </Box>
             </Box>
           </Box>
-          <MatchModal
-            isOpen={isMatchFound}
-            matchedUser={matchedUser}
-          />
+          <MatchModal isOpen={isMatchFound} matchedUser={matchedUser} />
         </Container>
       </Layout>
     </RouteGuard>
