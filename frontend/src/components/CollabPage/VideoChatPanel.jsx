@@ -120,7 +120,7 @@ export default function VideoChatPanel() {
   const peer = new Peer({
     host: VIDEO_SVC_HOST,
     secure: true,
-    port: 443,
+    port: VIDEO_SVC_PORT,
     path: '/peerjs',
     config: {
       'iceServers': [
