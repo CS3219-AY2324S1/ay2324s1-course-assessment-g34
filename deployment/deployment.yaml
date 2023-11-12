@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
@@ -70,7 +70,7 @@ spec:
       containers:
         - name: postgres-db
           image: postgres:15.4
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Never
           envFrom:
             - configMapRef:
                 name: peerprep-config
@@ -233,7 +233,7 @@ spec:
             value: http://question-service:5000
           - name: DATABASE_URL
             value: mongodb://mongo-db:27017/collab-docs
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/collab-service
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/collab-service:latest
           imagePullPolicy: Always
           name: collab-service
           ports:
@@ -263,7 +263,7 @@ spec:
     spec:
       containers:
         - name: video-service
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/video-service
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/video-service:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
