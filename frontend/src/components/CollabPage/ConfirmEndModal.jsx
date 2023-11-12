@@ -3,7 +3,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
-import SolidButton from '../SolidButton';
+import SolidButton from '../commons/SolidButton';
 import { SlideTransition } from '../commons/transitions';
 
 export default function ConfirmEndModal({ isOpen, setIsOpen, handleEndSession }) {

@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import ComponentGuard from '../ComponentGuard';
 import DeleteQuestionDialog from './DeleteQuestionDialog';
 import QuestionCategoryList from './QuestionCategoryList';
-import DifficultyChip from '../DifficultyChip';
+import DifficultyChip from '../commons/DifficultyChip';
 
 export default function QuestionRow({
   question, setQuestions, setError, setSelectedQuestion, setIsEditModalOpen,
