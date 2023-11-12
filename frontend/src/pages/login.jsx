@@ -1,4 +1,4 @@
-import SolidButton from '@/components/SolidButton';
+import SolidButton from '@/components/commons/SolidButton';
 import React, { useEffect, useState } from 'react';
 import {
   Box, Container, Grid, Paper, TextField, Typography,

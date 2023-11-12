@@ -5,6 +5,17 @@ networks:
   backend:
 
 services:
+  code-execution-service:
+    container_name: code-execution-service
+    build:
+      context: ./code-execution-service
+    ports:
+      - 8008:8008
+    networks:
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  
   collab-service:
     container_name: collab-service
     build:
@@ -37,6 +48,7 @@ services:
       - question-service
       - matching-service
       - collab-service
+      - code-execution-service
       - video-service
   
   api-gateway:
@@ -52,10 +64,12 @@ services:
       - user-service
       - question-service
       - matching-service
+      - code-execution-service
     environment:
       USER_BASE_URL: http://user-service:8000
       QUESTION_BASE_URL: http://question-service:5000
       MATCHING_BASE_URL: http://matching-service:8001
+      EXECUTION_BASE_URL: http://code-execution-service:8008
       SECRET_KEY: ${SECRET_KEY}
 
   user-service:
@@ -164,3 +178,4 @@ services:
 volumes:
   postgres-db:
   mongo-db:
+  

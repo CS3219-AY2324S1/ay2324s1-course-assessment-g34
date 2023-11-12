@@ -20,7 +20,7 @@ import React from 'react';
  * // Usage of SolidButton component with the default 'primary' color:
  * <SolidButton variant="contained">Click Me</SolidButton>
  */
-const SolidButton = styled(Button)(({ theme, color = 'primary' }) =>  ({
+const SolidButton = styled(Button)(({ theme, color = 'primary' }) => ({
   '&.MuiButton-contained': {
     backgroundColor: theme.palette[color].main,
   },

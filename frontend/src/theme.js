@@ -1,10 +1,10 @@
 import {
-  alpha, createTheme, darken, getContrastRatio,
+  createTheme, darken, getContrastRatio, lighten,
 } from '@mui/material/styles';
 
 const createColor = (color) => ({
   main: color,
-  light: alpha(color, 0.5),
+  light: lighten(color, 0.1),
   dark: darken(color, 0.3),
   contrastText: getContrastRatio(color, '#fff') > 4.5 ? '#fff' : '#111',
 });

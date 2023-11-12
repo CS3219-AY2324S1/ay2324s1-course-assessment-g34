@@ -1,7 +1,7 @@
 import {
   Accordion, AccordionDetails, AccordionSummary, Box, Paper, Skeleton, Stack, Toolbar, Typography,
 } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ExpandMore } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -12,10 +12,10 @@ import { QUESTION_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
 import PropTypes from 'prop-types';
 import QuestionCategoryList from '../QuestionPage/QuestionCategoryList';
-import DifficultyChip from '../DifficultyChip';
-import SolidButton from '../SolidButton';
+import DifficultyChip from '../commons/DifficultyChip';
+import SolidButton from '../commons/SolidButton';
 
-export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, collabPageGetQid, isMinimized }) {
+export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, collabPageGetQid, isConsoleMinimized }) {
   const { getAccessToken } = useAuthContext();
   const questionId = useSelector(selectQuestionId);
   collabPageGetQid(questionId);
@@ -56,14 +56,17 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, coll
   }, [questionId]);
 
   return (
-    <Box
-      component={Paper}
-      flexGrow={isMinimized && 1}
+    <Paper
       sx={{
-        display: 'flex', flexDirection: 'column', overflowY: 'hidden', height: '60%'
+        flexGrow: isConsoleMinimized && 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'hidden',
+        height: isConsoleMinimized ? '100%' : '60%',
+        bgcolor: (theme) => theme.palette.primary.light,
       }}
     >
-      <Toolbar variant="dense" disableGutters sx={{ px: 2, bgcolor: (theme) => theme.palette.primary.main }}>
+      <Toolbar variant="dense" disableGutters sx={{ px: 2 }}>
         <Typography
           sx={{
             fontWeight: 600,
@@ -85,7 +88,7 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, coll
         </SolidButton>
       </Toolbar>
       <Stack sx={{
-        gap: 1, py: 1, px: 2, overflowY: 'scroll',
+        gap: 1, py: 1, px: 2, overflowY: 'scroll', bgcolor: 'white', height: '100%',
       }}
       >
         {isQuestionLoading
@@ -139,11 +142,12 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, coll
           </AccordionDetails>
         </Accordion>
       </Stack>
-    </Box>
+    </Paper>
   );
 }
 
 QuestionPanel.propTypes = {
   fetchSessionQuestion: PropTypes.func.isRequired,
   openSnackbar: PropTypes.func.isRequired,
+  isConsoleMinimized: PropTypes.bool.isRequired,
 };

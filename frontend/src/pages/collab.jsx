@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import React from 'react';
 
-// use of dynanic imports to avoid SSR hydration issues
+// use of dynamic imports to avoid SSR hydration issues
 const DynamicCollabPage = dynamic(() => import('../components/CollabPage/CollabPage'), {
   ssr: false,
   loading: () => <Skeleton variant="rectangular" height="100vh" />,

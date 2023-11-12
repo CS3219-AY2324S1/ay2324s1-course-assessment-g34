@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Box, Snackbar, Stack } from '@mui/material';
+import {
+  Alert, Box, Snackbar, Stack,
+} from '@mui/material';
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { COLLAB_SVC_URI } from '@/config/uris';
@@ -103,9 +105,10 @@ export default function CollabPage() {
       joinSession(socket, sessionId);
       return () => {
         socket.disconnect();
-        setSessionSocket(null)
-      }
+        setSessionSocket(null);
+      };
     }
+    return () => {};
   }, []);
 
   useEffect(() => {
@@ -118,14 +121,12 @@ export default function CollabPage() {
     dispatch(setIsOnGoing(isOnGoing));
   }, [isOnGoing]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(setIsOnGoing(false));
-      dispatch(resetMatchedUser());
-      dispatch(resetSession());
-      dispatch(setDifficulty(''));
-      dispatch(setQuestionId(null));
-    }
+  useEffect(() => () => {
+    dispatch(setIsOnGoing(false));
+    dispatch(resetMatchedUser());
+    dispatch(resetSession());
+    dispatch(setDifficulty(''));
+    dispatch(setQuestionId(null));
   }, []);
 
   useEffect(() => {
@@ -135,10 +136,8 @@ export default function CollabPage() {
 
       doc.subscribe((err) => {
         if (err) {
-          console.log('Error on subscribe');
           console.error(err);
         } else {
-          console.log('doc type: ', doc.type);
           if (!doc.type) {
             doc.create({ content: '', language: 'javascript' });
           }
@@ -205,8 +204,14 @@ export default function CollabPage() {
             openSnackbar={openSnackbar}
             collabPageGetQid={collabPageGetQid}
             isMinimized={isConsoleMinimized}
+            isConsoleMinimized={isConsoleMinimized}
           />
-          <ConsolePanel isMinimized={isConsoleMinimized} setIsMinimized={setIsConsoleMinimized} />
+          <ConsolePanel
+            code={content}
+            language={language}
+            isMinimized={isConsoleMinimized}
+            setIsMinimized={setIsConsoleMinimized}
+          />
         </Stack>
         <EditorPanel
           value={content}

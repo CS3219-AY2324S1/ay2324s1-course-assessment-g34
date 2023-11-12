@@ -10,6 +10,7 @@ const proxy = httpProxy.createProxyServer();
 const USER_BASE_URL = process.env.USER_BASE_URL;
 const QUESTION_BASE_URL = process.env.QUESTION_BASE_URL;
 const MATCHING_BASE_URL = process.env.MATCHING_BASE_URL;
+const EXECUTION_BASE_URL = process.env.EXECUTION_BASE_URL;
 
 const userProxy = createProxyMiddleware({
   target: USER_BASE_URL,
@@ -18,6 +19,11 @@ const userProxy = createProxyMiddleware({
 
 const questionProxy = createProxyMiddleware({
   target: QUESTION_BASE_URL,
+  changeOrigin: true
+});
+
+const executionProxy = createProxyMiddleware({
+  target: EXECUTION_BASE_URL,
   changeOrigin: true
 });
 
@@ -32,5 +38,6 @@ const matchingProxy = createProxyMiddleware(
 module.exports = {
   userProxy,
   questionProxy,
+  executionProxy,
   matchingProxy,
 };
