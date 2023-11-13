@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway：latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
