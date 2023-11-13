@@ -144,3 +144,41 @@ spec:
     app: video-service
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: code-execution-service
+  labels:
+    app: code-execution-service
+spec:
+  ports:
+    - port: 8008
+      targetPort: 8008
+      protocol: TCP
+      name: code-execution-service
+  selector:
+    app: code-execution-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-service
+  labels:
+    app: node-service
+spec:
+  selector:
+    app: node-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+  labels:
+    app: python-service
+spec:
+  selector:
+    app: python-service
+
+---

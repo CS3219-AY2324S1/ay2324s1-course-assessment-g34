@@ -57,6 +57,9 @@ jobs:
         docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/video-service:latest ./video-service
         docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/video-service:latest
 
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/code-execution-service:latest ./code-execution-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/code-execution-service:latest
+
     - name: deploy to gke
       run: |
         gcloud components install gke-gcloud-auth-plugin
