@@ -1,17 +1,3 @@
-const isProduction = process.env.IS_PROD || true;
-export const VIDEO_SVC_PORT = process.env.NEXT_PUBLIC_VIDEO_SVC_PORT || 3001;
-export const VIDEO_SVC_HOST = process.env.NEXT_PUBLIC_VIDEO_SVC_HOST || 'api.peerpreparing.com';
-
-// export const MATCHING_SVC_URI = process.env.NEXT_PUBLIC_MATCHING_SVC_URI || 'http://localhost:8001';
-
-let GATEWAY_BASE_URL;
-
-if (isProduction) {
-    GATEWAY_BASE_URL = 'https://api.peerpreparing.com';
-} else {
-    GATEWAY_BASE_URL = 'http://localhost:3001';
-}
-
 // User Service
 const USER_SVC_PREFIX = '/api/user-service';
 const USER_RESOURCE = '/users';
@@ -27,6 +13,20 @@ const VERIFY_TOKEN = '/verify';
 const QUESTION_SVC_PREFIX = '/api/question-service';
 const QUESTION_RESOURCE = '/questions';
 
+// Uncomment for prod
+const GATEWAY_BASE_URL = 'https://api.peerpreparing.com';
+export const VIDEO_SVC_PORT = 443;
+export const VIDEO_SVC_HOST = 'api.peerpreparing.com';
+export const VIDEO_SVC_SECURE = true;
+export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'wss');
+
+// Uncomment for dev
+// const GATEWAY_BASE_URL = 'http://localhost:3001';
+// export const VIDEO_SVC_PORT = 3001;
+// export const VIDEO_SVC_HOST = 'localhost';
+// export const VIDEO_SVC_SECURE = false;
+// export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'ws');
+
 export const REGISTER_SVC_URI = GATEWAY_BASE_URL + USER_SVC_PREFIX + REGISTER;
 export const LOGIN_SVC_URI = GATEWAY_BASE_URL + USER_SVC_PREFIX + LOGIN;
 
@@ -40,7 +40,5 @@ export const QUESTION_SVC_URI = GATEWAY_BASE_URL + QUESTION_SVC_PREFIX + QUESTIO
 export const MATCHING_SVC_URI = GATEWAY_BASE_URL;
 
 export const COLLAB_SVC_IO_URI = GATEWAY_BASE_URL;
-
-export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'wss');
 
 export const VIDEO_SVC_URI = GATEWAY_BASE_URL;

@@ -49,6 +49,8 @@ services:
       - user-service
       - question-service
       - matching-service
+      - video-service
+      - collab-service
     environment:
       USER_BASE_URL: http://user-service:8000
       QUESTION_BASE_URL: http://question-service:5000

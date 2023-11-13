@@ -2,7 +2,7 @@ import { Box, Paper, Stack, Toolbar, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { Mic, MicOff, Videocam, VideocamOff } from "@mui/icons-material";
 import SolidButton from "../SolidButton";
-import { VIDEO_SVC_HOST, VIDEO_SVC_PORT, VIDEO_SVC_URI } from "@/config/uris";
+import { VIDEO_SVC_HOST, VIDEO_SVC_PORT, VIDEO_SVC_URI, VIDEO_SVC_SECURE } from "@/config/uris";
 import Peer from "peerjs";
 import { useSelector } from "react-redux";
 import { VideoEvent } from "@/utils/constants";
@@ -119,7 +119,8 @@ export default function VideoChatPanel() {
 
   const peer = new Peer({
     host: VIDEO_SVC_HOST,
-    secure: true,
+    port: VIDEO_SVC_PORT,
+    secure: VIDEO_SVC_SECURE,
     path: '/peerjs',
     config: {
       'iceServers': [
