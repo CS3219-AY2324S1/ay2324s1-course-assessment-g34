@@ -28,7 +28,6 @@ const connectCollabSocket = (eventHandler) => {
     path: "/api/collab-service/socket.io" 
   });
 
-  console.log("connect to collab socket");
   eventHandler(collabSocket);
 };
 

@@ -39,7 +39,6 @@ const findMatch = (user) => {
     const sessionId = generateSessionId();
   
     createSession(sessionId, user, matchedUser, user.criteria.difficulty);
-    console.log("Ran createSession method in matchHandler")
     // handleCreateSession({ user1: user, user2: matchedUser, sessionId: sessionId, questionId: 'test' })
   } else {
     pushUserToQueue(user);
