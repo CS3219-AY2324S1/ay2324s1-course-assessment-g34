@@ -9,6 +9,7 @@ import QuestionPanel from '@/components/CollabPage/QuestionPanel';
 import EditorPanel from '@/components/CollabPage/EditorPanel';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAuthContext } from '@/contexts/AuthContext';
 import {
   resetMatchedUser, resetSession, selectMatchedUsername, selectSessionId, setMatchedUser,
   setSession,
@@ -21,6 +22,7 @@ import { handleSessionEvents } from '@/utils/eventHandlers';
 import { fetchSessionQuestion, joinSession } from '@/utils/eventEmitters';
 import LeaveSessionModal from '@/components/CollabPage/LeaveSessionModal';
 import ConfirmEndModal from '@/components/CollabPage/ConfirmEndModal';
+import addSubmission from '@/utils/addSubmission';
 import VideoChatPanel from './VideoChatPanel';
 import ConsolePanel from './ConsolePanel';
 
@@ -39,8 +41,14 @@ const connectSessionSocket = () => {
 };
 
 export default function CollabPage() {
+  const { user } = useAuthContext();
+  const username = user == null ? null : user.username;
+  let questionId = null;
+  const collabPageGetQid = (qid) => { questionId = qid };
+
   const router = useRouter();
   const sessionId = useSelector(selectSessionId);
+
   const matchedUser = useSelector(selectMatchedUsername);
   const difficulty = useSelector(selectDifficulty);
   const isOnGoing = useSelector(selectIsOngoing);
@@ -60,6 +68,12 @@ export default function CollabPage() {
     dispatch(setQuestionId(null));
     router.push('/');
   };
+
+  const addSubmissionAndHandleEndSession = () => {
+    const { content, language } = collabDoc.data;
+    addSubmission(questionId, username, matchedUser, language, content);
+    handleEndSession();
+  }
 
   const openSnackbar = () => {
     setIsSnackbarOpen(true);
@@ -149,7 +163,7 @@ export default function CollabPage() {
         });
       };
     }
-    return () => {};
+    return () => { };
   }, [sessionId]);
 
   const handleInputChange = (value, e) => {
@@ -165,6 +179,8 @@ export default function CollabPage() {
   };
 
   const handleFetchQuestion = () => {
+    const { content, language } = collabDoc.data;
+    addSubmission(questionId, username, matchedUser, language, content);
     fetchSessionQuestion(sessionSocket, sessionId, difficulty);
   };
 
@@ -186,6 +202,8 @@ export default function CollabPage() {
           <QuestionPanel
             fetchSessionQuestion={handleFetchQuestion}
             openSnackbar={openSnackbar}
+            collabPageGetQid={collabPageGetQid}
+            isMinimized={isConsoleMinimized}
             isConsoleMinimized={isConsoleMinimized}
           />
           <ConsolePanel
@@ -208,7 +226,7 @@ export default function CollabPage() {
       <ConfirmEndModal
         isOpen={isConfirmationModalOpen}
         setIsOpen={setIsConfirmationModalOpen}
-        handleEndSession={handleEndSession}
+        handleEndSession={addSubmissionAndHandleEndSession}
       />
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

@@ -15,9 +15,10 @@ import QuestionCategoryList from '../QuestionPage/QuestionCategoryList';
 import DifficultyChip from '../commons/DifficultyChip';
 import SolidButton from '../commons/SolidButton';
 
-export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isConsoleMinimized }) {
+export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, collabPageGetQid, isConsoleMinimized }) {
   const { getAccessToken } = useAuthContext();
   const questionId = useSelector(selectQuestionId);
+  collabPageGetQid(questionId);
   const [question, setQuestion] = useState(null);
 
   const isQuestionLoading = useSelector(selectIsQuestionLoading);
@@ -93,9 +94,9 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isCo
         {isQuestionLoading
           ? <Skeleton variant="text" sx={{ fontSize: 20 }} />
           : question && (
-          <Typography sx={{ fontWeight: 600, fontSize: 20 }}>
-            {question.title}
-          </Typography>
+            <Typography sx={{ fontWeight: 600, fontSize: 20 }}>
+              {question.title}
+            </Typography>
           )}
         <Box>
           {isQuestionLoading
@@ -105,17 +106,17 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isCo
         {isQuestionLoading
           ? <Skeleton variant="rectangular" width="100%" height={300} />
           : question && (
-          <Box sx={{
-            fontSize: 14,
-            wordBreak: 'break-word',
-            WebkitHyphens: 'auto',
-            MozHyphens: 'auto',
-            msHyphens: 'auto',
-            hyphens: 'auto',
-          }}
-          >
-            <div className="ck-content" dangerouslySetInnerHTML={{ __html: question.description }} />
-          </Box>
+            <Box sx={{
+              fontSize: 14,
+              wordBreak: 'break-word',
+              WebkitHyphens: 'auto',
+              MozHyphens: 'auto',
+              msHyphens: 'auto',
+              hyphens: 'auto',
+            }}
+            >
+              <div className="ck-content" dangerouslySetInnerHTML={{ __html: question.description }} />
+            </Box>
           )}
         <Accordion
           disableGutters
