@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend:latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway：latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
@@ -329,6 +329,8 @@ spec:
         - name: node-service
           image: node:14
           imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8009
 
 ---
 apiVersion: apps/v1
@@ -349,5 +351,6 @@ spec:
         - name: python-service
           image: python:3.9
           imagePullPolicy: IfNotPresent
-
+          ports:
+            - containerPort: 8010
 ---

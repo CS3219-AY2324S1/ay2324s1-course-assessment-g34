@@ -167,6 +167,11 @@ metadata:
   labels:
     app: node-service
 spec:
+  ports:
+    - port: 8009
+      targetPort: 8009
+      protocol: TCP
+      name: node-service
   selector:
     app: node-service
 
@@ -178,6 +183,11 @@ metadata:
   labels:
     app: python-service
 spec:
+  ports:
+    - port: 8010
+      targetPort: 8010
+      protocol: TCP
+      name: python-service
   selector:
     app: python-service
 
