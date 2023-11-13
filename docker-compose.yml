@@ -5,47 +5,6 @@ networks:
   backend:
 
 services:
-  node-service:
-    container_name: node-service
-    image: node:14
-    networks:
-      - backend
-  
-  python-service:
-    container_name: python-service
-    image: python:3.9
-    networks:
-      - backend
-
-  code-execution-service:
-    container_name: code-execution-service
-    build:
-      context: ./code-execution-service
-    ports:
-      - 8008:8008
-    networks:
-      - backend
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - node-service
-      - python-service
-  
-  collab-service:
-    container_name: collab-service
-    build:
-      context: ./collab-service
-    environment:
-      QUESTION_SVC_URI: http://question-service:5000
-      DATABASE_URL: mongodb://mongo-db:27017/collab-docs
-    ports:
-      - 8080:8080
-    networks:
-      - backend
-    depends_on:
-      - mongo-db
-      - question-service
-
   frontend:
     container_name: frontend
     build:
@@ -61,11 +20,7 @@ services:
     depends_on:
       - user-service
       - question-service
-      - matching-service
-      - collab-service
-      - code-execution-service
-      - video-service
-  
+
   api-gateway:
     container_name: api-gateway
     build:
@@ -78,8 +33,6 @@ services:
     depends_on:
       - user-service
       - question-service
-      - matching-service
-      - code-execution-service
     environment:
       USER_BASE_URL: http://user-service:8000
       QUESTION_BASE_URL: http://question-service:5000
@@ -114,31 +67,6 @@ services:
       - backend
     depends_on:
       - mongo-db
-    
-  matching-service:
-    container_name: matching-service
-    build:
-      context: ./matching-service
-    networks:
-      - backend
-    environment:
-      COLLAB_SVC_URI: ws://collab-service:8080
-      PORT: 8001
-    ports: 
-      - 8001:8001
-    depends_on:
-      - collab-service
-  
-  video-service:
-    container_name: video-service
-    build:
-      context: ./video-service
-    networks:
-      - backend
-    environment:
-      PORT: 3002
-    ports:
-      - 3002:3002
 
   postgres-db:
     container_name: ${DATABASE_HOST}

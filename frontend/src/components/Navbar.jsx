@@ -16,10 +16,6 @@ import SolidButton from './commons/SolidButton';
 
 const pages = [
   {
-    label: 'Find a Match',
-    path: '/match',
-  },
-  {
     label: 'Questions',
     path: '/questions',
   },
