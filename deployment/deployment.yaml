@@ -70,7 +70,7 @@ spec:
       containers:
         - name: postgres-db
           image: postgres:15.4
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: peerprep-config
@@ -326,11 +326,10 @@ spec:
         app: node-service
     spec:
       containers:
-        - name: node-service
-          image: node:14
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 8009
+      - name: node-service
+        image: node:14
+        command: ["sleep"]
+        args: ["infinity"]
 
 ---
 apiVersion: apps/v1
@@ -348,9 +347,9 @@ spec:
         app: python-service
     spec:
       containers:
-        - name: python-service
-          image: python:3.9
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 8010
+      - name: python-service
+        image: python:3.9
+        command: ["sleep"]
+        args: ["infinity"]
+
 ---
