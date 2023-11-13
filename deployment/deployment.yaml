@@ -294,21 +294,29 @@ spec:
         app: code-execution-service
     spec:
       containers:
-        - name: code-execution-service
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/code-execution-service:latest
-          imagePullPolicy: Always
-          envFrom:
-            - configMapRef:
-                name: peerprep-config
-          ports:
-            - containerPort: 8008
-          resources:
-            limits:
-              memory: 512Mi
-              cpu: '400m'
-            requests:
-              memory: 256Mi
-              cpu: '400m'
+      - name: code-execution-service
+        image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/code-execution-service:latest
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: peerprep-config
+        ports:
+        - containerPort: 8008
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: '400m'
+          requests:
+            memory: 256Mi
+            cpu: '400m'
+        volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+
 
 ---
 apiVersion: apps/v1
