@@ -9,7 +9,8 @@ const {
     collabProxyIO,
     collabProxyWS,
     videoProxy,
-    peerJSProxy
+    peerJSProxy,
+    executionProxy
 } = require('./proxy');
 
 const app = express();
@@ -52,6 +53,10 @@ app.use(isAuthenticated);
 // allows only authorized user to access these endpoints
 app.use('/api/question-service', (req, res) => {
   questionProxy(req, res);
+})
+
+app.use('/api/code-execution-service', (req, res) => {
+  executionProxy(req, res);
 })
 
 app.listen(3001, () => {

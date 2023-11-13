@@ -24,9 +24,17 @@ export const SessionEvent = {
   QUESTION_FETCHED: 'session-question_fetched',
 };
 
+export const Language = {
+  PYTHON: 'Python',
+  JAVASCRIPT: 'JavaScript',
+  CPP: 'C++',
+  JAVA: 'Java',
+  TYPESCRIPT: 'TypeScript',
+};
+
 export const VideoEvent = {
   JOIN: 'join-room',
   LEAVE: 'leave-call',
   TOGGLE_MIC: 'toggle-mic',
-  TOGGLE_CAM: 'toggle-video'
+  TOGGLE_CAM: 'toggle-video',
 };

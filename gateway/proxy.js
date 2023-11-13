@@ -13,6 +13,7 @@ const MATCHING_BASE_URL = process.env.MATCHING_BASE_URL;
 const COLLAB_BASE_IO_URL = process.env.COLLAB_BASE_IO_URL;
 const COLLAB_BASE_WS_URL = process.env.COLLAB_BASE_WS_URL;
 const VIDEO_BASE_URL = process.env.VIDEO_BASE_URL;
+const EXECUTION_BASE_URL = process.env.EXECUTION_BASE_URL;
 
 const userProxy = createProxyMiddleware({
   target: USER_BASE_URL,
@@ -21,6 +22,11 @@ const userProxy = createProxyMiddleware({
 
 const questionProxy = createProxyMiddleware({
   target: QUESTION_BASE_URL,
+  changeOrigin: true
+});
+
+const executionProxy = createProxyMiddleware({
+  target: EXECUTION_BASE_URL,
   changeOrigin: true
 });
 
@@ -68,6 +74,7 @@ const peerJSProxy = createProxyMiddleware(
 module.exports = {
   userProxy,
   questionProxy,
+  executionProxy,
   matchingProxy,
   collabProxyIO,
   collabProxyWS,

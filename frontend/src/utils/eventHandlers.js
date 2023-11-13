@@ -1,10 +1,6 @@
 import { setIsOnGoing, setIsQuestionLoading, setQuestionId } from '@/features/session/sessionSlice';
 import { SessionEvent, VideoEvent } from './constants';
 
-export const handleMatchEvents = (socket, dispatch) => {
-
-};
-
 export const handleSessionEvents = (socket, dispatch) => {
   socket.on(SessionEvent.ENDED, () => {
     dispatch(setIsOnGoing(false));

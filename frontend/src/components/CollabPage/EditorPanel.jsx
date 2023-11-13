@@ -5,20 +5,15 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { ExitToApp } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import SolidButton from '../SolidButton';
+import { Language } from '@/utils/constants';
+import SolidButton from '../commons/SolidButton';
 
 const Editor = dynamic(() => import('./CollabEditor'), {
   ssr: false,
   loading: () => <Skeleton variant="rectangular" height="100vh" />,
 });
 
-const languageOptions = [
-  { label: 'C++', value: 'cpp' },
-  { label: 'Python', value: 'python' },
-  { label: 'Java', value: 'java' },
-  { label: 'JavaScript', value: 'javascript' },
-  { label: 'TypeScript', value: 'typescript' },
-];
+const languageOptions = Object.values(Language);
 
 export default function EditorPanel({
   value, onChange, language, handleLanguageSelect, openConfirmationModal,
@@ -27,7 +22,7 @@ export default function EditorPanel({
     <Box
       component={Paper}
       sx={{
-        display: 'flex', flexDirection: 'column', height: '100%', width: '100%', overflowY: 'hidden', minWidth: 120, bgcolor: (theme) => theme.palette.primary.main,
+        display: 'flex', flexDirection: 'column', height: '100%', width: '100%', overflowY: 'hidden', minWidth: 120, bgcolor: (theme) => theme.palette.primary.light,
       }}
     >
       <Toolbar disableGutters variant="dense" sx={{ width: '100%', minWidth: 180, px: 2 }}>
@@ -46,7 +41,7 @@ export default function EditorPanel({
           }}
         >
           {languageOptions.map((lang) => (
-            <MenuItem key={lang.value} value={lang.value}>{lang.label}</MenuItem>
+            <MenuItem key={lang} value={lang.toLowerCase()}>{lang}</MenuItem>
           ))}
         </Select>
         <SolidButton
