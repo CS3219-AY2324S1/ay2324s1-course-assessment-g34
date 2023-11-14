@@ -128,20 +128,24 @@ spec:
     app: collab-service
 
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: video-service
-  labels:
-    app: video-service
-spec:
-  ports:
-    - port: 3002
-      targetPort: 3002
-      protocol: TCP
-      name: video-service
-  selector:
-    app: video-service
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: video-service
+    labels:
+      app: video-service
+  spec:
+    ports:
+      - port: 3002
+        targetPort: 3002
+        protocol: TCP
+        name: video-port-3002
+      - port: 9000
+        targetPort: 9000
+        protocol: TCP
+        name: video-port-9000
+    selector:
+      app: video-service
 
 ---
 apiVersion: v1

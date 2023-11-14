@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway:latest
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
@@ -287,6 +287,7 @@ spec:
                 name: peerprep-config
           ports:
             - containerPort: 3002
+            - containerPort: 9000
           resources:
             limits:
               memory: 512Mi
