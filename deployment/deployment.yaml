@@ -323,7 +323,13 @@ spec:
           requests:
             memory: 256Mi
             cpu: '400m'
-
+        volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: docker-sock
+        persistentVolumeClaim:
+          claimName: code-execution-service
 
 ---
 apiVersion: apps/v1
