@@ -83,7 +83,7 @@ spec:
             requests:
               memory: 256Mi
               cpu: '400m'
-      volumeMounts:
+          volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-db
       volumes:
@@ -152,7 +152,7 @@ spec:
             requests:
               memory: 256Mi
               cpu: '400m'
-      volumeMounts:
+          volumeMounts:
             - mountPath: /data/db
               name: mongo-db
       volumes:
