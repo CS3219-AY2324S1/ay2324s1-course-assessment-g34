@@ -86,7 +86,7 @@ services:
       COLLAB_BASE_IO_URL: http://collab-service:8080
       COLLAB_BASE_WS_URL: ws://collab-service:8080
       VIDEO_BASE_URL: http://video-service:3002
-      PEERJS_BASE_URL: http://video-service:3003
+      PEERJS_BASE_URL: http://video-service:9000
       EXECUTION_BASE_URL: http://code-execution-service:8008
       SECRET_KEY: ${SECRET_KEY}
 

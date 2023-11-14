@@ -2,38 +2,33 @@ const express = require("express");
 const http = require("http");
 const { ExpressPeerServer } = require("peer");
 const { Server } = require("socket.io");
-const cors = require("cors"); // Import the cors package
+const cors = require("cors"); 
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   path: '/api/video-service/socket.io',
   cors: {
-    origin: '*' // CORS enabled for Socket.io
+    origin: '*'
   }
 });
 
 const { VideoEvent } = require("./constants/events");
 
 const PORT = process.env.PORT || 3002;
-const PEER_SERVER_PORT = process.env.PEER_SERVER_PORT || 3003;
+const PEER_SERVER_PORT = process.env.PEER_SERVER_PORT || 9000;
 
 // PeerJS server setup
 const peerApp = express();
-peerApp.use(cors()); // Enable CORS for PeerJS server
+peerApp.use(cors());
 
 const peerServer = http.createServer(peerApp);
-const peerOpinions = {
-  debug: true,
+const peerOptions = {
+  debug: false,
   proxied: true,
 };
-
-peerApp.use("/peerjs", ExpressPeerServer(peerServer, peerOpinions));
-
-// Test route for main server
-app.get('/', (_req, res) => {
-  res.status(200).json({ message: 'Hello' });
-});
+peerApp.enable('trust proxy');
+peerApp.use("/peerjs", ExpressPeerServer(peerServer, peerOptions));
 
 io.on("connection", (socket) => {
   socket.on(VideoEvent.JOIN, (data) => {
