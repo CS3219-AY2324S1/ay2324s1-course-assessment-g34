@@ -46,14 +46,14 @@ io.on("connection", (socket) => {
     socket.to(sessionId).emit(VideoEvent.TOGGLE_CAM, { isVideoOn });
   });
 
-  socket.on(VideoEvent.DISCONNECTING, () => {
-    socket.rooms.forEach((roomId) => {
-      if (roomId !== socket.id) {
-        console.log(roomId);
-        io.to(roomId).emit(VideoEvent.LEAVE);
-      }
-    })
-  });
+  // socket.on(VideoEvent.DISCONNECTING, () => {
+  //   socket.rooms.forEach((roomId) => {
+  //     if (roomId !== socket.id) {
+  //       console.log(roomId);
+  //       io.to(roomId).emit(VideoEvent.LEAVE);
+  //     }
+  //   })
+  // });
 });
 
 server.listen(PORT, () => {
