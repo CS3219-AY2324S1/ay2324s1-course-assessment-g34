@@ -41,27 +41,39 @@ export default function ComponentGuard({
   children, allowedRoles, altComponent, loadingComponent,
 }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const { user, isAuthenticated, isLoading } = useAuthContext();
+  const { user, isLoading } = useAuthContext();
+
+  // useEffect(() => {
+  //   if (user && allowedRoles.includes(user.role)) {
+  //     if (isAuthenticated && allowedRoles.includes(user.role)) {
+  //       setIsAuthorized(true);
+  //     } else {
+  //       setIsAuthorized(false);
+  //     }
+  //   }
+  // }, [isLoading, isAuthenticated, user, allowedRoles]);
 
   useEffect(() => {
     if (!isLoading) {
-      if (isAuthenticated && allowedRoles.includes(user.role)) {
+      if (user && allowedRoles.includes(user.role)) {
         setIsAuthorized(true);
       } else {
         setIsAuthorized(false);
       }
     }
-  }, [isLoading, isAuthenticated, user, allowedRoles]);
+    // console.log("loading?", isLoading)
+    // console.log("user:", user)
+  }, [user, isLoading, allowedRoles]);
 
   if (isLoading) {
     return loadingComponent;
   }
 
-  if (!isAuthorized && !isLoading) {
+  if (!isAuthorized) {
     return altComponent;
   }
 
-  return isAuthorized && !isLoading && children;
+  return isAuthorized && children;
 }
 
 /**

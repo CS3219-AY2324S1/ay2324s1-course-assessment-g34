@@ -1,7 +1,6 @@
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 
@@ -31,23 +30,22 @@ import { PropTypes } from 'prop-types';
  * export default MyProtectedPage;
  */
 export default function RouteGuard({ children, allowedRoles }) {
-  const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const {
-    user, isAuthenticated, isLoading, setRedirect,
-  } = useAuthContext();
+  const { user, isLoading } = useAuthContext();
 
   useEffect(() => {
     if (!isLoading) {
-      if (isAuthenticated && allowedRoles.includes(user.role)) {
+      if (user && allowedRoles.includes(user.role)) {
         setIsAuthorized(true);
         return;
       }
 
       setIsAuthorized(false);
     }
+    // console.log("loading?", isLoading)
+    // console.log("user:", user)
     /* eslint-disable react-hooks/exhaustive-deps */
-  }, [isLoading, isAuthenticated, user, allowedRoles, setRedirect]);
+  }, [isLoading, user, allowedRoles]);
 
   if (isLoading) {
     return (
@@ -57,7 +55,7 @@ export default function RouteGuard({ children, allowedRoles }) {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
     return (
       <Box sx={{
         display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center',
@@ -76,7 +74,7 @@ export default function RouteGuard({ children, allowedRoles }) {
     );
   }
 
-  if (isAuthenticated && !isAuthorized) {
+  if (!isAuthorized) {
     return (
       <Box sx={{ display: 'flex' }}>
         <Typography>

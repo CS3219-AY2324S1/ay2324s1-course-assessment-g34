@@ -15,7 +15,7 @@ export default function DeleteAccountButton({
 }) {
   const path = useRouter().asPath;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { getAccessToken, setRedirect, logout } = useAuthContext();
+  const { prepareToken, accessToken, setRedirect, logout } = useAuthContext();
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -27,11 +27,11 @@ export default function DeleteAccountButton({
 
   const handleDelete = async () => {
     try {
-      const token = await getAccessToken();
+      await prepareToken();
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 

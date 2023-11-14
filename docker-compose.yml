@@ -5,18 +5,6 @@ networks:
   backend:
 
 services:
-  node-service:
-    container_name: node-service
-    image: node:14
-    networks:
-      - backend
-  
-  python-service:
-    container_name: python-service
-    image: python:3.9
-    networks:
-      - backend
-
   code-execution-service:
     container_name: code-execution-service
     build:
@@ -27,9 +15,6 @@ services:
       - backend
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - node-service
-      - python-service
   
   collab-service:
     container_name: collab-service

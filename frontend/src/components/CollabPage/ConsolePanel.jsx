@@ -109,7 +109,7 @@ export default function ConsolePanel({
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [executedLanguage, setExecutedLanguage] = useState(language);
-  const { getAccessToken } = useAuthContext();
+  const { prepareToken, accessToken } = useAuthContext();
   const isExecutableLanguage = executableLanguages.includes(language);
 
   const toggleMinimize = () => {
@@ -123,11 +123,11 @@ export default function ConsolePanel({
     setError(null);
     setResult(null);
     try {
-      const token = await getAccessToken();
+      await prepareToken();
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 
