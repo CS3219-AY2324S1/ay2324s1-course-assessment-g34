@@ -2,13 +2,14 @@ const express = require("express");
 const http = require("http");
 const { ExpressPeerServer } = require("peer");
 const { Server } = require("socket.io");
+const cors = require("cors"); // Import the cors package
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   path: '/api/video-service/socket.io',
   cors: {
-    origin: '*'
+    origin: '*' // CORS enabled for Socket.io
   }
 });
 
@@ -19,11 +20,14 @@ const PEER_SERVER_PORT = process.env.PEER_SERVER_PORT || 3003;
 
 // PeerJS server setup
 const peerApp = express();
+peerApp.use(cors()); // Enable CORS for PeerJS server
+
 const peerServer = http.createServer(peerApp);
 const peerOpinions = {
   debug: true,
   proxied: true,
 };
+
 peerApp.use("/peerjs", ExpressPeerServer(peerServer, peerOpinions));
 
 // Test route for main server
