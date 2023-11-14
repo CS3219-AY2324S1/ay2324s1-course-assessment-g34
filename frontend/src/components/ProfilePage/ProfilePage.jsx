@@ -20,7 +20,7 @@ const label = { inputProps: { 'aria-label': 'Dark mode switch' } };
 export default function ProfilePage() {
   const path = useRouter().asPath;
   const {
-    getAccessToken, user, logout, setRedirect,
+    prepareToken, accessToken, user, logout, setRedirect,
   } = useAuthContext();
   const [displayName, setDisplayName] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -29,7 +29,7 @@ export default function ProfilePage() {
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarColor, setSnackbarColor] = useState('error');
   const [message, setMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const closeSnackbar = () => {
     setIsSnackbarOpen(false);
@@ -44,11 +44,14 @@ export default function ProfilePage() {
   };
 
   const fetchUserDetails = useCallback(async () => {
+    setIsLoading(true);
+    console.log("fetching user details in profile page...")
     try {
-      const token = await getAccessToken();
+      await prepareToken();
+
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 
@@ -76,7 +79,8 @@ export default function ProfilePage() {
         openSnackbar();
       }
     }
-  }, [getAccessToken, logout, path, setRedirect, user.username]);
+    setIsLoading(false);
+  }, [accessToken]);
 
   const handleDisplayNameChange = (e) => {
     const { value } = e.target;
@@ -106,10 +110,11 @@ export default function ProfilePage() {
     }
 
     try {
-      const token = await getAccessToken();
+      await prepareToken();
+
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 
@@ -136,8 +141,9 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    fetchUserDetails();
-    setIsLoading(false);
+    if (accessToken && !displayName) {
+      fetchUserDetails();
+    }
   }, [fetchUserDetails]);
 
   if (isLoading) {

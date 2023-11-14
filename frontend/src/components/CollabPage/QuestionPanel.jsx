@@ -16,7 +16,7 @@ import DifficultyChip from '../commons/DifficultyChip';
 import SolidButton from '../commons/SolidButton';
 
 export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isConsoleMinimized }) {
-  const { getAccessToken } = useAuthContext();
+  const { prepareToken, accessToken } = useAuthContext();
   const questionId = useSelector(selectQuestionId);
   const [question, setQuestion] = useState(null);
 
@@ -25,11 +25,11 @@ export default function QuestionPanel({ fetchSessionQuestion, openSnackbar, isCo
 
   const getQuestion = async () => {
     try {
-      const token = await getAccessToken();
+      await prepareToken();
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 

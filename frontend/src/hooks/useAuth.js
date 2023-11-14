@@ -5,27 +5,12 @@ import { decode } from 'jsonwebtoken';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
-/**
- * Custom hook for handling authentication and user data.
- *
- * @returns {Object} An object containing authentication-related functions and state.
- * @property {Object|null} user - The authenticated user's data, or null if not authenticated.
- * @property {boolean} isAuthenticated - A boolean indicating whether the user is authenticated.
- * @property {boolean} isLoading - A boolean indicating whether authentication data is being loaded.
- * @property {Function} login - Function to log in a user with provided credentials.
- * @property {Function} logout - Function to log out the user.
- * @property {string|null} loginError - An error message if login fails, or null if there's no
- * error.
- * @property {Function} setLoginError - Function to set the login error message.
- * @property {Function} setRedirect - Function to set the redirect URL after login.
- * @property {Function} getAccessToken - Function to retrieve and refresh the access token.
- */
 export default function useAuth() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [loginError, setLoginError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [redirect, setRedirect] = useState('/');
 
   const addRefreshToken = (refreshToken) => {
@@ -56,6 +41,7 @@ export default function useAuth() {
         username: userData.username,
         role: user_role,
       };
+      console.log("logging in...");
       setUser(newUser);
       addAccessToken(access);
       addRefreshToken(refresh);
@@ -71,6 +57,7 @@ export default function useAuth() {
   };
 
   const logout = () => {
+    console.log("logging out...")
     setUser(null);
     removeAccessToken();
     removeRefreshToken();
@@ -79,99 +66,74 @@ export default function useAuth() {
   };
 
   const refreshAccessToken = useCallback(async () => {
+    setIsLoading(true);
     const refreshToken = getRefreshToken();
-    let newAccessToken;
-    if (!refreshToken) {
-      return null;
-    }
 
-    const body = { refresh: refreshToken };
+    if (!refreshToken) {
+      setIsLoading(false);
+      return;
+    }
 
     try {
-      console.log('refreshing token...');
-      const response = await axios.post(REFRESH_TOKEN_SVC_URI, body);
+      const response = await axios.post(REFRESH_TOKEN_SVC_URI, { refresh: refreshToken });
       const { access, refresh } = response.data;
-      newAccessToken = access;
       addAccessToken(access);
       addRefreshToken(refresh);
+      
+      const { username, user_role } = decode(access);
 
-      const { username, user_role } = decode(refresh);
-
-      setUser({
-        username,
-        role: user_role,
-      });
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        console.error('Unauthorized: ', error);
+      if (!user || user.username !== username || user.role !== user_role ) {
+        setUser({ username, role: user_role });
+      }
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        console.error('Unauthorized: ', err);
+        logout();
       } else {
-        console.error('An error occurred: ', error);
+        console.error('An error occurred: ', err);
       }
     }
-
-    return newAccessToken;
-  }, []);
+    setIsLoading(false);
+  }, [user]);
 
   const verifyAccessToken = async () => {
     const body = { token: accessToken };
 
     try {
-      const response = await axios.post(VERIFY_TOKEN_SVC_URI, body);
-
-      if (response && response.status === 200) {
-        addAccessToken(accessToken);
-        return true;
-      }
+      await axios.post(VERIFY_TOKEN_SVC_URI, body);
     } catch (err) {
       removeAccessToken();
     }
-
-    return false;
   };
 
-  const getAccessToken = async () => {
-    setIsLoading(true);
-    let token;
-
-    const isValid = accessToken && await verifyAccessToken();
-
-    if (isValid) {
-      token = accessToken;
-    } else {
-      token = refreshAccessToken();
+  const prepareToken = async () => {
+    if (!accessToken) {
+      await refreshAccessToken();
+      return;
     }
 
-    setIsLoading(false);
-    return token;
+    await verifyAccessToken();
+
+    if (!accessToken) {
+      await refreshAccessToken();
+    }
   };
 
-  // resolve user
   useEffect(() => {
     if (!user) {
-      setIsLoading(true);
-      const verifyAndRefreshAccessToken = async () => {
-        const isValid = accessToken && await verifyAccessToken();
-
-        if (!isValid) {
-          await refreshAccessToken();
-        }
-      };
-
-      verifyAndRefreshAccessToken();
-      setIsLoading(false);
+      refreshAccessToken();
     }
-    /* eslint-disable react-hooks/exhaustive-deps */
-  }, [user]);
+  }, [user, refreshAccessToken]);
 
   return {
     user,
-    isAuthenticated: !!accessToken,
+    accessToken,
+    prepareToken,
     isLoading,
     login,
     logout,
     loginError,
     setLoginError,
     setRedirect,
-    getAccessToken,
   };
 }

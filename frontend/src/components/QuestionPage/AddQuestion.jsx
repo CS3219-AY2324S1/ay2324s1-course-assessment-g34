@@ -13,7 +13,7 @@ export default function AddQuestion({ setQuestions }) {
   const path = useRouter().asPath;
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
-  const { getAccessToken, logout, setRedirect } = useAuthContext();
+  const { prepareToken, accessToken, logout, setRedirect } = useAuthContext();
 
   // TODO: consider using a reducer to handle question list instead
   const updateQuestions = (question) => {
@@ -21,12 +21,11 @@ export default function AddQuestion({ setQuestions }) {
   };
 
   const handleSubmit = async (newQuestionData) => {
-    // TODO: make some toast pop up to notify user that a question has been added successfully
     try {
-      const token = await getAccessToken();
+      await prepareToken();
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 

@@ -12,7 +12,7 @@ export default function EditQuestion({
 }) {
   const router = useRouter();
   const [error, setError] = useState(null);
-  const { getAccessToken, setRedirect } = useAuthContext();
+  const { prepareToken, accessToken, setRedirect } = useAuthContext();
 
   const updateQuestions = (newQuestion) => {
     setQuestions((prevState) => prevState.map((q) => (q._id === question._id ? newQuestion : q)));
@@ -20,10 +20,10 @@ export default function EditQuestion({
 
   const handleSubmit = async (newQuestionData) => {
     try {
-      const token = await getAccessToken();
+      await prepareToken();
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Skeleton, Toolbar, Tooltip,
   Typography,
@@ -8,8 +8,6 @@ import Link from 'next/link';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { NAVBAR_HEIGHT_PX, Role } from '@/utils/constants';
 import { stringToAvatar, stringToColor } from '@/utils/utils';
-import axios from 'axios';
-import { USER_SVC_URI } from '@/config/uris';
 import Logo from './Logo';
 import ComponentGuard from './ComponentGuard';
 import SolidButton from './commons/SolidButton';
@@ -61,8 +59,7 @@ function LoadingPlaceholder() {
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { getAccessToken, logout, user } = useAuthContext();
-  const [displayName, setDisplayName] = useState(null);
+  const { logout, user } = useAuthContext();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -78,30 +75,6 @@ export default function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  const fetchUserDetails = useCallback(async () => {
-    try {
-      const token = await getAccessToken();
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.get(`${USER_SVC_URI}/${user.username}`, config);
-      /* eslint-disabled camelcase */
-      setDisplayName(response.data.profile.displayed_name);
-    } catch (err) {
-      logout();
-    }
-  }, [getAccessToken, logout, user]);
-
-  useEffect(() => {
-    if (user && !displayName) {
-      fetchUserDetails();
-    }
-  }, [user, displayName, fetchUserDetails]);
 
   return (
     <AppBar position="static" sx={{ minHeight: NAVBAR_HEIGHT_PX }}>
@@ -168,13 +141,9 @@ export default function Navbar() {
             >
               <Tooltip title="Open user menu">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {displayName
-                    ? (
-                      <Avatar sx={{ bgcolor: stringToColor(displayName) }}>
-                        {stringToAvatar(displayName)}
-                      </Avatar>
-                    )
-                    : <Avatar alt="Avatar placeholder" src="http://localhost:3000/images/user-avatar.png" />}
+                  <Avatar sx={{ bgcolor: user ? stringToColor(user.username) : 'grey' }}>
+                    {user ? stringToAvatar(user.username) : ''}
+                  </Avatar>
                 </IconButton>
               </Tooltip>
               <Menu

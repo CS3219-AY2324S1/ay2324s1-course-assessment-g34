@@ -21,7 +21,7 @@ export default function QuestionRow({
 }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { getAccessToken, setRedirect } = useAuthContext();
+  const { prepareToken, accessToken, setRedirect } = useAuthContext();
 
   const updateDeletedQuestions = () => {
     setQuestions((prevState) => prevState.filter((q) => q._id !== question._id));
@@ -29,10 +29,10 @@ export default function QuestionRow({
 
   const handleDelete = async () => {
     try {
-      const token = await getAccessToken();
+      await prepareToken();
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 
