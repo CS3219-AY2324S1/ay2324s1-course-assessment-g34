@@ -83,7 +83,13 @@ spec:
             requests:
               memory: 256Mi
               cpu: '400m'
-      restartPolicy: Never
+      volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-db
+      volumes:
+        - name: postgres-db
+          persistentVolumeClaim:
+            claimName: postgres-db
 
 ---
 apiVersion: apps/v1
@@ -146,7 +152,13 @@ spec:
             requests:
               memory: 256Mi
               cpu: '400m'
-      restartPolicy: Never
+      volumeMounts:
+            - mountPath: /data/db
+              name: mongo-db
+      volumes:
+        - name: mongo-db
+          persistentVolumeClaim:
+            claimName: mongo-db
 
 ---
 apiVersion: apps/v1
@@ -311,9 +323,6 @@ spec:
           requests:
             memory: 256Mi
             cpu: '400m'
-        volumeMounts:
-        - name: docker-sock
-          mountPath: /var/run/docker.sock
 
 
 ---

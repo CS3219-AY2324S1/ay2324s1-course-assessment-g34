@@ -70,6 +70,7 @@ jobs:
         kubectl apply -f deployment/service.yaml
         kubectl apply -f deployment/ingress.yaml
         kubectl apply -f deployment/api-ingress.yaml
+        kubectl apply -f deployment/PVC.yaml
         kubectl apply -f deployment/deployment.yaml 
         kubectl apply -f deployment/job.yaml 
         
