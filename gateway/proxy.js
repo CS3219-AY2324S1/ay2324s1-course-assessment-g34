@@ -14,6 +14,7 @@ const COLLAB_BASE_IO_URL = process.env.COLLAB_BASE_IO_URL;
 const COLLAB_BASE_WS_URL = process.env.COLLAB_BASE_WS_URL;
 const VIDEO_BASE_URL = process.env.VIDEO_BASE_URL;
 const EXECUTION_BASE_URL = process.env.EXECUTION_BASE_URL;
+const PEERJS_BASE_URL = process.env.PEERJS_BASE_URL;
 
 const userProxy = createProxyMiddleware({
   target: USER_BASE_URL,
@@ -64,7 +65,7 @@ const videoProxy = createProxyMiddleware(
 
 const peerJSProxy = createProxyMiddleware(
   '/peerjs', {
-    target: VIDEO_BASE_URL,
+    target: PEERJS_BASE_URL,
     changeOrigin: true,
     ws: true
   }
