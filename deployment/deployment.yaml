@@ -83,6 +83,7 @@ spec:
             requests:
               memory: 256Mi
               cpu: '400m'
+      restartPolicy: Never
 
 ---
 apiVersion: apps/v1
@@ -145,6 +146,7 @@ spec:
             requests:
               memory: 256Mi
               cpu: '400m'
+      restartPolicy: Never
 
 ---
 apiVersion: apps/v1
@@ -312,10 +314,6 @@ spec:
         volumeMounts:
         - name: docker-sock
           mountPath: /var/run/docker.sock
-      volumes:
-      - name: docker-sock
-        hostPath:
-          path: /var/run/docker.sock
 
 
 ---
