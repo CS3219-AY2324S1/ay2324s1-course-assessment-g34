@@ -1,18 +1,14 @@
 const express = require("express");
-const http = require("http");
-const { ExpressPeerServer } = require("peer");
-const { Server } = require("socket.io");
-const cors = require("cors"); 
-
+const cors = require("cors");
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
   path: '/api/video-service/socket.io',
   cors: {
     origin: '*'
   }
 });
-
+const { ExpressPeerServer } = require("peer");
 const { VideoEvent } = require("./constants/events");
 
 const PORT = process.env.PORT || 3002;
@@ -21,8 +17,7 @@ const PEER_SERVER_PORT = process.env.PEER_SERVER_PORT || 9000;
 // PeerJS server setup
 const peerApp = express();
 peerApp.use(cors());
-
-const peerServer = http.createServer(peerApp);
+const peerServer = require("http").Server(peerApp);
 const peerOptions = {
   debug: false,
   proxied: true,
@@ -65,6 +60,4 @@ server.listen(PORT, () => {
     console.log(`Video Service Server is running on http://localhost:${PORT}`);
 });
 
-peerServer.listen(PEER_SERVER_PORT, () => {
-  console.log(`PeerJS Server is running on http://localhost:${PEER_SERVER_PORT}`);
-});
+peerServer.listen(PEER_SERVER_PORT);
