@@ -28,7 +28,7 @@ export default function QuestionPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { getAccessToken } = useAuthContext();
+  const { prepareToken, accessToken } = useAuthContext();
   const [selectedQuestion, setSelectedQuestion] = useState({
     _id: '',
     title: '',
@@ -40,24 +40,32 @@ export default function QuestionPage() {
 
   const getAllQuestions = useCallback(async () => {
     setIsLoading(true);
+    console.log("getting questions...")
     try {
-      const token = await getAccessToken();
+      await prepareToken();
+
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
+
+      console.log("token in questions:", accessToken);
+
       const response = await axios.get(QUESTION_SVC_URI, config);
       setQuestions(response.data);
     } catch (err) {
+      console.error(err);
       setError('An error occurred while retrieving the questions. Please try again later.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [getAccessToken]);
+    } 
+
+    setIsLoading(false);
+  }, [accessToken]);
 
   useEffect(() => {
-    getAllQuestions();
+    if (accessToken) {
+      getAllQuestions();
+    }
   }, [getAllQuestions]);
 
   return (

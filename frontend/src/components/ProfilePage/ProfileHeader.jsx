@@ -9,13 +9,9 @@ export default function ProfileHeader({ username, displayName }) {
   return (
     <Box>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'center' }}>
-        { username && displayName
-          ? (
-            <Avatar sx={{ bgcolor: stringToColor(displayName), width: 80, height: 80 }}>
-              {stringToAvatar(displayName)}
-            </Avatar>
-          )
-          : <Avatar alt="Avatar placeholder" src="http://localhost:3000/images/user-avatar.png" />}
+        <Avatar sx={{ bgcolor: username ? stringToColor(username) : 'grey', width: 80, height: 80 }}>
+          {username ? stringToAvatar(username) : ''}
+        </Avatar>
         <Box>
           { displayName
             ? (
