@@ -3,10 +3,10 @@ name: Deploy to GCP artifact
 on:
   push:
     branches:
-    - 'master'
+    - 'deployment'
   pull_request:
     branches:
-      - 'master'
+      - 'deployment'
   workflow_run:
     workflows: ["question-service_test.yml"]
     types:
