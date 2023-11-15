@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - master
+      - deployment
   pull_request:
     branches:
       - master
+      - deployment
 
 jobs:
   test:
