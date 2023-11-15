@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Mic, MicOff, Videocam, VideocamOff,
 } from '@mui/icons-material';
-import { VIDEO_SVC_HOST, VIDEO_SVC_PORT, VIDEO_SVC_URI } from '@/config/uris';
+import { VIDEO_SVC_HOST, VIDEO_SVC_PORT, VIDEO_SVC_URI, VIDEO_SVC_SECURE } from '@/config/uris';
 import Peer from 'peerjs';
 import { useSelector } from 'react-redux';
 import { VideoEvent } from '@/utils/constants';
@@ -130,36 +130,9 @@ export default function VideoChatPanel() {
   const peer = new Peer({
     host: VIDEO_SVC_HOST,
     port: VIDEO_SVC_PORT,
+    secure: VIDEO_SVC_SECURE,
     path: '/peerjs',
-    config: {
-      iceServers: [
-        // STUN servers (e.g., stun01.sipphone.com, stun.ekiga.net, etc.) are used to discover
-        // the public IP address and port of a client when they are behind a NAT/firewall.
-        { url: 'stun:stun01.sipphone.com' },
-        { url: 'stun:stun.ekiga.net' },
-        { url: 'stun:stunserver.org' },
-        { url: 'stun:stun.softjoys.com' },
-        { url: 'stun:stun.voiparound.com' },
-        { url: 'stun:stun.voipbuster.com' },
-        { url: 'stun:stun.voipstunt.com' },
-        { url: 'stun:stun.voxgratia.org' },
-        { url: 'stun:stun.xten.com' },
-        // TURN servers (e.g., 192.158.29.39:3478) are used when direct peer-to-peer communication
-        // is not possible due to strict firewalls or other network configurations.
-        // TURN servers relay traffic between peers to ensure connectivity.
-        {
-          url: 'turn:192.158.29.39:3478?transport=udp',
-          credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-          username: '28224511:1379330808',
-        },
-        {
-          url: 'turn:192.158.29.39:3478?transport=tcp',
-          credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-          username: '28224511:1379330808',
-        },
-      ],
-    },
-    debug: 3,
+    debug: 3
   });
 
   const attachStream = (ref, stream) => {

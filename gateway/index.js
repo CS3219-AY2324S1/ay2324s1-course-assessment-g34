@@ -6,6 +6,10 @@ const {
     userProxy,
     questionProxy,
     matchingProxy,
+    collabProxyIO,
+    collabProxyWS,
+    videoProxy,
+    peerJSProxy,
     executionProxy
 } = require('./proxy');
 
@@ -15,7 +19,7 @@ const isAuthenticated = require('./authMiddleware');
 
 // Configure CORS for requests from anywhere
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: '*', // TODO: Update accordingly
   credentials: true
 };
 
@@ -35,6 +39,14 @@ app.use('/api/user-service', (req, res) => {
 });
 
 app.use(matchingProxy);
+
+app.use(collabProxyIO);
+
+app.use(collabProxyWS);
+
+app.use(videoProxy);
+
+app.use(peerJSProxy);
 
 app.use(isAuthenticated);
 

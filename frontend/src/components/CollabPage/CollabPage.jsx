@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import ShareDBClient from 'sharedb-client';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { COLLAB_SVC_URI } from '@/config/uris';
+import { COLLAB_SVC_IO_URI, COLLAB_SVC_WS_URI } from '@/config/uris';
 import QuestionPanel from '@/components/CollabPage/QuestionPanel';
 import EditorPanel from '@/components/CollabPage/EditorPanel';
 import { io } from 'socket.io-client';
@@ -25,13 +25,14 @@ import VideoChatPanel from './VideoChatPanel';
 import ConsolePanel from './ConsolePanel';
 
 const connectShareDBSocket = () => {
-  const shareDBSocket = new ReconnectingWebSocket(COLLAB_SVC_URI);
+  const websocketPath = "/api/collab-service/ws";
+  const shareDBSocket = new ReconnectingWebSocket(`${COLLAB_SVC_WS_URI}${websocketPath}`);
   const connection = new ShareDBClient.Connection(shareDBSocket);
   return connection;
 };
 
 const connectSessionSocket = () => {
-  const socket = io(COLLAB_SVC_URI, {
+  const socket = io(COLLAB_SVC_IO_URI, {
     path: '/api/collab-service/socket.io',
   });
 

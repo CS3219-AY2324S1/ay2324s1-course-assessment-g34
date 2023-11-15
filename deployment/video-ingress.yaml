@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: peerprep-video-ingress
+  annotations:
+    networking.gke.io/managed-certificates: managed-cert
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: video-service
+                port:
+                  number: 3002

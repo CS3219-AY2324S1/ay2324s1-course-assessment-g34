@@ -1,0 +1,380 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          command: ["npm", "run", "dev"]
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/api-gateway
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
+          ports:
+            - containerPort: 3001
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-db
+  template:
+    metadata:
+      labels:
+        app: postgres-db
+    spec:
+      containers:
+        - name: postgres-db
+          image: postgres:15.4
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-db
+      volumes:
+        - name: postgres-db
+          persistentVolumeClaim:
+            claimName: postgres-db
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/user-service:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+          command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-db
+  template:
+    metadata:
+      labels:
+        app: mongo-db
+    spec:
+      containers:
+        - image: mongo:latest
+          name: mongo-db
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-db
+      volumes:
+        - name: mongo-db
+          persistentVolumeClaim:
+            claimName: mongo-db
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: question-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: question-service
+  template:
+    metadata:
+      labels:
+        app: question-service
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: peerprep-config
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/question-service:latest
+          imagePullPolicy: Always
+          name: question-service
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matching-service
+  template:
+    metadata:
+      labels:
+        app: matching-service
+    spec:
+      containers:
+        - env:
+            - name: PORT
+              value: "8001"
+            - name: COLLAB_SVC_URI
+              value: ws://collab-service:8080
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/matching-service:latest
+          imagePullPolicy: Always
+          name: matching-service
+          ports:
+            - containerPort: 8001
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collab-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: collab-service
+  template:
+    metadata:
+      labels:
+        app: collab-service
+    spec:
+      containers:
+        - env:
+          - name: QUESTION_SVC_URI
+            value: http://question-service:5000
+          - name: DATABASE_URL
+            value: mongodb://mongo-db:27017/collab-docs
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/collab-service:latest
+          imagePullPolicy: Always
+          name: collab-service
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-service
+  template:
+    metadata:
+      labels:
+        app: video-service
+    spec:
+      containers:
+        - name: video-service
+          image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/video-service
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: peerprep-config
+          ports:
+            - containerPort: 3002
+            - containerPort: 9000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '400m'
+            requests:
+              memory: 256Mi
+              cpu: '400m'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-execution-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: code-execution-service
+  template:
+    metadata:
+      labels:
+        app: code-execution-service
+    spec:
+      containers:
+      - name: code-execution-service
+        image: asia-southeast1-docker.pkg.dev/steam-bee-404110/peer-prep/code-execution-service:latest
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: peerprep-config
+        ports:
+        - containerPort: 8008
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: '400m'
+          requests:
+            memory: 256Mi
+            cpu: '400m'
+        volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: docker-sock
+        persistentVolumeClaim:
+          claimName: code-execution-service
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-service
+  template:
+    metadata:
+      labels:
+        app: node-service
+    spec:
+      containers:
+      - name: node-service
+        image: node:14
+        command: ["sleep"]
+        args: ["infinity"]
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-service
+  template:
+    metadata:
+      labels:
+        app: python-service
+    spec:
+      containers:
+      - name: python-service
+        image: python:3.9
+        command: ["sleep"]
+        args: ["infinity"]
+
+---
