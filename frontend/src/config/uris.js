@@ -16,18 +16,18 @@ const EXECUTION_SVC_PREFIX = '/api/code-execution-service';
 const EXECUTE = '/execute';
 
 // Uncomment for prod
-// const GATEWAY_BASE_URL = 'https://api.peerpreparing.com';
-// export const VIDEO_SVC_PORT = 443;
-// export const VIDEO_SVC_HOST = 'api.peerpreparing.com';
-// export const VIDEO_SVC_SECURE = true;
-// export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'wss');
+const GATEWAY_BASE_URL = 'https://api.peerpreparing.com';
+export const VIDEO_SVC_PORT = 443;
+export const VIDEO_SVC_HOST = 'api.peerpreparing.com';
+export const VIDEO_SVC_SECURE = true;
+export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'wss');
 
 // Uncomment for dev
-const GATEWAY_BASE_URL = 'http://localhost:3001';
-export const VIDEO_SVC_PORT = 3001;
-export const VIDEO_SVC_HOST = 'localhost';
-export const VIDEO_SVC_SECURE = false;
-export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'ws');
+// const GATEWAY_BASE_URL = 'http://localhost:3001';
+// export const VIDEO_SVC_PORT = 3001;
+// export const VIDEO_SVC_HOST = 'localhost';
+// export const VIDEO_SVC_SECURE = false;
+// export const COLLAB_SVC_WS_URI = GATEWAY_BASE_URL.replace(/^https?/, 'ws');
 
 
 export const REGISTER_SVC_URI = GATEWAY_BASE_URL + USER_SVC_PREFIX + REGISTER;
