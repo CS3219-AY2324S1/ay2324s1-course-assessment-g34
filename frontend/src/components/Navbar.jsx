@@ -27,11 +27,7 @@ const menuPages = [
   {
     label: 'Profile',
     path: '/profile',
-  },
-  {
-    label: 'Dashboard',
-    path: '/dashboard',
-  },
+  }
 ];
 
 function LoginButton() {

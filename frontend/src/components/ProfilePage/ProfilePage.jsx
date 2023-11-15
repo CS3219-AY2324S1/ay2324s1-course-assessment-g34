@@ -15,8 +15,6 @@ import DeleteAccountButton from './DeleteAccountButton';
 import ProfileHeader from './ProfileHeader';
 import Layout from '../Layout';
 
-const label = { inputProps: { 'aria-label': 'Dark mode switch' } };
-
 export default function ProfilePage() {
   const path = useRouter().asPath;
   const {
@@ -45,7 +43,7 @@ export default function ProfilePage() {
 
   const fetchUserDetails = useCallback(async () => {
     setIsLoading(true);
-    console.log("fetching user details in profile page...")
+
     try {
       await prepareToken();
 
@@ -258,29 +256,6 @@ export default function ProfilePage() {
                       </Typography>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                  <Divider />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container sx={{ alignItems: 'center' }} rowGap={1}>
-                <Grid item xs={12}>
-                  <Typography sx={{
-                    fontWeight: 600, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden',
-                  }}
-                  >
-                    Preferences
-                  </Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  <Typography sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                    Dark mode
-                  </Typography>
-                </Grid>
-                <Grid item xs={2} sx={{ textAlign: 'right' }}>
-                  <Switch {...label} color="secondary" />
                 </Grid>
                 <Grid item xs={12}>
                   <Divider />

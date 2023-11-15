@@ -8,7 +8,6 @@ import { MATCHING_SVC_URI } from '@/config/uris';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { MatchEvent, Role } from '@/utils/constants';
 import { cancelMatch, findMatch } from '@/utils/eventEmitters';
-import { getQuestionId, getSessionId, getUsername } from '@/utils/socketUtils';
 import {
   Box, Container, MenuItem, TextField, Typography,
 } from '@mui/material';

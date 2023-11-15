@@ -42,8 +42,8 @@ export default function RouteGuard({ children, allowedRoles }) {
 
       setIsAuthorized(false);
     }
-    // console.log("loading?", isLoading)
-    // console.log("user:", user)
+  
+    
     /* eslint-disable react-hooks/exhaustive-deps */
   }, [isLoading, user, allowedRoles]);
 

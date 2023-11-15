@@ -9,7 +9,7 @@ const editorConfig = {
   toolbar: {
     items: [
       'undo', 'redo', '|', 'bold', 'underline', 'italic', 'subscript', 'superscript',
-      '|', 'outdent', 'indent', 'bulletedList', 'numberedList', '|', 'imageUpload', 'imageInsert', 'insertTable',
+      '|', 'outdent', 'indent', 'bulletedList', 'numberedList', '|', 'imageInsert', 'insertTable',
       'code', 'codeBlock', '|', 'findAndReplace',
     ],
     shouldNotGroupWhenFull: true,
