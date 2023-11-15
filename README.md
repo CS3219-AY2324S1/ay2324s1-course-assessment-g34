@@ -4,7 +4,25 @@
 
 ## Background
 
-Add description here
+PeerPrep is a novel and groundbreaking solution that aims to bring about a paradigm shift in technical interview preparation. Achieving a coveted position in the technology sector in the current competitive job market frequently necessitates the mastery of complex technical interviews. Nevertheless, Preparing for these interviews can induce apprehension and seclusion. In response to this difficulty, we introduce PeerPrep. This interactive digital environment facilitates the gathering of students, enabling them to engage in collaborative training of whiteboard-style interview inquiries with their fellow students.
+
+
+## Purpose
+
+PeerPrep aims to enable individuals aspiring to excel in technical interviews by providing a collaborative and encouraging environment conducive to preparation. Our platform fulfils several fundamental goals:
+
+### Effective Learning through Matchmaking
+
+PeerPrep matches users with peers with similar categories and difficulty levels, which guarantees that individuals will have the opportunity to participate in fruitful practice sessions with companions who possess similar objectives, thereby establishing an optimal learning environment.
+
+### Collaborative Learning
+
+Users can participate in live joint coding sessions via PeerPrep, which emulates the format of whiteboard interviews frequently encountered in technology job evaluations. 
+
+### Facilitate Communications
+
+PeerPrep provides more than a mere practice platform; it cultivates a dynamic community comprising technology aficionados and individuals seeking employment. It promotes exchanging information, networking, and emotional support among its members.
+
 
 ## Table of Contents
 
