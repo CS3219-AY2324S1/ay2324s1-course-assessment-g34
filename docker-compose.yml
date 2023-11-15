@@ -1,0 +1,160 @@
+version: '3.8'
+
+networks:
+  frontend:
+  backend:
+
+services:
+  code-execution-service:
+    container_name: code-execution-service
+    build:
+      context: ./code-execution-service
+    ports:
+      - 8008:8008
+    networks:
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  
+  collab-service:
+    container_name: collab-service
+    build:
+      context: ./collab-service
+    environment:
+      QUESTION_SVC_URI: http://question-service:5000
+      DATABASE_URL: mongodb://mongo-db:27017/collab-docs
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+    depends_on:
+      - mongo-db
+      - question-service
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    command: npm run dev
+    ports:
+      - 3000:3000
+    networks:
+      - frontend
+    depends_on:
+      - user-service
+      - question-service
+      - matching-service
+      - collab-service
+      - code-execution-service
+      - video-service
+  
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./gateway
+    ports:
+      - 3001:3001
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - user-service
+      - question-service
+      - matching-service
+      - video-service
+      - collab-service
+      - code-execution-service
+    environment:
+      USER_BASE_URL: http://user-service:8000
+      QUESTION_BASE_URL: http://question-service:5000
+      MATCHING_BASE_URL: http://matching-service:8001
+      COLLAB_BASE_IO_URL: http://collab-service:8080
+      COLLAB_BASE_WS_URL: ws://collab-service:8080
+      VIDEO_BASE_URL: http://video-service:3002
+      PEERJS_BASE_URL: http://video-service:9000
+      EXECUTION_BASE_URL: http://code-execution-service:8008
+      SECRET_KEY: ${SECRET_KEY}
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+    command: 'python manage.py runserver 0.0.0.0:8000'
+    ports:
+      - 8000:8000
+    networks:
+      - backend
+    depends_on: 
+      - postgres-db
+    env_file:
+      - .env
+  
+  question-service:
+    container_name: question-service
+    build:
+      context: ./question-service
+    environment:
+      DATABASE_URL: mongodb://mongo-db:27017/questions
+      SECRET_KEY: ${SECRET_KEY}
+    ports: 
+      - 5000:5000
+    networks:
+      - backend
+    depends_on:
+      - mongo-db
+    
+  matching-service:
+    container_name: matching-service
+    build:
+      context: ./matching-service
+    networks:
+      - backend
+    environment:
+      COLLAB_SVC_URI: ws://collab-service:8080
+      PORT: 8001
+    ports: 
+      - 8001:8001
+    depends_on:
+      - collab-service
+  
+  video-service:
+    container_name: video-service
+    build:
+      context: ./video-service
+    networks:
+      - backend
+    environment:
+      PORT: 3002
+    ports:
+      - 3002:3002
+
+  postgres-db:
+    container_name: ${DATABASE_HOST}
+    image: postgres:15.4
+    restart: always
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    networks:
+      - backend
+
+  mongo-db:
+    container_name: mongo-db
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo-db:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - backend
+
+volumes:
+  postgres-db:
+  mongo-db:
+  

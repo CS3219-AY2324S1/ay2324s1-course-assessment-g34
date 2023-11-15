@@ -1,0 +1,78 @@
+name: Deploy to GCP artifact
+
+on:
+  push:
+    branches:
+    - 'deployment'
+  pull_request:
+    branches:
+      - 'deployment'
+  workflow_run:
+    workflows: ["question-service_test.yml"]
+    types:
+      - completed
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: code checkout
+      uses: actions/checkout@v2
+
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+
+    - name: build and push the docker image
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT_ID }}
+      run: |
+        gcloud auth configure-docker asia-southeast1-docker.pkg.dev
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest ./frontend
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/frontend:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/api-gateway:latest ./gateway
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/api-gateway:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/matching-service:latest ./matching-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/matching-service:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/question-service:latest ./question-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/question-service:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/user-service:latest ./user-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/user-service:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/collab-service:latest ./collab-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/collab-service:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/video-service:latest ./video-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/video-service:latest
+
+        docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/code-execution-service:latest ./code-execution-service
+        docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/peer-prep/code-execution-service:latest
+
+    - name: deploy to gke
+      run: |
+        gcloud components install gke-gcloud-auth-plugin
+        gcloud container clusters get-credentials autopilot-cluster-1 --region=asia-southeast1
+
+        kubectl apply -f deployment/managed-cert.yaml
+        kubectl apply -f deployment/frontend-config.yaml
+        kubectl apply -f deployment/service.yaml
+        kubectl apply -f deployment/ingress.yaml
+        kubectl apply -f deployment/api-ingress.yaml
+        kubectl apply -f deployment/postgres-db-pvc.yaml
+        kubectl apply -f deployment/mongo-db-pvc.yaml
+        kubectl apply -f deployment/code-execution-pvc.yaml
+        kubectl apply -f deployment/deployment.yaml 
+        kubectl apply -f deployment/job.yaml 
+        
