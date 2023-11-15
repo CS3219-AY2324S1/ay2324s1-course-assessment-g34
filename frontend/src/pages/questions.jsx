@@ -40,7 +40,6 @@ export default function QuestionPage() {
 
   const getAllQuestions = useCallback(async () => {
     setIsLoading(true);
-    console.log("getting questions...")
     try {
       await prepareToken();
 
@@ -49,8 +48,6 @@ export default function QuestionPage() {
           Authorization: `Bearer ${accessToken}`,
         },
       };
-
-      console.log("token in questions:", accessToken);
 
       const response = await axios.get(QUESTION_SVC_URI, config);
       setQuestions(response.data);
