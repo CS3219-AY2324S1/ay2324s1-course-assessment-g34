@@ -87,40 +87,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-### Accessing the Frontend
-
-You can access the frontend of the project by opening a web browser and navigating to http://localhost:3000.
-
-## Setting Up Microservices for Development
-
-### Frontend
-
-#### Setting Up
-To set up the frontend for development, navigate into the `frontend` directory and run the following command to install the dependencies:
-
-```bash
-cd frontend
-npm install
-```
-
-#### Running the Frontend
-
-After installing the dependencies, you can run the frontend by executing the following command in the `frontend` directory:
-
-```bash
-npm run dev
-```
-
-You can access the running frontend application in your web browser at http://localhost:3000.
-
-### User Service
-
-### Question Service
-
-### Matching Service
-
-### Collaboration Service
 
 ## Accessing the Deployed Version
 
-To be updated: Include information about where users can access the deployed version of the application, such as a URL or endpoint.
+You can access the deployed version of the project at this url: (https://peerpreparing.com/)[https://peerpreparing.com/]
