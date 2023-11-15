@@ -90,4 +90,4 @@ python manage.py migrate
 
 ## Accessing the Deployed Version
 
-You can access the deployed version of the project at this url: (https://peerpreparing.com/)[https://peerpreparing.com/]
+You can access the deployed version of the project at this url: [https://peerpreparing.com/](https://peerpreparing.com/)
